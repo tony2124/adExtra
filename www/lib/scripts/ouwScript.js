@@ -1,0 +1,1 @@
+var esPalabra = /^[A-Za-z]+$/;
