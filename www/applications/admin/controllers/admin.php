@@ -106,6 +106,8 @@ class Admin_Controller extends ZP_Controller {
 		
 		$vars["carreras"] = $carreras;
 		$vars["todos_alumnos"] = $alumnos;
+
+		$vars["menu"] = 1;
 		$this->render("content", $vars);
 	}
 
@@ -137,6 +139,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['alumnos'] = $alumnos;
 		$vars['clubes'] = $clubes;
 		$vars['view'] = $this->view("listaclub", true);
+		$vars["menu"] = 2;
 		$this->render("content", $vars);
  	}
 
@@ -461,6 +464,7 @@ class Admin_Controller extends ZP_Controller {
 
 		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL);
 		$vars['view'] = $this->view('registroalumno',true);
+		$vars['menu'] = 2;
 		$this->render("content",$vars);
 	}
 

@@ -14,14 +14,14 @@
 		<link href="<?php print path("vendors/css/frameworks/bootstrap/css/bootstrap.min.css", "zan"); ?>" rel="stylesheet">
 		<?php //print $this->getCSS(); ?>
 		<link rel="stylesheet" href="<?php print path("www/lib/css/font-awesome-4.3.0/css/font-awesome.min.css", "www"); ?>">
-		<link href="<?php print path("vendors/css/frameworks/smoothness/jquery-ui-1.8.21.custom.css", "zan"); ?>" rel="stylesheet">
+		
 		
 		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
 		<script src="<?php print path("www/lib/scripts/ouwScript.js","www") ?>"></script>
 		<script src="<?php print path("vendors/js/jquery-2.1.4.min.js","zan") ?>"></script>
 		<script src="<?php print path("vendors/css/frameworks/bootstrap/js/bootstrap.min.js", "zan"); ?>"></script>
 		<script src="<?php print path("vendors/js/jquery.validate.js","zan") ?>"></script>
-		<script src="<?php print path("vendors/js/jquery-ui-1.8.21.custom.min.js","zan") ?>"></script>
+		
 		
 		<style>
 	      body { padding-top: 70px; }
@@ -44,14 +44,16 @@
 
 			     $('[data-toggle="tooltip"]').tooltip();
 
-			     	/* ==========================================================================
-					Scroll To top
-					========================================================================== */
-					jQuery('#totop a').on('click', function () {
+
+
+		     	/* ==========================================================================
+				Scroll To top
+				========================================================================== */
+				jQuery('#totop a').on('click', function () {
 					    jQuery('html, body').animate({scrollTop: '0'}, 800);
 					    return false;
 					});
-							});
+				});
 		});
 
 			/*$(function(){
@@ -96,9 +98,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active">
+        <li <?php if($menu == 1) print "class='active'" ?> >
         	<a href="<?php print get('webURL') . _sh .'admin/estadisticas' ?>">Estadísticas <span class="sr-only">(current)</span></a></li>
-        <li class="dropdown">
+        <li <?php if($menu == 2) print "class='active'" ?> class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnos <span class="caret"></span></a>
           <ul class="dropdown-menu">
 		      <li><a href="<?php print get('webURL'). _sh .'admin/listaclub/'  ?>">Listas de alumnos</a></li>
@@ -118,6 +120,7 @@
         		<li><a href="<?php print get('webURL'). _sh .'admin/configLiberacion/'  ?>">Fechas (inscr. / lib.)</a></li>
         		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Imágenes y logos</a></li>
         		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Códigos y revisiones</a></li>
+        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Datos del instituto</a></li>
         	</ul>
         </li>
 

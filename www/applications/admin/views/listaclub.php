@@ -1,78 +1,111 @@
-<form action="<?php print get('webURL')._sh.'admin/listaclub/' ?>" method="get" class="form-horizontal span9">
-	<fieldset>
-		<legend>Elije un club y un periodo</legend>
-		<div class="control-group">
-			<label class="control-label">CLUB</label>
-			<div class="controls">
-				<select name="club" id="club">
-					<option value="">--Seleccina--</option>
-					<?php 
-					foreach ($clubes as $row)
-					{
-						print '<option ';
-						print ($par1 == $row['id_club']) ? 'selected="selected"' : '';
-						print ' value="'.$row['id_club'].'">';
-						print $row['nombre_club'];	
-						print '</option>';
-					
-					} ?>
-				</select>
+<div class="col-sm-12">
+	<form action="<?php print get('webURL')._sh.'admin/listaclub/' ?>" method="get" class="form-horizontal">
+		<fieldset>
+			<legend><span class="glyphicon glyphicon-folder-open"></span> Elije un club y un periodo</legend>
+			<div class="form-group">
+				<!--<label class="control-label">CLUB</label>-->
+				<div class="col-sm-4">
+					<select name="club" id="club" class="form-control">
+						<option value="">--Selecciona un club--</option>
+						<?php 
+						foreach ($clubes as $row)
+						{
+							print '<option ';
+							print ($par1 == $row['id_club']) ? 'selected="selected"' : '';
+							print ' value="'.$row['id_club'].'">';
+							print $row['nombre_club'];	
+							print '</option>';
+						
+						} ?>
+					</select>
+				</div>
+		
+				<!--<label class="form-label">PERIODO</label> -->
+			    <div class="col-sm-4">
+				  	<select class="form-control" name="periodo" id="periodo">
+				  		<option value="">--Selecciona un periodo--</option>
+					<?php
+						
+						foreach ($periodos as $per)
+						{
+							print '<option ';
+							print ($per == $par2) ? 'selected="selected"' : '';
+							print ' value="'.$per.'">';
+							print $per;
+							print '</option>';
+						}
+						?>
+					</select>
+				</div>
+				<div class="col-sm-1">
+				</div>
+				<div class="col-sm-1">
+					<a data-toggle="modal" data-target="#avanzada" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span></a>  
+				</div>
+				<div class="col-sm-2">
+					<input type="button" value="Ver alumnos" style="width:100%" class="btn btn-primary" onclick="location.href='<?php print get("webURL")._sh."admin/listaclub/" ?>'+$('#club').val()+'/'+$('#periodo').val()" />
+				</div>
 			</div>
-			<br>
-			<label class="control-label">PERIODO</label> 
-		    <div class="controls">
-			  	<select name="periodo" id="periodo">
-			  		<option value="">--Seleccina--</option>
-				<?php
-					
-					foreach ($periodos as $per)
-					{
-						print '<option ';
-						print ($per == $par2) ? 'selected="selected"' : '';
-						print ' value="'.$per.'">';
-						print $per;
-						print '</option>';
-				
-					}
-					?>
-				</select>
-			</div>
-			<br>
-			<p align="center">
-				<input type="button" value="Ver alumnos" class="btn btn-primary" onclick="location.href='<?php print get("webURL")._sh."admin/listaclub/" ?>'+$('#club').val()+'/'+$('#periodo').val()" />
-			</p>
-		</div>
-		<hr>
-	</fieldset>
-</form>
-
+			<hr>
+		</fieldset>
+	</form>
+</div>
 <?php 
 if($alumnos != NULL) { ?>
-Número de registros encontrados: <?php print count($alumnos) ?>
-<div class="btn-group pull-right">
-  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-    Descarga
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu">
-    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/lista/'.$par1.'/'.$par2 ?>" target="_blank">Lista de alumnos</a></li>
-    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/cedula/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de inscripción</a></li>
-    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/resultados/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de resultados</a></li>
-  </ul>
-</div><br>
-<hr>
+
+	<div class="col-sm-9">Número de registros encontrados: <?php print count($alumnos) ?></div>
+	<div class="col-sm-1">
+	 	<button class="btn btn-primary" data-toggle="collapse" data-target="#graf" aria-expanded="false" aria-controls="graf"><span class="glyphicon glyphicon-stats"></span></button>  
+	 </div>
+	<div class="col-sm-2">		
+		<div class="btn-group" style="width:100%">
+		  <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
+		    Descarga
+		    <span class="caret"></span>
+		  </a>
+		  <ul class="dropdown-menu">
+		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/lista/'.$par1.'/'.$par2 ?>" target="_blank">Lista de alumnos</a></li>
+		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/cedula/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de inscripción</a></li>
+		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/resultados/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de resultados</a></li>
+		  </ul>
+		</div>
+	</div>
+<div style="clear: both"></div>
+
+<p>&nbsp;</p>
+<div class="collapse" id="graf">
+		<p>Muestra una comparativa entre los alumnos que se inscribieron en los clubes y aquellos que acreditaron sus horas.</p>
+		<div id="piechart_3d" style="width: 500px; height:430px" ></div>
+</div>
+
+<p>&nbsp;</p>
 <script src="<?php print path("www/lib/jquery.tablesorter.min.js","www") ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php print path("www/lib/green/style.css","www") ?>">
-<script>
-$(document).ready(function() 
-    { 
-        $("#lista").tablesorter(); 
-    } 
-); 
+<script >
+	$(document).ready(function() { 
+	        $("#lista").tablesorter(); 
+	    } 
+	); 
     
+     function verificar2(){
+			//alert("cambio a " + $("#costo").val());
+			if($("#fecha").val() == 0)
+				$("#fecha_i").attr("disabled","disabled");
+			else 
+				$("#fecha_i").removeAttr("disabled");
+
+			if($("#fecha").val() == 4)
+				$("#fecha_f").css("display","block");
+			else
+				$("#fecha_f").css("display","none");
+		}
+
+	
 </script>
 
-<table id="lista" class="table table-striped table-condensed">
+
+
+<table id="lista" class="table table-striped table-condensed table-hover">
 
 
   <thead>
@@ -88,9 +121,10 @@ $(document).ready(function()
   </thead>
   <tbody>
 <?php
-
+$hombres = $mujeres = 0; 
 $i=1;
 foreach ($alumnos as $alum) {	?>
+<?php  if($alum['sexo']==1) $hombres++; else $mujeres++; ?>
   <tr>
     <td><?php print $i++ ?></td>
     <td><?php print $alum['numero_control'] ?></td>
@@ -106,3 +140,138 @@ foreach ($alumnos as $alum) {	?>
    </tbody>
  </table>
 <?php } ?>
+
+<div class="modal fade"  id="avanzada" role="dialog" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title"><div>Búsqueda avanzada</div></h3>
+      </div>
+      <div class="modal-body">
+      	<div class="form-horizontal">
+	   	<div class="form-group">
+	    	<label class="col-sm-2 control-label">CLUB: </label>
+		    <div class="col-sm-3">
+		      	<select name="club" id="club" class="form-control">
+						<option value="">--Selecciona un club--</option>
+						<?php 
+						foreach ($clubes as $row)
+						{
+							print '<option ';
+							print ($par1 == $row['id_club']) ? 'selected="selected"' : '';
+							print ' value="'.$row['id_club'].'">';
+							print $row['nombre_club'];	
+							print '</option>';
+						
+						} ?>
+					</select>
+		    </div>
+	    	<label class="col-sm-3 control-label">PERIODO: </label>
+		    <div class="col-sm-3">
+		      	<select class="form-control" name="periodo" id="periodo">
+				  		<option value="">--Selecciona un periodo--</option>
+					<?php
+						
+						foreach ($periodos as $per)
+						{
+							print '<option ';
+							print ($per == $par2) ? 'selected="selected"' : '';
+							print ' value="'.$per.'">';
+							print $per;
+							print '</option>';
+						}
+						?>
+					</select>
+		    </div>
+  		</div>
+  		<div class="form-group">
+	    	<label class="col-sm-2 control-label">CARRERA: </label>
+		    <div class="col-sm-3">
+		      	<select id="status" class="form-control input">
+		      		<option value="-1">-- Sin filtro</option>
+		      		<option value="1">Activo</option>
+		      		<option value="0">Inactivo</option>
+		      	</select>
+		    </div>
+	    	<label class="col-sm-3 control-label">SEXO: </label>
+		    <div class="col-sm-3">
+		      	<select id="status" class="form-control input">
+		      		<option value="-1">-- Sin filtro</option>
+		      		<option value="1">Activo</option>
+		      		<option value="0">Inactivo</option>
+		      	</select>
+		    </div>
+  		</div>
+  		<div class="form-group">
+	    	<label class="col-sm-2 control-label">SIT. ESC.: </label>
+		    <div class="col-sm-3">
+		      	<select id="status" class="form-control input">
+		      		<option value="-1">-- Sin filtro</option>
+		      		<option value="1">Activo</option>
+		      		<option value="0">Inactivo</option>
+		      	</select>
+		    </div>
+  		</div>
+
+  		<div class="form-group">
+	    	<label class="col-sm-2 control-label">Edad: </label>
+		    <div class="col-sm-3">
+		      	<select id="fecha" onchange="verificar2()" class="form-control input">
+		      		<option value="0">--- Sin filtro</option>
+		      		<option value="1">Menor que</option>
+		      		<option value="2">Igual que</option>
+		      		<option value="3">Mayor que</option>
+		      		<option value="4">Entre</option>
+		      	</select>
+		    </div>
+		    <div class="col-sm-3">
+		      	<input id="fecha_i"  disabled class="form-control input" type="num" min="0">
+		    </div> 
+		    <div class="col-sm-3">
+		      	<input id="fecha_f" style="display:none" class="form-control input" type="num" min="0">
+		    </div> 
+
+  		</div>
+
+  		</div>
+  		<div style="clear:both"></div>
+  		<p>&nbsp;</p>
+	  </div>
+	  <div class="modal-footer">
+	  	<center>
+		    <button style="width: 150px" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+		    <button onclick="aplicar()" style="width: 150px" class="btn btn-primary" data-dismiss="modal">Aplicar</button>
+		    <input type="hidden" id="filtro">
+	    </center>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	  google.load("visualization", "1", {packages:["corechart"]});
+	  google.setOnLoadCallback(drawChart);
+	  function drawChart() {
+	    var data = google.visualization.arrayToDataTable([
+	    	['Task', 'Hours per Day'],
+	    	['HOMBRES', <?php print $hombres ?>],
+	    	['MUJERES', <?php print $mujeres ?>]
+	      
+	    ]);
+
+	    var options = {
+	      title: 'HOMBRES Y MUJERES',
+	      height: 500,
+	      width: 800,
+	      chartArea:{top: '0px'},
+	      is3D: true
+	    };
+
+	    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+	    chart.draw(data, options);
+	  }
+
+
+</script>

@@ -6,8 +6,8 @@ if(!defined("_access")) {
 	die("Error: You don't have permission to access here...");
 }
 
-require_once(_spath.'/APIs/tcpdf/config/lang/eng.php');
-require_once(_spath.'/APIs/tcpdf/tcpdf.php');
+require_once(_spath.'/pdf/config/lang/eng.php');
+require_once(_spath.'/pdf/tcpdf.php');
 include(_corePath . _sh .'/libraries/funciones/funciones.php');
 
 
@@ -310,7 +310,7 @@ class Pdf_Controller extends ZP_Controller {
 
 				$pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 				$pdf->SetCreator(PDF_CREATOR);
-				$pdf->SetAuthor('Alfonso Calderon');
+				$pdf->SetAuthor('Simpus Soluciones Informaticas');
 				$pdf->SetTitle('Lista de alumnos');
 				$pdf->SetSubject('Lista');
 				$pdf->SetKeywords('lista, extraescolares, clubes, club');
@@ -332,28 +332,35 @@ class Pdf_Controller extends ZP_Controller {
 					</p>
 					<table border="1" width="850">
 						<tr height="80" align="center">
-							<td width="400" height = "80"><br><br><br>Nombre del alumno</td>';
+							<td align="center"><br><br><br>No.</td>
+							<td width="100" height = "80"><br><br><br>Número de control</td>
+							<td width="360" height = "80"><br><br><br>Nombre del alumno</td>';
 							$i=0;
-							while($i<22)
+							while($i<18)
 							{
 								$html .= '<td width="20"></td>';
 								$i++;
 							}
 							$html .='
 						</tr>';
+						$cont = 0;
 						foreach ($data as $row ) {
 							
 							$html .= '
 								<tr>
+									<td align="center">'.++$cont.'</td>
+									<td align="center"> '.$row['numero_control'].'</td>
 									<td> '.$row['apellido_paterno_alumno'].' '.$row['apellido_materno_alumno'].' '.$row['nombre_alumno'].'</td>';
-									$i=0;
-							//while($i<7)
-							//{
-								$html .= '<td colspan="7"></td>';
-								$html .= '<td colspan="7"></td>';
-								$html .= '<td colspan="8"></td>';
-								//$i++;
-							//}
+									
+							for($i = 0; $i < 18; $i++)
+								$html .= '<td></td>';	
+							/*while($i<7)
+							{
+								$html .= '<td></td>';
+								$html .= '<td></td>';
+								$html .= '<td></td>';
+								$i++;
+							}*/
 							$html .='
 								
 								</tr>

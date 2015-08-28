@@ -1,5 +1,21 @@
+<script src="<?php print path("vendors/js/jquery-ui.min.js","zan") ?>"></script>
+<link href="<?php print path("vendors/css/frameworks/jquery-ui/jquery-ui.min.css", "zan"); ?>" rel="stylesheet">
+
  <script type="text/javascript">
+
+ 
 $().ready(function() {
+
+  $( ".selectorFecha" ).datepicker({  
+          defaultDate: "-15y", 
+                yearRange: "1900:-15",
+        dateFormat: 'yy-mm-dd',  
+        showAnim: 'show',
+        duration: 'normal',
+        changeMonth: true,
+                changeYear: true });
+
+
 
    $("#registroalumno").validate({
     rules: {
@@ -31,7 +47,7 @@ $().ready(function() {
 </style>
  <form id="registroalumno" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/regisalumno' ?>">
     <fieldset>
-      <legend>Inscripción de un nuevo alumno</legend>
+      <legend>Reistro de un nuevo alumno</legend>
        <div class="well">
        <h5>Antes de registrar el alumno debe tomar en cuenta los siguientes aspectos:</h5>
         <ul>
@@ -39,61 +55,76 @@ $().ready(function() {
           <li>El nombre y apellidos debe escribirse con letra mayúscula.</li>
           <li>El correo electrónico de un alumno es indispensable.</li>
           <li>Debe asignársele una clave al alumno para que acceda al sitio de extraescolares.</li>
-          <li>Verifique el número de control del alumno ya que <span class="label label-important">NO SERÁ POSIBLE</span> editarlo más tarde.</li>
+          <li>Verifique el número de control del alumno ya que <span class="label label-danger">NO SERÁ POSIBLE</span> editarlo más tarde.</li>
         </ul>
       </div>
         <hr>
-        <div class="control-group">
-          <label class="control-label" for="numero_control">Número de control</label>
-          <div class="controls">
-    <!-- -->  <input type="text" maxlength="8" name="numero_control" class="input-xlarge" id="numero_control">
-          </div><br>
-          <label class="control-label" for="nombre">Nombre</label>
-          <div class="controls">
-    <!-- -->  <input type="text" name="nombre" class="input-xlarge" id="nombre">
-          </div><br>
-          <label class="control-label" for="ap">Apellido paterno</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="ap" class="input-xlarge" id="ap">
-          </div><br>
-          <label class="control-label" for="am">Apellido materno</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="am" class="input-xlarge" id="am">
-          </div><br>
-          <label class="control-label">Carrera</label>
-          <div class="controls">
-      <!-- -->  <select name="carrera" id="carrera">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="numero_control">Núm. de control</label>
+          <div class="col-sm-2">
+    <!-- -->  <input type="text" maxlength="8" name="numero_control" class="form-control" id="numero_control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="nombre">Nombre</label>
+          <div class="col-sm-4">
+    <!-- -->  <input type="text" name="nombre" class="form-control" id="nombre">
+          </div>
+          <label class="control-label col-sm-2">Carrera</label>
+          <div class="col-sm-4">
+      <!-- -->  <select name="carrera" class="form-control" id="carrera">
                   <?php foreach ($carreras as $carrera) { 
                     print '<option value="'.$carrera['id_carrera'].'">'.$carrera['abreviatura_carrera'].' ('.$carrera['id_carrera'].')</option>';
                   } ?>
   
                 </select>
-          </div><br>
-          <label class="control-label" for="fecha_nac">Fecha de nacimiento</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="fecha_nac" class="input-xlarge selectorFecha" placeholder="aaaa/mm/dd" id="fecha_nac">
-          </div><br>
-          <label class="control-label">Sexo</label>
-          <div class="controls">
-      <!-- -->  <select name="sexo" id="sexo">
+          </div>
+        </div>
+         <div class="form-group">
+          <label class="col-sm-2 control-label" for="ap">Apellido paterno</label>
+          <div class="col-sm-4">
+      <!-- -->  <input type="text" name="ap" class="form-control" id="ap">
+          </div>
+          <label class="control-label col-sm-2">Fecha de nacimiento</label>
+          <div class="col-sm-4">
+      <!-- -->  <input type="text" name="fecha_nac" class="form-control selectorFecha" placeholder="aaaa/mm/dd" id="fecha_nac">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="am">Apellido materno</label>
+          <div class="col-sm-4">
+      <!-- -->  <input type="text" name="am" class="form-control" id="am">
+          </div>
+          <label class="control-label col-sm-2">Sexo</label>
+          <div class="col-sm-4">
+      <!-- -->  <select name="sexo" class="form-control" id="sexo">
                   <option value="1">HOMBRE</option>
                   <option value="2">MUJER</option>
                 </select>
-          </div><br>
-          <label class="control-label" for="email">Correo electrónico</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="email" class="input-xlarge" id="email">
-          </div><br>
-          <label class="control-label" for="se">Situación escolar</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="se" class="input-xlarge" id="se">
-          </div><br>
-          <label class="control-label" for="clave">Clave del sitio</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="clave" class="input-xlarge" id="clave">
           </div>
-          <div class="form-actions">
-            <input type="submit" class="btn btn-success span2 pull-center" value="Registrar">  
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="email">Correo electrónico</label>
+          <div class="col-sm-4">
+      <!-- -->  <input type="text" name="email"  class="form-control" id="email">
+          </div>
+          <label class="control-label col-sm-2" for="se">Situación escolar</label>
+          <div class="col-sm-4">
+      <!--<  <input type="text" name="se"  class="form-control" id="se">-->
+                <select name="se"  class="form-control" id="sexo">
+                  <option value="1">ACTIVO</option>
+                  <option value="0">INACTIVO</option>
+                </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="clave">Clave del sitio</label>
+          <div class="col-sm-4">
+      <!-- -->  <input type="text" name="clave"  class="form-control" id="clave">
+          </div>
+          <div class="col-sm-4"></div>
+          <div class="col-sm-2">
+            <input type="submit" style="width:100%" class="btn btn-success" value="Registrar">  
           </div>
         </div>
       </fieldset>

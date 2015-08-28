@@ -261,7 +261,7 @@ return $this->Db->query("select numero_control, sexo, id_administrador, id_club,
 
 public function getAlumnosClubes2($club, $periodo)
 {
-return $this->Db->query("select apellido_paterno_alumno,apellido_materno_alumno, 
+return $this->Db->query("select numero_control, apellido_paterno_alumno,apellido_materno_alumno, 
 	nombre_alumno from inscripciones natural join alumnos where id_club = '$club' and periodo = '$periodo' order by apellido_paterno_alumno asc,
 	apellido_materno_alumno asc, nombre_alumno asc");
 }
