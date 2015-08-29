@@ -107,14 +107,14 @@
 		      <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroalumno/'  ?>">Registrar nuevo alumno</a></li>
 		  </ul>
         </li>
-        <li>
+        <li <?php if($menu == 3) print "class='active'" ?>>
         	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Promotores <span class="caret"></span></a>
         	 <ul class="dropdown-menu">
 				 <li><a href="<?php print get('webURL'). _sh .'admin/promotores/'  ?>">Lista de promotores</a></li>
 				 <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroPromotor/' ?>">Registrar nuevo promotor</a></li>
 			 </ul>
         </li>
-        <li>
+        <li <?php if($menu == 4) print "class='active'" ?>>
         	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Configuración <span class="caret"></span></a>
         	<ul class="dropdown-menu">
         		<li><a href="<?php print get('webURL'). _sh .'admin/configLiberacion/'  ?>">Fechas (inscr. / lib.)</a></li>

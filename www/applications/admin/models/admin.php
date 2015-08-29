@@ -26,6 +26,12 @@ public function getResultadoProm()
 return $this->Db->query("select * from ");
 }
 
+public function obtenerListaPromotores($buscar)
+{
+	return $this->Db->query("SELECT * from promotores WHERE eliminado_promotor = 0 AND (nombre_promotor like '%$buscar%' OR apellido_paterno_promotor like '%$buscar%' OR apellido_materno_promotor like '%$buscar%' OR usuario_promotor like '%$buscar%')  order by  apellido_paterno_promotor asc, apellido_materno_promotor asc, nombre_promotor asc");	
+	
+}
+
 public function getPromotores($periodo)
 {
 	if($periodo==NULL)
@@ -33,6 +39,11 @@ public function getPromotores($periodo)
 	else if(strcmp($periodo,"all") == 0)
 		return $this->Db->query("select * from promotores order by  nombre_promotor asc, apellido_paterno_promotor asc, apellido_materno_promotor asc");	
 	return $this->Db->query("select * from promotores natural join horarios natural join clubes where periodo='$periodo' order by nombre_promotor asc, apellido_paterno_promotor asc, apellido_materno_promotor asc");
+}
+
+
+public function habilitarpromotor($id,$dato){
+	$this->Db->query("UPDATE promotores set eliminado_promotor = $dato WHERE usuario_promotor = '$id'");
 }
 
 public function subirBDAlumnos($ruta)
@@ -73,7 +84,7 @@ return $query;
 public function updatePromotor($vars)
 {
 
-$query = "update promotores set contrasena_promotor = '$vars[pass]', foto_promotor = '$vars[foto]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', fecha_registro_promotor = '$vars[fecha_reg]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
+$query = "UPDATE promotores set usuario_promotor = '$vars[usuarionuevo]', contrasena_promotor = '$vars[pass]', foto_promotor = '$vars[foto]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', fecha_registro_promotor = '$vars[fecha_reg]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
 $this->Db->query($query);
 return $query;
 }
@@ -81,7 +92,7 @@ return $query;
 public function updatePromotorMantener($vars)
 {
 
-$query = "update promotores set contrasena_promotor = '$vars[pass]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', fecha_registro_promotor = '$vars[fecha_reg]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
+$query = "UPDATE promotores set usuario_promotor = '$vars[usuarionuevo]', contrasena_promotor = '$vars[pass]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', fecha_registro_promotor = '$vars[fecha_reg]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
 $this->Db->query($query);
 return $query;
 }

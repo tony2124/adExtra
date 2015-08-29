@@ -10,7 +10,7 @@ if(!defined("_access")) {
  * Website
  */
 
-$ip = "192.168.0.101";
+$ip = "localhost";
 
 $ZP["webURL"] 	    = "http://$ip/adExtra";
 //$ZP["webURL"] 	    = "http://itsaextraescolares.com/loginAdministrador/adExtra";
@@ -46,6 +46,7 @@ $ZP["translation"] = "normal";
 define("_sh", "/");
 define("ruta_imagen", "http://$ip/adExtra/www/lib/images");
 define("_rs", "http://$ip/extra");
+define("_pathwww",$_SERVER['DOCUMENT_ROOT']."/adExtra/www");
 define("_spath",$_SERVER['DOCUMENT_ROOT']."/extra");
 /*define("_rs", "http://itsaextraescolares.com/");
 define("_spath",$_SERVER['DOCUMENT_ROOT']."/");*/

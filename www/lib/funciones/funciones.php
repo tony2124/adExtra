@@ -50,7 +50,7 @@ function fechaactual()
 {
 	return date("Y-m-d");	
 }
-
+/*
 function edad($edad){
 		list($anio,$mes,$dia) = explode("-",$edad);
 		$anio_dif = date("Y") - $anio;
@@ -63,6 +63,11 @@ function edad($edad){
 			
 		return $anio_dif;
 	}
+*/
+function edad( $fecha ) {
+    list($Y,$m,$d) = explode("-",$fecha);
+    return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+}
 	
 
 function calcularEdad($fecha1, $fecha2){

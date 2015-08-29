@@ -3,7 +3,7 @@ if(!defined("_access")) {
 	die("Error: You don't have permission to access here...");
 }
 
-include(_corePath . _sh .'/libraries/funciones/funciones.php');
+include(_pathwww.'/lib/funciones/funciones.php');
 
 class Admin_Controller extends ZP_Controller {
 	
@@ -172,15 +172,41 @@ class Admin_Controller extends ZP_Controller {
 		$vars['periodo'] = $periodo;
 		$this->Admin_Model->guardarHorario($vars);
 	}
+
+
+
 /* PROMOTORES */
-	function promotores($periodo = NULL)
+	function promotores($buscar = "")
 	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		if( POST('buscar') != null )
+			$buscar = POST('buscar');
+		$vars['promotores']  = $this->Admin_Model->obtenerListaPromotores($buscar);
+		$vars['buscar'] = $buscar;
+		$vars['menu'] = 3;
+		$vars['view'] = $this->view('promotores',true);
+		$this->render('noRightContent', $vars);
+	}
+
+	function habilitarpromotor($id, $dato)
+	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		$this->Admin_Model->habilitarpromotor($id, $dato);
+		redirect(get('webURL'). _sh . 'admin/promotores');
+		
+	}
+
+	function horarios(){
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
-		//____($periodossss);
+
 		$i = 0;
 		$bandera = false;
 		foreach ($periodossss as $per) {
@@ -200,6 +226,8 @@ class Admin_Controller extends ZP_Controller {
 		$vars['todos_promotores'] = $this->Admin_Model->getPromotores("all");
 		$vars['promotores_actuales'] = $this->Admin_Model->getPromotores(NULL);
 		$vars['clubes'] = $this->Admin_Model->getClubes();
+
+		$vars['menu'] = 3;
 		$vars['view'] = $this->view('adminPromotores',true);
 		$this->render('noRightContent', $vars);
 	}
@@ -230,6 +258,7 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') . _sh . 'admin/login');
 
 		$vars['clubes'] = $this->Admin_Model->getClubesProm();
+		$vars['menu'] = 3;
 		$vars['view'] = $this->view('registroPromotor', true);
 		$this->render('content', $vars);
 	}
@@ -242,6 +271,7 @@ class Admin_Controller extends ZP_Controller {
 		$data = $this->Admin_Model->getEditPromotor($id);
 		$vars['promotor'] = $data[0];
 		$vars['clubes'] = $this->Admin_Model->getClubes();
+		$vars['menu'] = 3;
 		$vars['view'] = $this->view('editPromotor', true);
 		$this->render('content', $vars);
 	}
@@ -304,11 +334,12 @@ class Admin_Controller extends ZP_Controller {
 		}
 
 		$vars['usuario'] = POST('user');
+		$vars['usuarionuevo'] = POST('usernew');
 		$vars['pass'] = POST('pass');
 		$vars['foto'] = $name;
-		$vars['nombre'] = POST('nombre');
-		$vars['ap'] = POST('ap');
-		$vars['am'] = POST('am');
+		$vars['nombre'] = strtoupper(POST('nombre'));
+		$vars['ap'] = strtoupper(POST('ap'));
+		$vars['am'] = strtoupper(POST('am'));
 		//$vars['horario'] = POST('horario');
 		//$vars['lugar'] = POST('lugar');
 		$vars['fecha_nac'] = POST('fecha_nac');
@@ -319,7 +350,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['email'] = POST('email');
 		$vars['tel'] = POST('tel');
 		$vars['direccion'] = POST('direccion');
-		$vars['ocupacion'] = POST('ocupacion');
+		$vars['ocupacion'] = strtoupper(POST('ocupacion'));
 		//____($vars);
 		if( strcmp(POST('mantener'), "S") != 0 )
 			$this->Admin_Model->updatePromotor($vars);
@@ -434,6 +465,7 @@ class Admin_Controller extends ZP_Controller {
 		
 		$vars["view"] = $this->view("busquedaAlumnos",true);
 		/*****************************************************/
+		$vars['menu'] = 0;
 
 		$this->render("content",$vars);
 	}
@@ -451,6 +483,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['clubes'] = $clubes;
 		$vars["alumno"] = $datos[0];
 		$vars["inscripciones"] = $inscripciones;
+		$vars['menu'] = 0;
 
 		$vars["view"] = $this->view("alumno",true);
 
@@ -474,9 +507,9 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') .  _sh .'admin/login');
 
 		$vars['numero_control'] = POST('numero_control');
-		$vars['nombre'] = POST('nombre');
-		$vars['ap'] = POST('ap');
-		$vars['am'] = POST('am');
+		$vars['nombre'] = strtoupper(POST('nombre'));
+		$vars['ap'] = strtoupper(POST('ap'));
+		$vars['am'] = strtoupper(POST('am'));
 		$vars['fecha_nac'] = POST('fecha_nac');
 		$vars['fecha_ins'] = '2'.substr(POST('numero_control'), 0, 2).'3';
 		$vars['sexo'] = POST('sexo');
