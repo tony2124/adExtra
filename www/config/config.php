@@ -10,7 +10,9 @@ if(!defined("_access")) {
  * Website
  */
 
+
 $ip = "localhost";
+
 
 $ZP["webURL"] 	    = "http://$ip/adExtra";
 //$ZP["webURL"] 	    = "http://itsaextraescolares.com/loginAdministrador/adExtra";

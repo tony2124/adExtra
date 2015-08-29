@@ -43,19 +43,17 @@ $().ready(function() {
 </script>
 
 <style type="text/css">
-  label.error { color: red; display: inline; margin-left: 10px;}
+  label.error { color: red; display: inline; margin-left: 10px; font-size: 10px;}
 </style>
  <form id="registroalumno" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/regisalumno' ?>">
     <fieldset>
-      <legend>Reistro de un nuevo alumno</legend>
-       <div class="well">
+      <legend>Registro de un nuevo alumno</legend>
+       <div class="alert alert-info">
        <h5>Antes de registrar el alumno debe tomar en cuenta los siguientes aspectos:</h5>
         <ul>
           <li>No debe usarse acentos en el nombre y apellidos del alumno.</li>
-          <li>El nombre y apellidos debe escribirse con letra mayúscula.</li>
           <li>El correo electrónico de un alumno es indispensable.</li>
-          <li>Debe asignársele una clave al alumno para que acceda al sitio de extraescolares.</li>
-          <li>Verifique el número de control del alumno ya que <span class="label label-danger">NO SERÁ POSIBLE</span> editarlo más tarde.</li>
+          <li>La clave hace referencia a la contraseña para entrar el sitio de extraescolares e inscribirse a clubes.</li>
         </ul>
       </div>
         <hr>

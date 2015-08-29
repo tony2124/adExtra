@@ -112,7 +112,7 @@ class Admin_Controller extends ZP_Controller {
 	}
 
 	
-	/***LISTAS *********/
+	/******LISTAS *********/
 	public function listaclub($club = NULL, $periodo = NULL)
 	{
 		if (!SESSION('user_admin'))
@@ -142,6 +142,20 @@ class Admin_Controller extends ZP_Controller {
 		$vars["menu"] = 2;
 		$this->render("content", $vars);
  	}
+
+ 	/***** REGISTRO DE NUEVO ALUMNO ********/
+ 	public function formRegistroAlumno()
+	{
+		if (!SESSION('user_admin'))
+			return redirect(get('webURL') .  _sh .'admin/login');
+
+		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL);
+		$vars['view'] = $this->view('registroalumno',true);
+		$vars['menu'] = 2;
+		$this->render("content",$vars);
+	}
+
+
 
  	public function listacarrera($carrera = NULL, $periodo = NULL)
 	{
@@ -490,16 +504,6 @@ class Admin_Controller extends ZP_Controller {
 		$this->render("content",$vars);
 	}
 
-	public function formRegistroAlumno()
-	{
-		if (!SESSION('user_admin'))
-			return redirect(get('webURL') .  _sh .'admin/login');
-
-		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL);
-		$vars['view'] = $this->view('registroalumno',true);
-		$vars['menu'] = 2;
-		$this->render("content",$vars);
-	}
 
 	public function regisalumno()
 	{
