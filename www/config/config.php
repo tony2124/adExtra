@@ -10,7 +10,7 @@ if(!defined("_access")) {
  * Website
  */
 
-$ip = "192.168.0.101";
+$ip = "192.168.0.100";
 
 $ZP["webURL"] 	    = "http://$ip/adExtra";
 //$ZP["webURL"] 	    = "http://itsaextraescolares.com/loginAdministrador/adExtra";

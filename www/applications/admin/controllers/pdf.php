@@ -305,7 +305,10 @@ class Pdf_Controller extends ZP_Controller {
 	 			if (!SESSION('user_admin') && !SESSION('usuario_promotor'))
 				return redirect(get('webURL') .  _sh .'admin/login');
 
+				//consulta de alumnos inscritos y datos del club en el club $club y en el periodo $periodo
  				$data = $this->Admin_Model->getAlumnosClubes2($club, $periodo);
+
+ 				//obtiene nombre de promotor si es que es un club del departamento
 				$prommotor = $this->Admin_Model->getPromotor($club, $periodo);
 
 				$pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -314,7 +317,7 @@ class Pdf_Controller extends ZP_Controller {
 				$pdf->SetTitle('Lista de alumnos');
 				$pdf->SetSubject('Lista');
 				$pdf->SetKeywords('lista, extraescolares, clubes, club');
-				$pdf->SetHeaderData("logo.png", 15, "RELACIÓN DE ALUMNOS DEL CLUB DE ".$prommotor[0]['nombre_club'], "INSTITUTO TECNOLÓGICO SUPERIOR DE APATZINGÁN\n".$prommotor[0]['nombre_promotor']." ".$prommotor[0]['apellido_paterno_promotor']." ".$prommotor[0]['apellido_materno_promotor']."\nhttp://itsaextraescolares.com");
+				$pdf->SetHeaderData("logo.png", 15, "RELACIÓN DE ALUMNOS DEL CLUB DE ".$data[0]['nombre_club'],"INSTITUTO TECNOLÓGICO SUPERIOR DE APATZINGÁN\nDEPARTAMENTO DE ACTIVIDADES CULTURALES, DEPORTIVAS Y RECREATIVAS\n".$prommotor[0]['nombre_promotor']." ".$prommotor[0]['apellido_paterno_promotor']." ".$prommotor[0]['apellido_materno_promotor']);
 				$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 				$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 				$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);

@@ -1,4 +1,4 @@
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script src="<?php print path("www/lib/google/jsapi.js","www") ?>"></script>
 
 <!--COMBO PARA SELECCIONAR EL PERIODO -->
 <p class="label label-primary">SELECCIONA UN PERIODO: </p>

@@ -40,7 +40,9 @@
 				<div class="col-sm-1">
 				</div>
 				<div class="col-sm-1">
-					<a data-toggle="modal" data-target="#avanzada" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span></a>  
+					<span data-toggle="tooltip" data-placement="top" title="Búsqueda avanzada">
+						<a data-toggle="modal" data-target="#avanzada" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span></a>  
+					</span>
 				</div>
 				<div class="col-sm-2">
 					<input type="button" value="Ver alumnos" style="width:100%" class="btn btn-primary" onclick="location.href='<?php print get("webURL")._sh."admin/listaclub/" ?>'+$('#club').val()+'/'+$('#periodo').val()" />
@@ -55,11 +57,14 @@ if($alumnos != NULL) { ?>
 
 	<div class="col-sm-9">Número de registros encontrados: <?php print count($alumnos) ?></div>
 	<div class="col-sm-1">
-	 	<button class="btn btn-primary" data-toggle="collapse" data-target="#graf" aria-expanded="false" aria-controls="graf"><span class="glyphicon glyphicon-stats"></span></button>  
+	 	<span data-toggle="tooltip" data-placement="top" title="Gráfico de hombres y mujeres">
+	 	<button class="btn btn-success" data-toggle="collapse"  data-target="#graf" aria-expanded="false" aria-controls="graf"><span class="glyphicon glyphicon-stats"></span></button>  
+	 	</span>
 	 </div>
 	<div class="col-sm-2">		
 		<div class="btn-group" style="width:100%">
-		  <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
+		  <a class="btn dropdown-toggle btn-success" data-toggle="dropdown" href="#" style="width:100%">
+		  	<span  class="glyphicon glyphicon-save-file"></span>
 		    Descarga
 		    <span class="caret"></span>
 		  </a>
@@ -67,6 +72,9 @@ if($alumnos != NULL) { ?>
 		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/lista/'.$par1.'/'.$par2 ?>" target="_blank">Lista de alumnos</a></li>
 		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/cedula/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de inscripción</a></li>
 		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/resultados/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de resultados</a></li>
+		    <li class="divider"></li>
+		    <li><a href="<?php  ?>" target="_blank">Formato de lib. horas</a></li>
+		    <li><a href="<?php  ?>" target="_blank">Formato de act. comp.</a></li>
 		  </ul>
 		</div>
 	</div>
@@ -74,11 +82,15 @@ if($alumnos != NULL) { ?>
 
 <p>&nbsp;</p>
 <div class="collapse" id="graf">
-		<p>Muestra una comparativa entre los alumnos que se inscribieron en los clubes y aquellos que acreditaron sus horas.</p>
+		<p>Muestra una comparativa entre la cantidad de mujeres y hombres inscritos en el club.</p>
 		<div id="piechart_3d" style="width: 500px; height:430px" ></div>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+
 </div>
 
-<p>&nbsp;</p>
+
 <script src="<?php print path("www/lib/jquery.tablesorter.min.js","www") ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php print path("www/lib/green/style.css","www") ?>">
 <script >
@@ -249,7 +261,7 @@ foreach ($alumnos as $alum) {	?>
   </div>
 </div>
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="<?php print path("www/lib/google/jsapi.js","www") ?>"></script>
 <script type="text/javascript">
 	  google.load("visualization", "1", {packages:["corechart"]});
 	  google.setOnLoadCallback(drawChart);
