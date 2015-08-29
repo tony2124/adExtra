@@ -1,5 +1,16 @@
+<script src="<?php print path("vendors/js/jquery-ui.min.js","zan") ?>"></script>
+<link href="<?php print path("vendors/css/frameworks/jquery-ui/jquery-ui.min.css", "zan"); ?>" rel="stylesheet">
 <script type="text/javascript">
 $().ready(function() {
+
+   $( ".selectorFecha" ).datepicker({  
+          defaultDate: "-15y", 
+                yearRange: "1900:-15",
+        dateFormat: 'yy-mm-dd',  
+        showAnim: 'show',
+        duration: 'normal',
+        changeMonth: true,
+                changeYear: true });
 
    $("#registropromotor").validate({
     rules: {
@@ -36,95 +47,89 @@ $().ready(function() {
 </script> 
 
 <style type="text/css">
-  label.error { color: red; display: inline; margin-left: 10px;}
+  label.error { color: red; display: inline; margin-left: 10px;font-size: 10px;}
 </style>
 
  <form id="registropromotor" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/regProm' ?>" enctype="multipart/form-data">
     <fieldset>
-      <legend>Inscripción de un nuevo promotor</legend>
+      <legend><span class="glyphicon glyphicon-user"></span>&nbsp;  Registro de un nuevo promotor</legend>
       <div class="well">
       <h5>Antes de registrar al promotor debe tomar en cuenta los siguientes aspectos:</h5>
         <ul>
           <li>No debe usarse acentos en el nombre y apellidos del promotor.</li>
           <li>El nombre y apellidos debe escribirse con letra mayúscula.</li>
           <li>El correo electrónico del promotor es indispensable.</li>
-          <li>El usuario del promotor NO PODRÁ SER MODIFICADO DESPUÉS.</li>
         </ul>
       </div>
         <hr>
-        <div class="control-group">
-           <label class="control-label" for="user">Foto</label>
-          <div class="controls">
+        <div class="form-group">
+           <label class="col-sm-3 control-label" for="user">Foto</label>
+          <div class="col-sm-3">
     <!-- -->  <input type="file"  name="foto">
-          </div><br>
-          <label class="control-label" for="user">Usuario</label>
-          <div class="controls">
-    <!-- -->  <input type="text" name="user" class="input-xlarge" id="user">
-          </div><br>
-          <label class="control-label" for="pass">Contraseña</label>
-          <div class="controls">
-    <!-- -->  <input type="password" name="pass" class="input-xlarge" id="pass">
-          </div><br>
-          <label class="control-label" for="nombre">Nombre</label>
-          <div class="controls">
-    <!-- -->  <input type="text" name="nombre" class="input-xlarge" id="nombre">
-          </div><br>
-          <label class="control-label" for="ap">Apellido paterno</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="ap" class="input-xlarge" id="ap">
-          </div><br>
-          <label class="control-label" for="am">Apellido materno</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="am" class="input-xlarge" id="am">
-          </div><br>
-          <label class="control-label" for="fecha_nac" >Fecha de nacimiento</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="fecha_nac" class="selectorFecha" placeholder="aaaa/mm/dd" id="fecha_nac" class="input-xlarge selectorfecha">
-          </div><br>
-          <label class="control-label">Sexo</label>
-          <div class="controls">
-      <!-- -->  <select name="sexo" id="sexo" >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="user">Usuario</label>
+          <div class="col-sm-3">
+    <!-- -->  <input type="text" name="user" class="form-control" id="user">
+          </div>
+          <label class="col-sm-3 control-label" for="pass">Contraseña</label>
+          <div class="col-sm-3">
+    <!-- -->  <input type="password" name="pass" class="form-control" id="pass">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="nombre">Nombre</label>
+          <div class="col-sm-3">
+    <!-- -->  <input type="text" name="nombre" class="form-control" id="nombre">
+          </div>
+          <label class="col-sm-3 control-label" for="ap">Apellido paterno</label>
+          <div class="col-sm-3">
+      <!-- -->  <input type="text" name="ap" class="form-control" id="ap">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="am">Apellido materno</label>
+          <div class="col-sm-3">
+      <!-- -->  <input type="text" name="am" class="form-control" id="am">
+          </div>
+          <label class="col-sm-3 control-label" for="fecha_nac" >Fecha de nacimiento</label>
+          <div class="col-sm-3">
+      <!-- -->  <input type="text" name="fecha_nac" class="form-control selectorFecha" placeholder="aaaa/mm/dd" id="fecha_nac" class="form-control selectorfecha">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Sexo</label>
+          <div class="col-sm-3" >
+      <!-- -->  <select name="sexo" class="form-control" id="sexo" >
                   <option value="1">HOMBRE</option>
                   <option value="2">MUJER</option>
                 </select>
-          </div><br>
-      <!--    <label class="control-label">Club</label>
-          <div class="controls">
-      <select name="club" id="club">
-                <option>Seleccione una opción....</option>
-                  <?php foreach ($clubes as $club){
-
-                    print '<option value="'.$club['id_club'].'">'.$club['nombre_club'].'</option>';
-                  } ?>
-                </select>
-          </div><br>
-          <label class="control-label" for="horario">Horario de trabajo</label>
-          <div class="controls">
-      <!  <textarea name="horario" id="horario"></textarea>
-          </div><br>
-          <label class="control-label" for="lugar">Lugar de trabajo</label>
-          <div class="controls">
-      <!  <textarea name="lugar" id="lugar"></textarea>
-          </div><br>-->
-          <label class="control-label" for="email">Correo electrónico</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="email" class="input-xlarge" id="email">
-          </div><br>
-           <label class="control-label" for="tel">Teléfono</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="tel" class="input-xlarge" id="tel">
-          </div><br>
-          <label class="control-label" for="direccion">Dirección</label>
-          <div class="controls">
+          </div>
+          <label class="col-sm-3 control-label" for="email">Correo electrónico</label>
+          <div class="col-sm-3">
+      <!-- -->  <input type="text" name="email" class="form-control" id="email">
+          </div>
+        </div>
+        <div class="form-group">
+           <label class="col-sm-3 control-label" for="tel">Teléfono</label>
+          <div class="col-sm-3">
+      <!-- -->  <input type="text" name="tel" class="form-control" id="tel">
+          </div>
+          <label class="col-sm-3 control-label" for="direccion">Dirección</label>
+          <div class="col-sm-3">
       <!-- -->  <textarea name="direccion" id="direccion"></textarea>
-          </div><br>
-          <label class="control-label" for="ocupacion">Ocupación</label>
-          <div class="controls">
-      <!-- -->  <input type="text" name="ocupacion" class="input-xlarge" id="ocupacion">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="ocupacion">Ocupación</label>
+          <div class="col-sm-3">
+      <!-- -->  <input type="text" name="ocupacion" class="form-control" id="ocupacion">
           </div>
           <div class="form-actions">
             <input type="submit" class="btn btn-success span2 pull-center" value="Registrar">  
           </div>
+
         </div>
       </fieldset>
 </form> 

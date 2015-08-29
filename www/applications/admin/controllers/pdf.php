@@ -8,7 +8,7 @@ if(!defined("_access")) {
 
 require_once(_spath.'/pdf/config/lang/eng.php');
 require_once(_spath.'/pdf/tcpdf.php');
-include(_corePath . _sh .'/libraries/funciones/funciones.php');
+include(_pathwww.'/lib/funciones/funciones.php');
 
 
 //Encabezado personalizado de la cédula de inscripción
