@@ -237,7 +237,10 @@ class Admin_Controller extends ZP_Controller {
 			else $vars['periodo'] = periodo_actual();
 
 		if($periodo == 1)
+		{
 			$vars['promotores']  = $this->Admin_Model->getPromotores($vars['periodo_anterior']);
+			$vars["mostrar_datos"] = 1;
+		}
 		else
 			$vars['promotores']  = $this->Admin_Model->getPromotores($vars['periodo']);
 		$vars['todos_promotores'] = $this->Admin_Model->getPromotores("all");
@@ -303,7 +306,7 @@ class Admin_Controller extends ZP_Controller {
 		if( strcmp(POST('mantener'), "S") != 0 )
 		if (FILES("foto", "tmp_name")) 
 		{
-		    $path = _spath.'/IMAGENES/fotosPromotores/';  
+		    $path = _spath.'/img/promotores/';  
 		    $tmp_name = $_FILES["foto"]["tmp_name"];
 			$name = $_FILES["foto"]["name"];
 	
@@ -384,7 +387,7 @@ class Admin_Controller extends ZP_Controller {
 
 		if (FILES("foto", "tmp_name")) 
 		{
-		    $path = _spath.'/IMAGENES/fotosPromotores/';  
+		    $path = _spath.'/img/promotores/';  
 		    $tmp_name = $_FILES["foto"]["tmp_name"];
 			$name = $_FILES["foto"]["name"];
 	
@@ -464,7 +467,6 @@ class Admin_Controller extends ZP_Controller {
 		$sit = POST('sit');
 
 		if(!POST('sit')) $sit='1';
-		//____($sit);
 		$error = NULL;
 		if($busqueda=='') $error = 1;
 
@@ -1411,9 +1413,10 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') . _sh . 'admin/login');
 
  		$vars['view'] = $this->view('configLiberacion', true);
- 		$config = $this->Admin_Model->getConfiguracion();
+ 		$config = $this->Admin_Model->getConfFechas(periodo_actual());
  		$vars['periodos'] = periodos_combo('1082');
  		$vars['config'] = $config[0];
+ 		$vars['menu'] = 4;
 
  		$this->render('content', $vars);
  	}

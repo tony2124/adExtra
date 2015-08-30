@@ -140,6 +140,11 @@ public function getConfiguracion()
 return $data = $this->Db->query("select * from configuracion");
 }
 
+public function getConfFechas($periodo)
+{
+	return $data = $this->Db->query("SELECT * from conf_fechas WHERE periodo = '$periodo'");
+}
+
 public function inscribirActividad($vars)
 {
 $this->acentos();
@@ -171,7 +176,7 @@ public function guardarHorario($vars)
 
 	$data = $this->Db->query("select * from horarios where periodo = '$vars[periodo]' and id_club = '$vars[club]'");
 	if($data == NULL)
-		$this->Db->query("insert into horarios values($vars[club],'$vars[promotor]','$vars[periodo]','$vars[lugar]','$vars[horario]')");
+		$this->Db->query("INSERT into horarios(id_club, usuario_promotor,periodo,grupo,lugar, horario) values($vars[club],'$vars[promotor]','$vars[periodo]','A','$vars[lugar]','$vars[horario]')");
 	else
 		$this->Db->query("update horarios set usuario_promotor = '$vars[promotor]', lugar = '$vars[lugar]', horario =  '$vars[horario]' where id_club = '$vars[club]' and periodo = '$vars[periodo]' ");
 }

@@ -47,8 +47,8 @@ $().ready(function() {
 </style>
  <form id="registroalumno" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/regisalumno' ?>">
     <fieldset>
-      <legend>Registro de un nuevo alumno</legend>
-       <div class="alert alert-info">
+      <legend><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Registro de un nuevo alumno</legend>
+       <div class="well">
        <h5>Antes de registrar el alumno debe tomar en cuenta los siguientes aspectos:</h5>
         <ul>
           <li>No debe usarse acentos en el nombre y apellidos del alumno.</li>

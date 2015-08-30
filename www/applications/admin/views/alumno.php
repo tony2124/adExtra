@@ -1,7 +1,8 @@
+<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;Datos del alumno</legend>
 <?php 
 if(!$alumno){
   ?>
-  <div class="alert alert-error"><h2>Error</h2>No se ha detectado el número de control de un alumno, por favor introdusca un número de contol para encontrar resultados.</div>
+  <div class="alert alert-danger"><h2>Error</h2>No se ha detectado el número de control de un alumno, por favor introdusca un número de contol para encontrar resultados.</div>
   <?php
   return;
 }
@@ -34,25 +35,6 @@ function modActividad(periodo, folio)
 
 $().ready(function() {
 
-  // validate signup form on keyup and submit
- /* $("#editres").validate({
-    rules: {
-      obs: "required"
-    },
-    messages: {
-      obs: "Debe incluir un comentario para que realice el cambio."
-    }
-  });
-/*
-  $("#insActForm").validate({
-    rules: {
-      obsIns: "required"
-    },
-    messages: {
-      obsIns: "Debe incluir un comentario para que realice el cambio."
-    }
-  });
-*/
    $("#editalumno").validate({
     rules: {
       nombre: "required",
@@ -75,6 +57,8 @@ $().ready(function() {
     }
   });
 
+   $("[rel=tooltip]").tooltip();
+     $("[rel=popover]").popover();
   // propose username by combining first- and lastname
  
 });
@@ -92,7 +76,7 @@ function folio(folio)
   label.error { color: red;}
 </style>
 
-<div class="well"><h4>A continuación se muestra los datos del alumno seleccionado.</h4></div>
+<!--<div class="well"><h4>A continuación se muestra los datos del alumno seleccionado.</h4></div>-->
 <a rel="tooltip" title="Modificar datos del alumno" data-toggle="modal" href="#miModal" class="pull-right">
   <i class="icon-cog"></i> Editar
 </a>
@@ -142,7 +126,7 @@ function folio(folio)
       </tr>
       <tr>
         <td>Situación escolar (SE)</td>
-        <td><?php print $alumno['situacion_escolar'] ?></td>
+        <td><?php print ($alumno['situacion_escolar']==1) ? '<label class="label label-success">ACTIVO</label>' : '<label class="label label-danger">INACTIVO</label>' ?></td>
       </tr>
       <tr>
         <td>Clave del sitio</td>
@@ -150,10 +134,11 @@ function folio(folio)
       </tr>
   </tbody>
 </table>
-
-<h2>Historial de liberación de horas extraescolares</h2>
+<div style="clear: both"></div>
+<p>&nbsp;</p>
+<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;Historial de participación</legend>
 <hr>
-<p>A continuación se muestra todos los clubes y actividades que ha realizado <span class="label label-success"><?php print $nombreAlumno ?> </span>.</p>
+<p>A continuación se muestran los clubes y actividades en las que ha particpado <span class="label label-primary"><?php print $nombreAlumno ?> </span>.</p>
 <hr><!--
 <?php // if($inscripciones == NULL) { ?>
  <div class="alert"><h2>Advertencia</h2>Este alumno no se ha inscrito en ninguna actividad.</div>
@@ -176,7 +161,7 @@ function folio(folio)
       ?>
     <li class="<?php print ($i==sizeof($periodos) - 1) ? 'active' : NULL; $i++; ?>">
       <a href="#tab<?php print $i ?>" data-toggle="tab">
-        <span class="label label-<?php print ($liberado) ? 'success' : 'important' ?>"><?php print $periodo ?></span>
+        <span class="label label-<?php print ($liberado) ? 'success' : 'danger' ?>"><?php print $periodo ?></span>
       </a>
     </li>
     <?php 
@@ -221,10 +206,11 @@ function folio(folio)
                 </td>
                 <td>
                   <?php if($ins['observaciones']!=NULL) { ?>
-                  <a href="#" rel="popover" data-content="<?php print $ins['observaciones'] ?>" data-original-title="Observación">ver</a><?php } ?></td>
+                  <button class="btn btn-default" rel="popover" data-content="<?php print $ins['observaciones'] ?>" data-original-title="Observación">ver</button><?php } ?></td>
                 <td>
-                  <a href="<?php print get('webURL')._sh.'admin/pdf/formatos/liberacion/'.$ins['folio'] ?>" target="_blank" title="Descargar formato de liberación de horas" rel="tooltip" class="btn">Formato</a>
-                  <a title="Eliminar" data-toggle="modal" href="#confirmModal" rel="tooltip" href="#" class="btn btn-danger pull-right" onclick="folio('<?php print $ins['folio'] ?>')"><span class="icon-trash icon-white"></span></a>
+                  <a style="margin-left: 10px" title="Eliminar" data-toggle="modal" href="#confirmModal" rel="tooltip" href="#" class="btn btn-danger pull-right" onclick="folio('<?php print $ins['folio'] ?>')"><span class="glyphicon glyphicon-remove"></span></a>
+                  <a  href="<?php print get('webURL')._sh.'admin/pdf/formatos/liberacion/'.$ins['folio'] ?>" target="_blank" title="Descargar formato de liberación de horas" rel="tooltip" class="btn btn-success pull-right"><span class="glyphicon glyphicon-download-alt"></span> </a>
+                  
                 </td>
               </tr>
                 <?php
@@ -232,18 +218,22 @@ function folio(folio)
               
             }
             if(!$band) 
-              print '<tr><td colspan="6">No se encuentra inscrito en ningún club ó actividad</td></tr>';
+              print '<tr><td colspan="6"><div class="alert alert-danger">No se encuentra inscrito en ningún club ó actividad</div></td></tr>';
             ?>
             <tr>
               <td colspan="6">
-                <a rel="tooltip" title="Inscribir a una actividad" onclick="updateDataInsForm(<?php print $i.",'".$periodo."'" ?>)" class="pull-right btn btn-success" data-toggle="modal" href="#insActDialog" >
-                  <i class="icon-pencil icon-white"></i>
+                <a data-toggle="tooltip" title="Inscribir a una actividad" onclick="updateDataInsForm(<?php print $i.",'".$periodo."'" ?>)" class="pull-right btn btn-success" data-toggle="modal" href="#insActDialog" >
+                  <i class="glyphicon glyphicon-plus"></i>
                 </a>
               </td>
             </tr>
         </tbody>
       </table>
-      
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
     </div>
   
     <?php } ?>

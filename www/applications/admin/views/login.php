@@ -29,7 +29,7 @@ body{
 <center>
 	<img src="<?php print ruta_imagen . '/ITSA.png' ?>" width="150">
 	<p>&nbsp;</p>
-	<p style="font-family: 'Lobster', cursive; font-size: 2em; color: #fff">Departamento de promoción cultural, deportiva y recreativa</p>
+	<p style="font-family: 'Lobster', cursive; font-size: 2em; color: #fff">Departamento de actividades culturales, deportivas y recreativas</p>
 	<hr>
 </center>
 <?php if($error=='1') { ?>

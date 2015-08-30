@@ -29,15 +29,15 @@
 <p>Registros encontrados: <?php if($promotores != null) print sizeof($promotores); else print "0"; ?></p>
 <p>&nbsp;</p>
 <table class="table table-hover">
-	<tr>
-		<td>Usuario</td>
-		<td>Nombre</td>
-		<td>Sexo</td>
-		<td>E-mail</td>
-		<td>Teléfono</td>
-		<td>Edad</td>
-		<td>Estado</td>
-		<td></td>
+	<tr style="background: #eeeeee">
+		<th>Usuario</th>
+		<th>Nombre</th>
+		<th>Sexo</th>
+		<th>E-mail</th>
+		<th>Teléfono</th>
+		<th>Edad</th>
+		<th>Estado</th>
+		<th></th>
 	</tr>
 	<tbody>
 		<?php 

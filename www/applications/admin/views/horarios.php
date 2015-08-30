@@ -21,7 +21,12 @@ function guardar(posicion)
      alert( "Error al actualizar datos: " + textStatus );
     });
 }
+
+
+
 </script>
+
+
 
 <legend><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Horarios</legend>
 <!--
@@ -76,17 +81,33 @@ function guardar(posicion)
 
 </div>
 <?php if($promotores==NULL) { ?>
-<div class="alert alert-error">
+<div style="clear: both"></div>
+<p>&nbsp;</p>
+<div class="alert alert-danger">
   <!--<a class="close" data-dismiss="alert" href="#">×</a>-->
-  <p>No se encuentra ningún promotor ASIGNADO en este periodo, por favor asigne los promotores correspondientes a cada club y su horario de participación. Debe tener en cuenta que si es un periodo pasado solo podra hacer esta configuración UNA VEZ, es necesario que cuente con el horario correspondiente al periodo.</p>
+  <p>No se encuentra ningún promotor ASIGNADO en este periodo, 
+    por favor asigne los promotores correspondientes a cada club y 
+    su horario de participación. Debe tener en cuenta que si es un periodo 
+    pasado sólo podrá hacer esta configuración UNA VEZ, es necesario 
+    que cuente con el horario correspondiente al periodo.</p>
   
+</div>
+ <?php } ?>
+
+ <?php if(isset($mostrar_datos)) { ?>
+<div style="clear: both"></div>
+<p>&nbsp;</p>
+<div class="alert alert-warning">
+  <!--<a class="close" data-dismiss="alert" href="#">×</a>-->
+  <p>Ha sido cargado el horario del periodo anterior, por favor guarde 
+    los cambios para cada club. Los cambios se pueden comprobar si se actualiza la página.</p>
 </div>
  <?php } ?>
 <hr>
 
 <div style="clear: both"></div>
 <p>&nbsp;</p>
-<table class="table table-hover">
+<table class="table">
   <thead style="background: #eeeeee">
     <td width="150" align="center"><strong> CLUB</strong></td>
     <th width="250">PROMOTOR</th>
@@ -96,134 +117,155 @@ function guardar(posicion)
   </thead>
   <tbody>
 
-<?php $cI = 0; foreach ($clubes as $club) {  $b = false; ?>
+<?php 
+    $cI = 0; 
+    foreach ($clubes as $club) {  
+      $b = false; ?>
   
-  <tr>
-      <td align="center"><?php print $club['nombre_club'] ?><input id="club<?php print $cI ?>" type="hidden" value="<?php print $club['id_club'] ?>" /></td>
-     <?php if($promotores != NULL) foreach ($promotores as $promotor) 
-      if($club['id_club'] == $promotor['id_club'])
-      {
-         if(strcmp( $periodo , periodo_actual()) == 0)
-         {
-      ?>
-        <td>
-          <select class="form-control" id="promotor<?php print $cI ?>"> 
-            <?php foreach ($promotores_actuales as $prom) { ?>
-            <option value="<?php print $prom['usuario_promotor'] ?>"  <?php if(strcmp($prom['usuario_promotor'], $promotor['usuario_promotor']) == 0) print "selected='selected'" ?>>
-              <?php print strtoupper($prom['nombre_promotor'].' '.$prom['apellido_paterno_promotor'].' '.$prom['apellido_materno_promotor']) ?>
-            </option>
-            <?php } ?>
-          </select>
-        </td>
-        <td><textarea class="form-control" id="lugar<?php print $cI ?>"><?php print $promotor['lugar'] ?></textarea></td>
-        <td><textarea class="form-control" id="horario<?php print $cI ?>"><?php print $promotor['horario'] ?></textarea></td>
-        <td>
-          <button class="btn btn-default" onclick="guardar(<?php print $cI ?>)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-          <button class="btn btn-default" data-toggle="collapse" href="#showAdmin_<?php print $cI;?>"><span class="glyphicon glyphicon-chevron-down"></span></button>
+        <tr>
+            <td align="center">
+               <?php print $club['nombre_club'] ?> 
+              <input id="club<?php print $cI ?>" type="hidden" value="<?php print $club['id_club'] ?>" />
+            </td>
 
-        </td>
-        <?php 
-          }
-          else
-          { ?>
+           <?php 
+              if($promotores != NULL) 
+                  foreach ($promotores as $promotor) 
+                      if($club['id_club'] == $promotor['id_club'])
+                      {
+                        if(strcmp( $periodo , periodo_actual()) == 0)
+                        {
+                          ?>
+                            <td>
+                              <select class="form-control" id="promotor<?php print $cI ?>"> 
+                                <?php 
+                                  foreach ($promotores_actuales as $prom) 
+                                    { ?>
+                                      <option value="<?php print $prom['usuario_promotor'] ?>"  <?php if(strcmp($prom['usuario_promotor'], $promotor['usuario_promotor']) == 0) print "selected='selected'" ?>>
+                                        <?php print strtoupper($prom['nombre_promotor'].' '.$prom['apellido_paterno_promotor'].' '.$prom['apellido_materno_promotor']) ?>
+                                      </option>
+                                <?php } ?>
+                              </select>
+                            </td>
+                            <td>
+                              <textarea class="form-control" id="lugar<?php print $cI ?>"><?php print $promotor['lugar'] ?></textarea>
+                            </td>
+                            <td>
+                              <textarea class="form-control" id="horario<?php print $cI ?>"><?php print $promotor['horario'] ?></textarea>
+                            </td>
+                            <td>
+                              <button id="guardar" class="btn btn-default" onclick="guardar(<?php print $cI ?>)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                              <button class="btn btn-default" data-toggle="collapse" href="#showAdmin_<?php print $cI;?>"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                            </td>
+                            <?php 
+                        }
+                        else
+                        { ?>
 
-          <td><?php print strtoupper($promotor['nombre_promotor'].' '.$promotor['apellido_paterno_promotor'].' '.$promotor['apellido_materno_promotor']) ?></td>
-          <td><?php print $promotor['lugar'] ?></td>
-          <td><?php print $promotor['horario'] ?></td>
-          <td></td>
-          <?php }
-        $b = true; 
-        break; 
+                            <td><?php print strtoupper($promotor['nombre_promotor'].' '.$promotor['apellido_paterno_promotor'].' '.$promotor['apellido_materno_promotor']) ?></td>
+                            <td><?php print $promotor['lugar'] ?></td>
+                            <td><?php print $promotor['horario'] ?></td>
+                            <td>
+                              <button class="btn btn-default" data-toggle="collapse" href="#showAdmin_<?php print $cI;?>"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                            </td>
+<?php                   }
+                        $b = true; 
+                        break; 
+                      } 
 
-      } 
+                      if($b == false)
+                      {  ?>
+                          <td>
+                            <select class="form-control" id="promotor<?php print $cI ?>"> 
+                              <option>Elige un promotor</option>
+                              <?php 
+                              foreach ($promotores_actuales as $prom) 
+                              { ?>                        
+                                      <option value="<?php print $prom['usuario_promotor'] ?>" >
+                                        <?php print strtoupper($prom['nombre_promotor'].' '.$prom['apellido_paterno_promotor'].' '.$prom['apellido_materno_promotor']) ?>
+                                      </option>
+     <?php                     } 
+       ?>                   </select>
+                          </td>
+                          <td><textarea class="form-control" id="lugar<?php print $cI ?>"></textarea></td>
+                          <td><textarea class="form-control" id="horario<?php print $cI ?>"></textarea></td>
+                          <td><button class="btn btn-default" onclick="guardar(<?php print $cI ?>)"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
+  <?php               }  
 
-      if($b == false)
-      {  ?>
-      <td>
-        <select class="form-control" id="promotor<?php print $cI ?>"> 
-          <option>Elige un promotor</option>
-          <?php foreach ($promotores_actuales as $prom) { ?>
-          
-          <option value="<?php print $prom['usuario_promotor'] ?>" >
-            <?php print strtoupper($prom['nombre_promotor'].' '.$prom['apellido_paterno_promotor'].' '.$prom['apellido_materno_promotor']) ?>
-          </option>
-          <?php } ?>
-        </select>
-      </td>
-      <td ><textarea class="form-control" id="lugar<?php print $cI ?>"></textarea></td>
-      <td ><textarea class="form-control" id="horario<?php print $cI ?>"></textarea></td>
-      <td><button class="btn btn-default" onclick="guardar(<?php print $cI ?>)"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
-      <?php }  ?>
+?>
+          </tr>
 
-    </tr>
-    <?php if($b == true)  { ?>
-    <tr bgcolor="#eee">
-      <td colspan="5" >
-        <a class="icon-chevron-down pull-right" rel="tooltip" title="Mostrar datos"></a>
-      </td>
-    </tr>
-    <?php } ?>
-    <tr>
-      <td colspan="5">
-        <div id="showAdmin_<?php print $cI;?>" class="collapse out">
+          <?php 
+          if($b == true)  
+            { 
 
-          <table class="table table-striped table-condensed">
-            <thead>
-              <tr>
-                <th>Foto</th>
-                <th>Datos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td width="200" rowspan="12">
-                  <img src="<?php print _rs._sh.'img/promotores/'.$promotor['foto_promotor'] ?>" width="200" >
-                </td>
-              </tr>
-              <tr>
-                <td width="200">USUARIO</td>
-                <td><?php print $promotor['usuario_promotor']?></td>
-              </tr>
-              <tr>
-                 <td>NOMBRE</td>
-                <td><?php print $promotor['apellido_paterno_promotor'].' '.$promotor['apellido_materno_promotor'].' '.$promotor['nombre_promotor'] ?></td>
+?>
+                <tr>
+                  <td colspan="5">
+                    <div id="showAdmin_<?php print $cI;?>" class="collapse out">
+
+                      <table class="table table-striped table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Foto</th>
+                            <th>Datos</th>
+                          </tr>
+                        </thead>
+                        <tbody >
+                          <tr>
+                            <td width="200" rowspan="12">
+                              <img class="img-thumbnail" src="<?php print _rs._sh.'img/promotores/'.$promotor['foto_promotor'] ?>" width="200" >
+                            </td>
+                          </tr>
+                          <tr>
+                            <td width="200">USUARIO</td>
+                            <td><?php print $promotor['usuario_promotor']?></td>
+                          </tr>
+                          <tr>
+                             <td>NOMBRE</td>
+                            <td><a href=""> <?php print $promotor['apellido_paterno_promotor'].' '.$promotor['apellido_materno_promotor'].' '.$promotor['nombre_promotor'] ?></a></td>
+                            </tr>
+                          <tr>
+                             <td>CLUB</td>
+                            <td><?php print $promotor['nombre_club'] ?></td>
+                            </tr>
+                          <tr>
+                             <td>LUGAR Y HORARIO</td>
+                            <td><?php print $promotor['lugar']." horario:".$promotor['horario'] ?></td>
+                            </tr>
+                          <tr>
+                             <td>SEXO</td>
+                            <td><?php print ($promotor['sexo_promotor'] == 1) ? 'HOMBRE' : 'MUJER' ?></td>
+                            </tr>
+                          <tr>
+                             <td>CORREO ELECTRÓNICO</td>
+                            <td><?php print $promotor['correo_electronico_promotor'] ?></td>
+                            </tr>
+                          <tr>
+                             <td>EDAD</td>
+                            <td><?php print edad($promotor['fecha_nacimiento_promotor'])." años" ?></td>
+                            </tr>
+                          <tr>
+                             <td>OCUPACIÓN</td>
+                            <td><?php print $promotor['ocupacion_promotor']?></td>
+                            </tr>
+                          <tr>
+                             <td>DIRECCIÓN</td>
+                            <td><?php print $promotor['direccion_promotor'].' Teléfono: '.$promotor['telefono_promotor'] ?></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
                 </tr>
-              <tr>
-                 <td>CLUB</td>
-                <td><?php print $promotor['nombre_club'] ?></td>
-                </tr>
-              <tr>
-                 <td>LUGAR Y HORARIO</td>
-                <td><?php print $promotor['lugar']." horario:".$promotor['horario'] ?></td>
-                </tr>
-              <tr>
-                 <td>SEXO</td>
-                <td><?php print ($promotor['sexo_promotor'] == 1) ? 'HOMBRE' : 'MUJER' ?></td>
-                </tr>
-              <tr>
-                 <td>CORREO ELECTRÓNICO</td>
-                <td><?php print $promotor['correo_electronico_promotor'] ?></td>
-                </tr>
-              <tr>
-                 <td>EDAD</td>
-                <td><?php print edad($promotor['fecha_nacimiento_promotor'])." años" ?></td>
-                </tr>
-              <tr>
-                 <td>OCUPACIÓN</td>
-                <td><?php print $promotor['ocupacion_promotor']?></td>
-                </tr>
-              <tr>
-                 <td>DIRECCIÓN</td>
-                <td><?php print $promotor['direccion_promotor'].' Teléfono: '.$promotor['telefono_promotor'] ?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </td>
-    </tr>
-    <?php $cI++; } ?>
-  </tbody>
-</table>
+                <?php 
+                $cI++;
+                 } 
+
+                  }
+                 ?>
+              </tbody>
+            </table>
 <hr>
 
 
@@ -246,3 +288,4 @@ function guardar(posicion)
     <a href="#" class="btn btn-danger" onclick="$('#elimPromo').submit()">Eliminar</a>
   </div>
 </div>
+

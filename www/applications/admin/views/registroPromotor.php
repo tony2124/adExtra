@@ -63,71 +63,72 @@ $().ready(function() {
       </div>
         <hr>
         <div class="form-group">
-           <label class="col-sm-3 control-label" for="user">Foto</label>
-          <div class="col-sm-3">
+           <label class="col-sm-2 control-label" for="user">Foto</label>
+          <div class="col-sm-4">
     <!-- -->  <input type="file"  name="foto">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label" for="user">Usuario</label>
-          <div class="col-sm-3">
+          <label class="col-sm-2 control-label" for="user">Usuario</label>
+          <div class="col-sm-4">
     <!-- -->  <input type="text" name="user" class="form-control" id="user">
           </div>
-          <label class="col-sm-3 control-label" for="pass">Contraseña</label>
-          <div class="col-sm-3">
+          <label class="col-sm-2 control-label" for="pass">Contraseña</label>
+          <div class="col-sm-4">
     <!-- -->  <input type="password" name="pass" class="form-control" id="pass">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label" for="nombre">Nombre</label>
-          <div class="col-sm-3">
+          <label class="col-sm-2 control-label" for="nombre">Nombre</label>
+          <div class="col-sm-4">
     <!-- -->  <input type="text" name="nombre" class="form-control" id="nombre">
           </div>
-          <label class="col-sm-3 control-label" for="ap">Apellido paterno</label>
-          <div class="col-sm-3">
+          <label class="col-sm-2 control-label" for="ap">Apellido paterno</label>
+          <div class="col-sm-4">
       <!-- -->  <input type="text" name="ap" class="form-control" id="ap">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label" for="am">Apellido materno</label>
-          <div class="col-sm-3">
+          <label class="col-sm-2 control-label" for="am">Apellido materno</label>
+          <div class="col-sm-4">
       <!-- -->  <input type="text" name="am" class="form-control" id="am">
           </div>
-          <label class="col-sm-3 control-label" for="fecha_nac" >Fecha de nacimiento</label>
-          <div class="col-sm-3">
+          <label class="col-sm-2 control-label" for="fecha_nac" >Fecha de nacimiento</label>
+          <div class="col-sm-4">
       <!-- -->  <input type="text" name="fecha_nac" class="form-control selectorFecha" placeholder="aaaa/mm/dd" id="fecha_nac" class="form-control selectorfecha">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label">Sexo</label>
-          <div class="col-sm-3" >
+          <label class="col-sm-2 control-label">Sexo</label>
+          <div class="col-sm-4" >
       <!-- -->  <select name="sexo" class="form-control" id="sexo" >
                   <option value="1">HOMBRE</option>
                   <option value="2">MUJER</option>
                 </select>
           </div>
-          <label class="col-sm-3 control-label" for="email">Correo electrónico</label>
-          <div class="col-sm-3">
+          <label class="col-sm-2 control-label" for="email">Correo electrónico</label>
+          <div class="col-sm-4">
       <!-- -->  <input type="text" name="email" class="form-control" id="email">
           </div>
         </div>
         <div class="form-group">
-           <label class="col-sm-3 control-label" for="tel">Teléfono</label>
-          <div class="col-sm-3">
+           <label class="col-sm-2 control-label" for="tel">Teléfono</label>
+          <div class="col-sm-4">
       <!-- -->  <input type="text" name="tel" class="form-control" id="tel">
           </div>
-          <label class="col-sm-3 control-label" for="direccion">Dirección</label>
-          <div class="col-sm-3">
-      <!-- -->  <textarea name="direccion" id="direccion"></textarea>
+           <label class="col-sm-2 control-label" for="ocupacion">Ocupación</label>
+          <div class="col-sm-4">
+      <!-- -->  <input type="text" name="ocupacion" class="form-control" id="ocupacion">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label" for="ocupacion">Ocupación</label>
-          <div class="col-sm-3">
-      <!-- -->  <input type="text" name="ocupacion" class="form-control" id="ocupacion">
+          <label class="col-sm-2 control-label" for="direccion">Dirección</label>
+          <div class="col-sm-6">
+      <!-- -->  <textarea class="form-control" name="direccion" id="direccion"></textarea>
           </div>
-          <div class="form-actions">
-            <input type="submit" class="btn btn-success span2 pull-center" value="Registrar">  
+          <div class="col-sm-2"></div>
+          <div class="col-sm-2">
+            <input style="width: 100%" type="submit" class="btn btn-success span2 pull-center" value="Registrar">  
           </div>
 
         </div>

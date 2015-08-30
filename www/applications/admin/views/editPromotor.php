@@ -71,75 +71,75 @@ $().ready(function() {
                   <input type="checkbox" value="S" name="mantener" checked="checked"> &nbsp;Mantener la foto actual   </label>
                 <input type="file" name="foto">
                 <p>&nbsp;</p>
-                <p style="font-style: italic">* Para subir una nueva foto quite la selección de la casilla de "mantener foto actual" y seleccione la foto nueva. Nota: Si adjunta una foto nueva la anterior será destruida.</p>
+                <p style="font-style: italic">* Para subir una nueva foto quite la selección de la casilla "mantener foto actual" y seleccione la foto. Nota: Si adjunta una foto nueva la anterior será destruida.</p>
               </div>
                <div class="col-sm-2">
                 <a style="width: 100%" class="btn btn-default" href=""><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
               </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label" for="user">Usuario</label>
-            <div class="col-sm-3">
+            <label class="col-sm-2 control-label" for="user">Usuario</label>
+            <div class="col-sm-4">
                <!-- <span class="input-xlarge uneditable-input"><?php print $promotor['usuario_promotor'] ?></span>-->
                 <input type="text" name="usernew" class="form-control" value="<?php print $promotor['usuario_promotor'] ?>">
                 <input type="hidden" name="user" value="<?php print $promotor['usuario_promotor'] ?>">
             </div>
 
-            <label class="col-sm-3 control-label" for="pass">Contraseña</label>
-            <div class="col-sm-3">
+            <label class="col-sm-2 control-label" for="pass">Contraseña</label>
+            <div class="col-sm-4">
                 <input type="password" name="pass" class="form-control" id="pass" value="<?php print $promotor['contrasena_promotor'] ?>">
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-sm-3" for="nombre">Nombre</label>
-            <div class="col-sm-3">
+            <label class="control-label col-sm-2" for="nombre">Nombre</label>
+            <div class="col-sm-4">
       <!-- -->  <input type="text" name="nombre" class="form-control" id="nombre" value="<?php print $promotor['nombre_promotor'] ?>">
             </div>
-            <label class="col-sm-3 control-label" for="ap">Apellido paterno</label>
-            <div class="col-sm-3">
+            <label class="col-sm-2 control-label" for="ap">Apellido paterno</label>
+            <div class="col-sm-4">
         <!-- -->  <input type="text" name="ap" class="form-control" id="ap" value="<?php print $promotor['apellido_paterno_promotor'] ?>">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label" for="am">Apellido materno</label>
-            <div class="col-sm-3">
+            <label class="col-sm-2 control-label" for="am">Apellido materno</label>
+            <div class="col-sm-4">
         <!-- -->  <input type="text" name="am" class="form-control" id="am" value="<?php print $promotor['apellido_materno_promotor'] ?>">
             </div>
-            <label class="col-sm-3 control-label" for="fecha_nac" >Fecha de nacimiento</label>
-            <div class="col-sm-3">
+            <label class="col-sm-2 control-label" for="fecha_nac" >Fecha de nacimiento</label>
+            <div class="col-sm-4">
         <!-- -->  <input type="text" name="fecha_nac" class="selectorFecha form-control" placeholder="aaaa/mm/dd" id="fecha_nac" class="input-xlarge selectorfecha" value="<?php print $promotor['fecha_nacimiento_promotor'] ?>">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">Sexo</label>
-            <div class="col-sm-3">
+            <label class="col-sm-2 control-label">Sexo</label>
+            <div class="col-sm-4">
         <!-- -->  <select class="form-control" name="sexo" id="sexo">
                     <option <?php if(strcmp($promotor['sexo_promotor'],'1') == 0) print 'selected="selected"' ?> value="1">HOMBRE</option>
                     <option <?php if(strcmp($promotor['sexo_promotor'],'2') == 0) print 'selected="selected"' ?> value="2">MUJER</option>
                   </select>
             </div>
-            <label class="col-sm-3 control-label" for="email">Correo electrónico</label>
-            <div class="col-sm-3">
+            <label class="col-sm-2 control-label" for="email">Correo electrónico</label>
+            <div class="col-sm-4">
         <!-- -->  <input type="text" name="email" class="form-control" id="email" value="<?php print $promotor['correo_electronico_promotor'] ?>">
             </div>
           </div>
           <div class="form-group">
-             <label class="col-sm-3 control-label" for="tel">Teléfono</label>
-            <div class="col-sm-3">
+             <label class="col-sm-2 control-label" for="tel">Teléfono</label>
+            <div class="col-sm-4">
         <!-- -->  <input type="text" name="tel" class="form-control" id="tel" value="<?php print $promotor['telefono_promotor'] ?>">
             </div>
-             <label class="col-sm-3 control-label" for="ocupacion">Ocupación</label>
-              <div class="col-sm-3">
+             <label class="col-sm-2 control-label" for="ocupacion">Ocupación</label>
+              <div class="col-sm-4">
                 <input type="text" name="ocupacion" class="form-control" id="ocupacion" value="<?php print $promotor['ocupacion_promotor'] ?>">
               </div>
            
           </div>
           <div class="form-group">
-              <label class="col-sm-3 control-label" for="direccion">Dirección</label>
+              <label class="col-sm-2 control-label" for="direccion">Dirección</label>
             <div class="col-sm-6">
         <!-- -->  <textarea class="form-control" name="direccion" id="direccion"><?php print $promotor['direccion_promotor'] ?></textarea>
             </div>
-             <div class="col-sm-1"></div>
+             <div class="col-sm-2"></div>
             <div class="col-sm-2">
                 <input type="submit" style="width: 100%" class="btn btn-success span2 pull-center" value="Guardar">  
             </div>
