@@ -9,7 +9,7 @@
 		<footer style="position:relative; bottom: 0px; text-align: center; width: auto">
 			<hr>
 			<center>
-				<p>Instituto Tecnológico Superior de Apatzingán - - - Departamento de Promoción Cultural, Deportiva y Recreativa</p>
+				<p>Instituto Tecnológico Superior de Apatzingán - - - Departamento de Actividades Culturales, Deportivas y Recreativas</p>
 			</center>
 		</footer>
 	</div>
