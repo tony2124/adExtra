@@ -331,7 +331,7 @@ class Pdf_Controller extends ZP_Controller {
 				$html = '
 					<br>
 					<p align="center">
-					RELACIÓN DE ALUMNOS DEL CLUB DE '.$prommotor[0]['nombre_club'].' DEL PERIODO '.$periodo.'  
+					RELACIÓN DE ALUMNOS DEL CLUB DE '.$data[0]['nombre_club'].' DEL PERIODO '.$periodo.'  
 					</p>
 					<table border="1" width="850">
 						<tr height="80" align="center">
@@ -357,13 +357,6 @@ class Pdf_Controller extends ZP_Controller {
 									
 							for($i = 0; $i < 18; $i++)
 								$html .= '<td></td>';	
-							/*while($i<7)
-							{
-								$html .= '<td></td>';
-								$html .= '<td></td>';
-								$html .= '<td></td>';
-								$i++;
-							}*/
 							$html .='
 								
 								</tr>
@@ -436,8 +429,8 @@ class Pdf_Controller extends ZP_Controller {
  			break;
 
  			case 'resultados':
- 			if (!SESSION('user_admin'))
-			return redirect(get('webURL') .  _sh .'admin/login');
+	 			if (!SESSION('user_admin'))
+				return redirect(get('webURL') .  _sh .'admin/login');
 
  				$data = $this->Admin_Model->getAlumnosClubes1($club, $periodo);
 				$promotor = $this->Admin_Model->getPromotor($club, $periodo);
@@ -493,105 +486,44 @@ class Pdf_Controller extends ZP_Controller {
  			break;
 
  			case 'liberacion':
- 			if (!SESSION('user_admin'))
-			return redirect(get('webURL') .  _sh .'admin/login');
- 				$folio = $club; 
- 				$row = $this->Admin_Model->getAlumnoInscrito($folio);
- 			
- 				$admin = $this->Admin_Model->getAdminData($row[0]['id_administrador']);
-				$pdf = new Liberacion(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-				$pdf->SetCreator(PDF_CREATOR);
-				$pdf->SetAuthor('Alfonso Calderon');
-				$pdf->SetTitle('Liberacion de horas extraescolares');
-				$pdf->SetSubject('Horas extraescolares');
-				$pdf->SetKeywords('horas, extraescolares, clubes, club');
-				$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-				$pdf->SetMargins(20, 50, 20);
-				$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-				$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-				$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-				$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-				$pdf->SetFont('dejavusans', '', 10);
-				$pdf->AddPage(); 
-				$html = '<br><br><br>
-				<table width="620">
-					<tr>
-						<td width="620" align="center">
-							<strong>DEPARTAMENTO DE ACTIVIDADES CULTURALES, DEPORTIVAS Y  RECREATIVAS</strong>
-						</td>
-					</tr>
-				</table>
-				<br><br><br>
-				<table width="620" border="1" cellpadding="0"  cellspacing="0" style="border-collapse:collapse; font-family:Arial, Helvetica, sans-serif">
-				  <tr>
-				    <td align="center" colspan="5" valign="top" height="45">
-					<strong><br>BOLETA DE ACREDITACIÓN DE ACTIVIDADES CULTURALES, DEPORTIVAS Y RECREATIVAS</strong>
-					</td>
-				  </tr>
-				  <tr>
-				    <td width="130" valign="top"><strong> No. DE CONTROL:</strong></td>
-				    <td width="160" valign="top"> '.$row[0]['numero_control'].'</td>
-				    <td width="140" colspan="2"  valign="top"><strong> PERIODO ESCOLAR:</strong></td>
-				    <td width="190" valign="top"> '.$row[0]['periodo'].'</td>
-				  </tr>
-				  <tr>
-				    <td><strong> ALUMNO:</strong></td>
-				    <td colspan="4" valign="top"> '.$row[0]['nombre_alumno'].' '.$row[0]['apellido_paterno_alumno'].' '.$row[0]['apellido_materno_alumno'].'</td>
-				  </tr>
-				  <tr>
-				    <td valign="top"><strong> ESPECIALIDAD:</strong></td>
-				    <td valign="top">&nbsp;'.$row[0]['abreviatura_carrera'].'</td>
-				    <td colspan="2" valign="top"><strong> SEMESTRE: </strong></td>
-				    <td valign="top" align="center">'.$row[0]['semestre'].'</td>
-				  </tr>
-				  <tr>
-				    <td valign="top"><strong> ACTIVIDAD:</strong></td>
-				    <td colspan="4" valign="top"> '.$row[0]['nombre_club'];
-				    if($row[0]['observaciones'] != '' && $row[0]['tipo_club'] == 3 ) $html .= " (".$row[0]['observaciones'].")";
-				    $html .= '</td>
-				  </tr>
-				  <tr>
-				    <td valign="top"><strong> RESULTADO:</strong></td>
-				    <td colspan="4" valign="top">';
-				    if($row[0]['acreditado'] == 0 ) $html.=' NO ACREDITADO'; else $html.=' ACREDITADO';
-				    $html.='</td>
-				  </tr>
-				  <tr>
-				    <td align="center" height="137" valign="middle">
-				      <br><strong> FECHA DE DESCARGA:</strong>
-						<br><br>'.convertirFecha(date("Y-m-d"))."<br>".date("H:i:s").'<br><br><b>FECHA DE LIBERACIÓN</b><br><br>
-						'.convertirFecha($row[0]['fecha_liberacion_club']).'
-					 </td>
-				    <td align="center" colspan="3" valign="top">
-					<br><br>ATENTAMENTE<br><br><br><br>'.strtoupper($admin[0]['abreviatura_profesion'].' '.$admin[0]['nombre_administrador'].' '.$admin[0]['apellido_paterno_administrador'].' '.$admin[0]['apellido_materno_administrador']).'&nbsp;
-					<br>
-				      <br><strong>JEFE DEL DEPARTAMENTO DE ACTIVIDADES CULTURALES, DEPORTIVAS Y RECREATIVAS</strong>
-					</td>
-				    <td align="center" colspan="1" valign="top">
-				    
-				      <strong>SELLO:</strong><br><!--<img src="sello.png" />--></td>
-				  </tr>
-				</table>
-				<br><br><br>
-				<table style="text-align:justify"><tr><td>
-				<strong>NOTA.*  CONSERVE ESTA BOLETA SE LE SOLICITARÁ EN LA REALIZACIÓN DE OTROS TRÁMITES.</strong>
-				</td></tr></table>
-				';
+ 				//seguridad
+	 			if (!SESSION('user_admin'))
+				return redirect(get('webURL') .  _sh .'admin/login');
 
-				$pdf->writeHTML($html, true, false, true, false, '');
-				$style = array(
-				    'border' => 0,
-				    'vpadding' => 'auto',
-				    'hpadding' => 'auto',
-				    'fgcolor' => array(0,0,0),
-				    'bgcolor' => false, 
-				    'module_width' => 1, 
-				    'module_height' => 1 
-				);
+				$folio = $club;
+				include(_pathwww.'/lib/funciones/FormatoAcreditacion.php');
+				$pdf->Output($row[0]['numero_control']."_".$row[0]['nombre_club']."_".$row[0]['periodo'].".pdf", 'I');
 
-				$pdf->write2DBarcode('INSTITUTO TECNOLOGICO SUPERIOR DE APATZINGAN - DEPARTAMENTO DE ACTIVIDADES CULTURALES, DEPORTIVAS Y RECREATIVAS', 'QRCODE,L', 145, 113, 45, 45, $style, 'N');
-				$pdf->lastPage();
-				$pdf->Output($row[0]['numero_control'].$row[0]['periodo'].".pdf", 'I');
+ 			break;
+ 			case "zip-lib":
+ 				$pageLayout = array(750, 800); 
+
+ 				//eliminar archivos temporales
+ 				$files = glob(_spath.'/temp/*'); 
+				foreach($files as $file){ 
+				  if(is_file($file))
+				    unlink($file); 
+				}
+
+				$zip = new ZipArchive();
+				$filename = _spath."/temp/FormatosAcreditacion$club.zip";
+				$zip->open($filename, ZipArchive::CREATE);
+
+				$alumnosEnElClub = $this->Admin_Model->getAlumnosClubes($club, $periodo);
+
+				foreach($alumnosEnElClub as $alumno){
+
+					$folio = $alumno['folio'];
+				    include(_pathwww.'/lib/funciones/FormatoAcreditacion.php');
+				    $pdf->Output(_spath.'/temp/' .$row[0]['numero_control'] ."_". $folio . '.pdf', 'F');
+				    $zip->addFile(_spath.'/temp/'  .$row[0]['numero_control'] ."_". $folio .  '.pdf',$row[0]['numero_control'] ."_". $folio .  '.pdf');
+				}
+
+				$zip->close();
+
+				header('Content-type: application/zip');
+				header('Content-Disposition: attachment; filename="FormatosAcreditacion_'.$alumnosEnElClub[0]["nombre_club"].'_'.$periodo.'.zip"');
+				readfile($filename);
  			break;
  		}
  	}

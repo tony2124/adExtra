@@ -135,7 +135,7 @@
 			    <li><a href="<?php print get('webURL'). _sh .'admin/excel/'  ?>">Archivo Excel</a></li>
 			</ul>
         </li>
-        <li>
+        <li <?php if($menu == 6) print "class='active'" ?>>
         	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sitio web <span class="caret"></span></a>
 			<ul class="dropdown-menu">
 			      <li class><a href="<?php print get('webURL'). _sh .'admin/noticias/'  ?>">Noticias</a></li>
@@ -184,6 +184,5 @@
 </nav>
 
 <?php } ?>
-		<div class="container">
-			<div class="row">
-		
+		<div class="panel panel-default" style="border: 0px;">
+  			<div class="panel-body">

@@ -454,7 +454,7 @@ return $query;
 
 public function getAlumnoInscrito($folio)
 {
-return $this->Db->query("select * from inscripciones natural join alumnos natural join carreras natural join clubes where folio = '$folio'");
+	return $this->Db->query("select * from inscripciones natural join alumnos natural join carreras natural join clubes where folio = '$folio'");
 }
 
 public function setCampos($tabla, $campos, $ID)

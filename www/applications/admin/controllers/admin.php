@@ -226,8 +226,15 @@ class Admin_Controller extends ZP_Controller {
 			$periodos[$i] = $per['periodo']; 
 			$i++;
 		}
-		$vars['periodo_anterior'] = $periodos[$i-1];
-		if($bandera == false) $periodos[$i] = periodo_actual();
+		
+		if($bandera == false){
+			$vars['periodo_anterior'] = $periodos[$i-1];	
+			$periodos[$i] = periodo_actual();
+		}
+		else
+		{
+			$vars['periodo_anterior'] = $periodos[$i-2];	
+		}
 		$vars["periodos"] = $periodos; //periodos_combo("2082");
 		/****************************************************/
 		if($periodo == NULL)
@@ -1055,6 +1062,7 @@ class Admin_Controller extends ZP_Controller {
 		
 		$vars['clubes'] = $this->Admin_Model->getClubes();
  		$vars['view'] = $this->view('adminclubes',true);
+ 		$vars['menu'] = 6;
  		$this->render('content', $vars);
  	}
 

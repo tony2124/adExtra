@@ -30,13 +30,7 @@ function guardar(posicion)
 
 <legend><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Horarios</legend>
 <!--
-<div class="well">
-  <p>Para el mejor funcionamiento del sistema considere las siguientes recomendaciones:</p>
-  <ul>
-    <li>No tenga activo a más de un promotor en un club, dé primero de baja el actual y después inscriba al nuevo promotor.</li>
-    <li>El usuario y contraseña que estén asignadas son las que utilizará el promotor para iniciar sesión en su apartado: <a href="http://serviciosextraescolares.itsapatzingan.net/loginAdministrador/adExtra/promotor">http://serviciosextraescolares.itsapatzingan.net/loginAdministrador/adExtra/promotor</a></li>
-  </ul>
-</div>
+
 --> 
   <p class="label label-primary">SELECCIONA UN PERIODO: </p>
 <div class="form-group">
@@ -64,10 +58,11 @@ function guardar(posicion)
       ?>
     </select>
   </div>
+<!--  <?php print $periodo_anterior; ?>-->
   <div class="col-sm-7"></div>
   <div class="col-sm-2">
     <div class="btn-group" style="width:100%">
-      <a class="btn dropdown-toggle btn-success" data-toggle="dropdown" href="#" style="width:100%">
+      <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
         <span  class="glyphicon glyphicon-cog"></span>
         Operación
         <span class="caret"></span>
@@ -80,6 +75,16 @@ function guardar(posicion)
   </div>
 
 </div>
+<div style="clear: both"></div>
+<hr>
+<div class="alert alert-info">
+  <p>Para el mejor funcionamiento del sistema considere las siguientes recomendaciones:</p>
+  <ul>
+    <li>No asigne un promotor a dos o más clubes.</li>
+    <li>Los promotores asignados podrán iniciar sesión en la siguiente liga: <a href="<?php print get("webURL")."/promotor" ?>" target="_blank"><?php print get("webURL")."/promotor" ?></a></li>
+  </ul>
+</div>
+
 <?php if($promotores==NULL) { ?>
 <div style="clear: both"></div>
 <p>&nbsp;</p>

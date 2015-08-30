@@ -1,6 +1,8 @@
   <script src="<?php print path("www/lib/google/jsapi.js","www") ?>"></script>
  <legend><span class="glyphicon glyphicon-stats"></span>&nbsp;  Estadísticas</legend>
 <!--COMBO PARA SELECCIONAR EL PERIODO -->
+<div class="form-group">
+  <div class="col-sm-3">
 <p class="label label-primary">SELECCIONA UN PERIODO: </p>
 <select class="form-control" style="max-width:300px" onchange="location.href='<?php print get("webURL").'/admin/estadistica/' ?>'+$(this).val()">
 	<?php foreach ($periodos as $per ) {
@@ -15,6 +17,13 @@
 	}
 	?>
 </select>
+</div>
+<div class="col-sm-7"></div>
+<div class="col-sm-2">
+	<a style="width: 100%" class="btn btn-danger" href="">Descarga</a>
+</div>
+</div>
+<div style="clear: both"></div>
 <hr>
 
 <?php for ($indice = 0; $indice < sizeof($periodos); $indice++)
@@ -153,7 +162,7 @@
 
     <div class="tab-content">
 		<div class="tab-pane active" id="clubes">
-			
+			<div class="table-responsive">
 			<table id="estadistica" width="600" class="table table-bordered table-condensed table-hover">
 				<thead>
 			     	<tr align="center">
@@ -215,8 +224,10 @@
 					</tr>
 				</tbody>
 			</table>
+			</div>
 			<hr>
 			<!-- ****** TABLA OTROS ****** -->
+			<div class="table-responsive">
 			<table id="estadistica" width="600" class="table table-striped table-bordered table-condensed">
 				<thead>
 			     	<tr align="center">
@@ -266,12 +277,13 @@
 					</tr>
 				</tbody>
 			</table>
-			
+			</div>
 			<hr>
 			
 
 		</div>
 		<div class="tab-pane" id="carreras">
+			<div class="table-responsive">
 			<table id="estadistica" width="600" class="table table-striped table-bordered table-condensed">
 				<thead>
 			     	<tr align="center">
@@ -379,8 +391,10 @@
 				</tr>
 			  	</tbody>
 			 </table>
+			</div>
 			 <hr>
 			 <!-- ****** TABLA OTROS ****** -->
+			 <div class="table-responsive">
 			<table id="estadistica" width="600" class="table table-striped table-bordered table-condensed">
 				<thead>
 			     	<tr align="center">
@@ -430,7 +444,7 @@
 					</tr>
 				</tbody>
 			</table>
-
+			</div>
 			<hr>
 			<!--<p>TOTAL DE ALUMNOS LIBERADOS: <span style="font-size: 30px"><?php print  $totalesX[2] + ($tmL+$thL) ?></span></p>-->
 

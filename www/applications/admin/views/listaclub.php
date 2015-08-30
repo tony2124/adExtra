@@ -58,12 +58,12 @@ if($alumnos != NULL) { ?>
 	<div class="col-sm-9">Número de registros encontrados: <?php print count($alumnos) ?></div>
 	<div class="col-sm-1">
 	 	<span data-toggle="tooltip" data-placement="top" title="Gráfico de hombres y mujeres">
-	 	<button class="btn btn-success" data-toggle="collapse"  data-target="#graf" aria-expanded="false" aria-controls="graf"><span class="glyphicon glyphicon-stats"></span></button>  
+	 	<button class="btn btn-default" data-toggle="collapse"  data-target="#graf" aria-expanded="false" aria-controls="graf"><span class="glyphicon glyphicon-stats"></span></button>  
 	 	</span>
 	 </div>
 	<div class="col-sm-2">		
 		<div class="btn-group" style="width:100%">
-		  <a class="btn dropdown-toggle btn-success" data-toggle="dropdown" href="#" style="width:100%">
+		  <a class="btn dropdown-toggle btn-default" data-toggle="dropdown" href="#" style="width:100%">
 		  	<span  class="glyphicon glyphicon-save-file"></span>
 		    Descarga
 		    <span class="caret"></span>
@@ -73,8 +73,8 @@ if($alumnos != NULL) { ?>
 		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/cedula/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de inscripción</a></li>
 		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/resultados/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de resultados</a></li>
 		    <li class="divider"></li>
-		    <li><a href="<?php  ?>" target="_blank">Formato de lib. horas</a></li>
-		    <li><a href="<?php  ?>" target="_blank">Formato de act. comp.</a></li>
+		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/zip-lib/'.$par1.'/'.$par2 ?>" target="_blank">ZIP formatos de acred. de actividad</a></li>
+		    <li><a href="<?php  ?>" target="_blank">ZIP formatos de act. comp.</a></li>
 		  </ul>
 		</div>
 	</div>
@@ -116,41 +116,42 @@ if($alumnos != NULL) { ?>
 </script>
 
 
+<div class="table-responsive">
+	<table id="lista" class="table table-striped table-condensed table-hover">
 
-<table id="lista" class="table table-striped table-condensed table-hover">
 
-
-  <thead>
-    <tr style="background: #eeeeee">
-      <th><span class="icon-chevron-down"></span><br>N0.</th>
-      <th><span class="icon-chevron-down"></span><br>N. control</th>
-      <th><span class="icon-chevron-down"></span><br>Nombre</th>
-      <th><span class="icon-chevron-down"></span><br>Carrera</th>
-      <th><span class="icon-chevron-down"></span><br>Sexo</th>
-      <th><span class="icon-chevron-down"></span><br>Edad</th>
-      <th><span class="icon-chevron-down"></span><br>Res.</th>
-    </tr>
-  </thead>
-  <tbody>
-<?php
-$hombres = $mujeres = 0; 
-$i=1;
-foreach ($alumnos as $alum) {	?>
-<?php  if($alum['sexo']==1) $hombres++; else $mujeres++; ?>
-  <tr>
-    <td><?php print $i++ ?></td>
-    <td><?php print $alum['numero_control'] ?></td>
-    <td><a href="<?php print get("webURL")._sh."admin/alumno/".$alum['numero_control'] ?>"><?php echo $alum['apellido_paterno_alumno']." ".$alum['apellido_materno_alumno']." ".$alum['nombre_alumno'] ?></a></td>
-    <td><?php echo $alum['abreviatura_carrera'] ?></td>
-    <td><?php echo ($alum['sexo']==1) ? 'H' : 'M' ?></td>
-    <td><?php echo calcularEdad($alum['fecha_nacimiento'],$alum['fecha_inscripcion_club']) ?></td>
-    <td><?php echo ($alum['acreditado']==0) ? 'NO' :'SI'  ?></td>
-  </tr>
-<?php	
-}
-?>
-   </tbody>
- </table>
+	  <thead>
+	    <tr style="background: #eeeeee">
+	      <th><span class="icon-chevron-down"></span><br>N0.</th>
+	      <th><span class="icon-chevron-down"></span><br>N. control</th>
+	      <th><span class="icon-chevron-down"></span><br>Nombre</th>
+	      <th><span class="icon-chevron-down"></span><br>Carrera</th>
+	      <th><span class="icon-chevron-down"></span><br>Sexo</th>
+	      <th><span class="icon-chevron-down"></span><br>Edad</th>
+	      <th><span class="icon-chevron-down"></span><br>Res.</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	<?php
+	$hombres = $mujeres = 0; 
+	$i=1;
+	foreach ($alumnos as $alum) {	?>
+	<?php  if($alum['sexo']==1) $hombres++; else $mujeres++; ?>
+	  <tr>
+	    <td><?php print $i++ ?></td>
+	    <td><?php print $alum['numero_control'] ?></td>
+	    <td><a href="<?php print get("webURL")._sh."admin/alumno/".$alum['numero_control'] ?>"><?php echo $alum['apellido_paterno_alumno']." ".$alum['apellido_materno_alumno']." ".$alum['nombre_alumno'] ?></a></td>
+	    <td><?php echo $alum['abreviatura_carrera'] ?></td>
+	    <td><?php echo ($alum['sexo']==1) ? 'H' : 'M' ?></td>
+	    <td><?php echo calcularEdad($alum['fecha_nacimiento'],$alum['fecha_inscripcion_club']) ?></td>
+	    <td><?php echo ($alum['acreditado']==0) ? 'NO' :'SI'  ?></td>
+	  </tr>
+	<?php	
+	}
+	?>
+	   </tbody>
+	 </table>
+</div>
 <?php } ?>
 
 <div class="modal fade"  id="avanzada" role="dialog" >

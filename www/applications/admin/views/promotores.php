@@ -27,8 +27,8 @@
 <div style="clear: both"></div>
 <p>&nbsp;</p>
 <p>Registros encontrados: <?php if($promotores != null) print sizeof($promotores); else print "0"; ?></p>
-<p>&nbsp;</p>
-<table class="table table-hover">
+<div class="table-responsive">
+<table class="table table-hover table-condensed" >
 	<tr style="background: #eeeeee">
 		<th>Usuario</th>
 		<th>Nombre</th>
@@ -51,12 +51,13 @@
 				<td><?php print $prom['telefono_promotor'] ?></td>
 				<td><?php print edad($prom['fecha_nacimiento_promotor']) ?></td>
 				<td><?php print ($prom['eliminado_promotor'] == 0) ? "<span class='label label-success'>Activo</span>" : "<span class='label label-danger'>No activo</span>" ?></td>
-				<td>
-					<a href="<?php print get("webURL") . "/admin/formEdicionPromotor/$prom[usuario_promotor]" ?>" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> </button>
+				<td align="right">
+					<a href="<?php print get("webURL") . "/admin/formEdicionPromotor/$prom[usuario_promotor]" ?>" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> </a>
+					&nbsp;
 			<?php	if($prom['eliminado_promotor'] == 0) { ?>
-					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/1" ?>" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> </a>
+					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/1" ?>" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span> </a>
 			<?php } else { ?>
-					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/0" ?>" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> </a>
+					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/0" ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-ok"></span> </a>
 			<?php } ?>
 				</td>
 			</tr>
@@ -66,7 +67,7 @@
 	</tbody>
 
 </table>
-
+</div>
 
 
 
