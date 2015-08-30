@@ -113,6 +113,7 @@
         	 <ul class="dropdown-menu">
 				 <li><a href="<?php print get('webURL'). _sh .'admin/promotores/'  ?>">Lista de promotores</a></li>
 				 <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroPromotor/' ?>">Registrar nuevo promotor</a></li>
+				 <li><a href="<?php print get('webURL'). _sh .'admin/formHorarios' ?>">Horarios</a></li>
 			 </ul>
         </li>
         <li <?php if($menu == 4) print "class='active'" ?>>

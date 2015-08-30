@@ -1,5 +1,5 @@
   <script src="<?php print path("www/lib/google/jsapi.js","www") ?>"></script>
-
+ <legend><span class="glyphicon glyphicon-stats"></span>&nbsp;  Estadísticas</legend>
 <!--COMBO PARA SELECCIONAR EL PERIODO -->
 <p class="label label-primary">SELECCIONA UN PERIODO: </p>
 <select class="form-control" style="max-width:300px" onchange="location.href='<?php print get("webURL").'/admin/estadistica/' ?>'+$(this).val()">

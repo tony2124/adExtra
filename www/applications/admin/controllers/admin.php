@@ -157,6 +157,7 @@ class Admin_Controller extends ZP_Controller {
 
 
 
+
  	public function listacarrera($carrera = NULL, $periodo = NULL)
 	{
 		if (!SESSION('user_admin'))
@@ -172,21 +173,6 @@ class Admin_Controller extends ZP_Controller {
 		$vars['view'] = $this->view("listacarrera", true);
 		$this->render("content", $vars);
  	}
-
-
-
-
-
-	function guardarHorario($periodo)
-	{
-		$vars['club'] = POST('club');
-		$vars['promotor'] = POST('promotor');
-		$vars['lugar'] = POST('lugar');
-		$vars['horario'] = POST('horario');
-		$vars['periodo'] = $periodo;
-		$this->Admin_Model->guardarHorario($vars);
-	}
-
 
 
 /* PROMOTORES */
@@ -214,7 +200,18 @@ class Admin_Controller extends ZP_Controller {
 		
 	}
 
-	function horarios(){
+	function guardarHorario($periodo)
+	{
+		$vars['club'] = POST('club');
+		$vars['promotor'] = POST('promotor');
+		$vars['lugar'] = POST('lugar');
+		$vars['horario'] = POST('horario');
+		$vars['periodo'] = $periodo;
+		$this->Admin_Model->guardarHorario($vars);
+	}
+
+
+	function formHorarios($periodo = NULL){
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
@@ -229,24 +226,30 @@ class Admin_Controller extends ZP_Controller {
 			$periodos[$i] = $per['periodo']; 
 			$i++;
 		}
+		$vars['periodo_anterior'] = $periodos[$i-1];
 		if($bandera == false) $periodos[$i] = periodo_actual();
 		$vars["periodos"] = $periodos; //periodos_combo("2082");
 		/****************************************************/
 		if($periodo == NULL)
 			$vars['periodo'] = periodo_actual();
-		else
+		else if($periodo != 1)
 			$vars['periodo'] = $periodo;
-		$vars['promotores']  = $this->Admin_Model->getPromotores($vars['periodo']);
+			else $vars['periodo'] = periodo_actual();
+
+		if($periodo == 1)
+			$vars['promotores']  = $this->Admin_Model->getPromotores($vars['periodo_anterior']);
+		else
+			$vars['promotores']  = $this->Admin_Model->getPromotores($vars['periodo']);
 		$vars['todos_promotores'] = $this->Admin_Model->getPromotores("all");
 		$vars['promotores_actuales'] = $this->Admin_Model->getPromotores(NULL);
 		$vars['clubes'] = $this->Admin_Model->getClubes();
 
 		$vars['menu'] = 3;
-		$vars['view'] = $this->view('adminPromotores',true);
+		$vars['view'] = $this->view('horarios',true);
 		$this->render('noRightContent', $vars);
 	}
 
-
+/*
 	function buscar_promotor()
 	{
 		if( !SESSION('user_admin') )
@@ -255,7 +258,7 @@ class Admin_Controller extends ZP_Controller {
 		$palabra = POST("nombre");
 		redirect(get("webURL")._sh."admin/promotores/".$palabra);
 	}
-
+/*
 	public function elimPromotor()
 	{
 		if( !SESSION('user_admin') )
@@ -264,7 +267,7 @@ class Admin_Controller extends ZP_Controller {
 		$usuario_promotor = POST('usuario_promotor');
 		$this->Admin_Model->elimPromotor($usuario_promotor);
 		redirect(get('webURL'). _sh . 'admin/promotores');
-	}
+	}*/
 
 	public function formRegistroPromotor()
 	{
@@ -354,8 +357,6 @@ class Admin_Controller extends ZP_Controller {
 		$vars['nombre'] = strtoupper(POST('nombre'));
 		$vars['ap'] = strtoupper(POST('ap'));
 		$vars['am'] = strtoupper(POST('am'));
-		//$vars['horario'] = POST('horario');
-		//$vars['lugar'] = POST('lugar');
 		$vars['fecha_nac'] = POST('fecha_nac');
 		$vars['fecha_reg'] = date("Y-m-d");
 		$vars['sexo'] = POST('sexo');
@@ -434,11 +435,9 @@ class Admin_Controller extends ZP_Controller {
 		$vars['user'] = POST('user');
 		$vars['pass'] = POST('pass');
 		$vars['foto'] = $name;
-		$vars['nombre'] = POST('nombre');
-		//$vars['horario'] = POST('horario');
-		//$vars['lugar'] = POST('lugar');
-		$vars['ap'] = POST('ap');
-		$vars['am'] = POST('am');
+		$vars['nombre'] = strtoupper(POST('nombre'));
+		$vars['ap'] = strtoupper(POST('ap'));
+		$vars['am'] = strtoupper(POST('am'));
 		$vars['fecha_nac'] = POST('fecha_nac');
 		$vars['fecha_reg'] = date("Y-m-d");
 		$vars['sexo'] = POST('sexo');
