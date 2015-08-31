@@ -1,27 +1,37 @@
   <script src="<?php print path("www/lib/google/jsapi.js","www") ?>"></script>
  <legend><span class="glyphicon glyphicon-stats"></span>&nbsp;  Estadísticas</legend>
 <!--COMBO PARA SELECCIONAR EL PERIODO -->
-<div class="form-group">
-  <div class="col-sm-3">
 <p class="label label-primary">SELECCIONA UN PERIODO: </p>
-<select class="form-control" style="max-width:300px" onchange="location.href='<?php print get("webURL").'/admin/estadistica/' ?>'+$(this).val()">
-	<?php foreach ($periodos as $per ) {
-		print "<option ";
-		if(strcmp($per,$periodo)==0) print "selected='selected'";
-		?>
+<div class="form-group">
+  	<div class="col-sm-3">
+		<select class="form-control" style="max-width:300px" onchange="location.href='<?php print get("webURL").'/admin/estadistica/' ?>'+$(this).val()">
+			<?php foreach ($periodos as $per ) {
+				print "<option ";
+				if(strcmp($per,$periodo)==0) print "selected='selected'";
+				?>
 
-		 id="<?php print $per ?>">
-		
-		<?php print $per;
-		print "</option>";		
-	}
-	?>
-</select>
-</div>
-<div class="col-sm-7"></div>
-<div class="col-sm-2">
-	<a style="width: 100%" class="btn btn-danger" href="">Descarga</a>
-</div>
+				 id="<?php print $per ?>">
+				
+				<?php print $per;
+				print "</option>";		
+			}
+			?>
+		</select>
+	</div>
+	<div class="col-sm-7"></div>
+	<div class="col-sm-2">
+		<div class="btn-group" style="width:100%">
+	      <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
+	        <span  class="glyphicon glyphicon-save"></span>
+	        Descarga
+	        <span class="caret"></span>
+	      </a>
+	      <ul class="dropdown-menu">
+	        <li><a target="_blank" href="<?php print get("webURL")."/admin/pdf/formatos/zip-ins/0/$periodo"  ?>">ZIP Cédulas de Inscripción</a></li>
+	        <li><a href="<?php print get("webURL")."/admin/pdf/formatos/zip-res/0/$periodo"  ?>" target="_blank">ZIP Cédulas de resultados</a></li>
+	      </ul>
+	    </div>
+	</div>
 </div>
 <div style="clear: both"></div>
 <hr>

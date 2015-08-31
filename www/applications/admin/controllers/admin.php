@@ -1026,6 +1026,7 @@ class Admin_Controller extends ZP_Controller {
 		
 		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL);
  		$vars['view'] = $this->view('carreras',true);
+ 		$vars['menu'] = 2;
  		$this->render('content', $vars);
  	}
 
@@ -1062,7 +1063,7 @@ class Admin_Controller extends ZP_Controller {
 		
 		$vars['clubes'] = $this->Admin_Model->getClubes();
  		$vars['view'] = $this->view('adminclubes',true);
- 		$vars['menu'] = 6;
+ 		$vars['menu'] = 3;
  		$this->render('content', $vars);
  	}
 

@@ -372,116 +372,18 @@ class Pdf_Controller extends ZP_Controller {
  			case 'cedula':
  				if (!SESSION('user_admin'))
 				return redirect(get('webURL') .  _sh .'admin/login');
-				$data = $this->Admin_Model->getAlumnosClubes1($club, $periodo);
-				$prommotor = $this->Admin_Model->getPromotor($club, $periodo);
-				$admin = $this->Admin_Model->getAdminData($data[0]['id_administrador']);
-				SESSION('periodo',$periodo);
-				SESSION('horario',$prommotor[0]['horario']);
-				SESSION('actividad', $data[0]['nombre_club']);
 
-				SESSION('admin', strtoupper($admin[0]['abreviatura_profesion'].' '.$admin[0]['apellido_paterno_administrador'].' '.$admin[0]['apellido_materno_administrador'].' '.$admin[0]['nombre_administrador'] ) );
-				$pdf = new Cedula('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-				$pdf->SetCreator(PDF_CREATOR);
-				$pdf->SetAuthor('Alfonso Calderon');
-				$pdf->SetTitle('Cédula de inscripción');
-				$pdf->SetSubject('Lista');
-				$pdf->SetKeywords('lista, extraescolares, clubes, club');
-				$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+				include(_pathwww."/lib/funciones/CedulaInscripcion.php");
 
-				$pdf->SetMargins(20, 93, 20);
-				$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-				$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-				$pdf->SetAutoPageBreak(TRUE, 50);
-
-				$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-				$pdf->SetFont('dejavusans', '', 10);
-				$pdf->AddPage();
-				$html = '
-				<table style="border-collapse:collapse; font-family:Arial, Helvetica, sans-serif" border="1" 
-						cellspacing="0" cellpadding="0">
-				 ';
-				  $contador = 1;
-				  foreach($data as $row)
-				  {
-				  	$html .= '<tr>
-						<td width = "25">&nbsp;'.($contador++).'</td>
-						<td width = "300">&nbsp;'.$row['apellido_paterno_alumno'].' '.$row['apellido_materno_alumno'].' '.$row['nombre_alumno'].'</td>
-						<td width = "90">&nbsp;'.$row['numero_control'].'</td>
-						<td width = "150">&nbsp;'.$row['abreviatura_carrera'].'</td>
-						<td width = "45">&nbsp;'.$row['semestre'].'</td>
-						<td width = "45">&nbsp;'.calcularEdad($row['fecha_nacimiento'], $row['fecha_inscripcion_club']).'</td>
-						<td width = "45">&nbsp;';
-						
-						if($row['sexo'] == 1) $html .= "H"; else $html.= "M";
-						
-						$html .= '</td>
-						<td  width = "150" class="margin-left:10px"> '.$row['observaciones'].'</td>
-					</tr>';
-					
-				  }
-
-				$html.='</table>';
-
-				$pdf->writeHTML($html, true, false, true, false, '');
-
-				$pdf->lastPage();
-				$pdf->Output("cedins".$prommotor[0]['nombre_club'].$periodo.".pdf", 'I');
+				$pdf->Output("cedins_".$data[0]['nombre_club']."_".$periodo.".pdf", 'I');
  			break;
 
  			case 'resultados':
 	 			if (!SESSION('user_admin'))
 				return redirect(get('webURL') .  _sh .'admin/login');
 
- 				$data = $this->Admin_Model->getAlumnosClubes1($club, $periodo);
-				$promotor = $this->Admin_Model->getPromotor($club, $periodo);
-				$admin = $this->Admin_Model->getAdminData(SESSION('id_admin'));
-
-				SESSION('periodo',$periodo);
-				SESSION('actividad', $data[0]['nombre_club']);
-				SESSION('promotor',strtoupper($promotor[0]['apellido_paterno_promotor'].' '.$promotor[0]['apellido_materno_promotor'].' '.$promotor[0]['nombre_promotor']));
-				
-				$pdf = new Resultados('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-				
-				$pdf->SetCreator(PDF_CREATOR);
-				$pdf->SetAuthor('Alfonso Calderon');
-				$pdf->SetTitle('Cédula de resultados');
-				$pdf->SetSubject('Lista');
-				$pdf->SetKeywords('cedula, extraescolares, clubes, club');
-				$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-				$pdf->SetMargins(20, 93, 20);
-				$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-				$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-				$pdf->SetAutoPageBreak(TRUE, 60);
-
-				$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-				$pdf->SetFont('dejavusans', '', 10);
-				$pdf->AddPage();
-				$html = '
-				<table style="border-collapse:collapse; font-family:Arial, Helvetica, sans-serif" border="1" 
-						cellspacing="0" cellpadding="0">
-				 ';
-				  $contador = 1;
-				  foreach($data as $row)
-				  {
-				  	$html .= '<tr>
-						<td width = "25">&nbsp;'.($contador++).'</td>
-						<td width = "390">&nbsp;'.$row['apellido_paterno_alumno'].' '.$row['apellido_materno_alumno'].' '.$row['nombre_alumno'].'</td>
-						<td width = "90">&nbsp;'.$row['numero_control'].'</td>
-						<td width = "150">&nbsp;'.$row['abreviatura_carrera'].'</td>
-						
-						<td width = "45">&nbsp;'.$row['semestre'].'</td>
-						
-						<td  width = "150" class="margin-left:10px"> '.( (strcmp($row['acreditado'],'1') == 0) ? 'ACREDITADO' : 'NO ACREDITADO').' </td>
-					</tr>';
-					
-				  }
-
-				$html.='</table>';
-
-				$pdf->writeHTML($html, true, false, true, false, '');
-
-				$pdf->lastPage();
+				include(_pathwww.'/lib/funciones/CedulaResultado.php');
+ 				
 				$pdf->Output("cedres".$promotor[0]['nombre_club'].$periodo.".pdf", 'I');
  			break;
 
@@ -496,8 +398,6 @@ class Pdf_Controller extends ZP_Controller {
 
  			break;
  			case "zip-lib":
- 				$pageLayout = array(750, 800); 
-
  				//eliminar archivos temporales
  				$files = glob(_spath.'/temp/*'); 
 				foreach($files as $file){ 
@@ -506,7 +406,7 @@ class Pdf_Controller extends ZP_Controller {
 				}
 
 				$zip = new ZipArchive();
-				$filename = _spath."/temp/FormatosAcreditacion$club.zip";
+				$filename = _spath."/temp/FormatosAcreditacion.zip";
 				$zip->open($filename, ZipArchive::CREATE);
 
 				$alumnosEnElClub = $this->Admin_Model->getAlumnosClubes($club, $periodo);
@@ -521,8 +421,66 @@ class Pdf_Controller extends ZP_Controller {
 
 				$zip->close();
 
-				header('Content-type: application/zip');
+				header('Content-type: application/force-download');
 				header('Content-Disposition: attachment; filename="FormatosAcreditacion_'.$alumnosEnElClub[0]["nombre_club"].'_'.$periodo.'.zip"');
+				readfile($filename);
+ 			break;
+ 			case "zip-ins":
+ 				//eliminar archivos temporales
+ 				$files = glob(_spath.'/temp/*'); 
+				foreach($files as $file){ 
+				  if(is_file($file))
+				    unlink($file); 
+				}
+
+				$zip = new ZipArchive();
+				$filename = _spath."/temp/CedulasInscripcion.zip";
+				$zip->open($filename, ZipArchive::CREATE);
+
+				$clubes = $this->Admin_Model->getClubes();
+
+				foreach($clubes as $c){
+
+					$club = $c['id_club'];
+				    include(_pathwww.'/lib/funciones/CedulaInscripcion.php');
+				    $pdf->Output (_spath.'/temp/cedins_' . $c['nombre_club'] ."_". $periodo .'.pdf', 'F');
+				    $zip->addFile(_spath.'/temp/cedins_' . $c['nombre_club'] ."_". $periodo .'.pdf', "cedins_".$c['id_club'] . "_".$periodo . '.pdf');
+				}
+
+				$zip->close();
+
+				
+				header('Content-type: application/force-download');
+				header('Content-Disposition: attachment; filename="CedulasInscripcion_'.$periodo.'.zip"');
+				readfile($filename);
+ 			break;
+ 			case "zip-res":
+ 				//eliminar archivos temporales
+ 				$files = glob(_spath.'/temp/*'); 
+				foreach($files as $file){ 
+				  if(is_file($file))
+				    unlink($file); 
+				}
+
+				$zip = new ZipArchive();
+				$filename = _spath."/temp/CedulasResultados.zip";
+				$zip->open($filename, ZipArchive::CREATE);
+
+				$clubes = $this->Admin_Model->getClubes();
+
+				foreach($clubes as $c){
+
+					$club = $c['id_club'];
+				    include(_pathwww.'/lib/funciones/CedulaResultado.php');
+				    $pdf->Output (_spath.'/temp/cedres_' . $c['nombre_club'] ."_". $periodo .'.pdf', 'F');
+				    $zip->addFile(_spath.'/temp/cedres_' . $c['nombre_club'] ."_". $periodo .'.pdf', "cedres_".$c['id_club'] . "_".$periodo . '.pdf');
+				}
+
+				$zip->close();
+
+				
+				header('Content-type: application/force-download');
+				header('Content-Disposition: attachment; filename="CedulasResultados_'.$periodo.'.zip"');
 				readfile($filename);
  			break;
  		}

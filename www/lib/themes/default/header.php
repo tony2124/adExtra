@@ -106,6 +106,7 @@
           <ul class="dropdown-menu">
 		      <li><a href="<?php print get('webURL'). _sh .'admin/listaclub/'  ?>">Listas de alumnos</a></li>
 		      <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroalumno/'  ?>">Registrar nuevo alumno</a></li>
+		      <li><a href="<?php print get('webURL'). _sh .'admin/carreras/' ?>">Admon. carreras</a></li>
 		  </ul>
         </li>
         <li <?php if($menu == 3) print "class='active'" ?>>
@@ -114,6 +115,7 @@
 				 <li><a href="<?php print get('webURL'). _sh .'admin/promotores/'  ?>">Lista de promotores</a></li>
 				 <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroPromotor/' ?>">Registrar nuevo promotor</a></li>
 				 <li><a href="<?php print get('webURL'). _sh .'admin/formHorarios' ?>">Horarios</a></li>
+				 <li><a href="<?php print get('webURL'). _sh .'admin/adminclubes/' ?>">Admon. clubes</a></li>
 			 </ul>
         </li>
         <li <?php if($menu == 4) print "class='active'" ?>>
@@ -144,10 +146,6 @@
 			      <li class="divider"></li>
 			      <li><a href="<?php print get('webURL'). _sh .'admin/galeria/' ?>">Galería</a></li>				      
 			      <li><a href="<?php print get('webURL'). _sh .'admin/reglamento/' ?>">Reglamento</a></li>
-			      <li class="divider"></li>
-			      <li><a href="<?php print get('webURL'). _sh .'admin/adminclubes/' ?>">Admon. clubes</a></li>
-			      <li><a href="<?php print get('webURL'). _sh .'admin/carreras/' ?>">Admon. carreras</a></li>
-
 			      <li class="divider"></li>
 			      <li><a href="<?php print get('webURL'). _sh .'admin/subirarchivos/' ?>">Subir archivos</a></li>
 			</ul>
