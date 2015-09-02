@@ -134,7 +134,7 @@
 			    <li><a href="<?php print get('webURL'). _sh .'admin/respaldoBD/'  ?>">Respaldo de BD</a></li>
 			    <li><a href="<?php print get('webURL'). _sh .'admin/subirBD/'  ?>">Subir base de datos</a></li>
 			    <li><a href="<?php print get('webURL'). _sh .'admin/eliminarhistorial/'  ?>">Eliminar historial</a></li>
-			    <li><a href="<?php print get('webURL'). _sh .'admin/excel/'  ?>">Archivo Excel</a></li>
+			    <!--<li><a href="<?php print get('webURL'). _sh .'admin/excel/'  ?>">Archivo Excel</a></li>-->
 			</ul>
         </li>
         <li <?php if($menu == 6) print "class='active'" ?>>
@@ -182,5 +182,5 @@
 </nav>
 
 <?php } ?>
-		<div class="panel panel-default" style="border: 0px;">
+		<div class="panel panel-default" style="border: 0px;background: transparent">
   			<div class="panel-body">

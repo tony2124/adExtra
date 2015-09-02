@@ -15,7 +15,9 @@ if($error){
 //include(_corePath . _sh .'/libraries/funciones/funciones.php'); ?>
 
 
-<div class="well">La búsqueda se ha realizado mediante la palabra <span class="label label-success"><?php print $palabra ?></span>. Los resultados encontrados fueron los siguientes:</div>
+<div class="alert alert-info"><strong>La búsqueda se ha realizado mediante la palabra <span class="label label-primary"><?php print $palabra ?></span>. Los resultados encontrados fueron los siguientes:</strong></div>
+<p>Registros encontrados: <?php print sizeof($datos) ?></p>
+<hr>
 <table class="table table-striped table-condensed">
   <thead>
     <tr>
@@ -32,10 +34,10 @@ if($error){
       <tr>
         <td><?php print $alumno['numero_control']?></td>
         <td><?php print ($alumno['situacion_escolar']==1) ? '<label class="label label-success">Act.</label>' : '<label class="label label-danger">Inact.</label>' ?></td>
-        <td><?php print $alumno['apellido_paterno_alumno'].' '.$alumno['apellido_materno_alumno'].' '.$alumno['nombre_alumno'] ?></td>
+        <td><a href="<?php print get('webURL'). _sh . 'admin/alumno/'.$alumno['numero_control'] ?>"><?php print $alumno['apellido_paterno_alumno'].' '.$alumno['apellido_materno_alumno'].' '.$alumno['nombre_alumno'] ?></a></td>
         <td><?php print $alumno['abreviatura_carrera']?></td>
-        <td><?php print  (semestre( $alumno['fecha_inscripcion']) > 12) ? 'NO DISP.' : semestre( $alumno['fecha_inscripcion'])  ?></td>
-        <td><a href="<?php print get('webURL'). _sh . 'admin/alumno/'.$alumno['numero_control'] ?>" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> </a></td>
+        <td><?php print  (semestre( $alumno['fecha_inscripcion']) > 12) ? '<label class="label label-danger">NO DISP.</label>' : semestre( $alumno['fecha_inscripcion'])  ?></td>
+        <td><a href="<?php print get('webURL'). _sh . 'admin/alumno/'.$alumno['numero_control'] ?>" class="btn btn-default btn-xs">ver </a></td>
       </tr>
     <?php } ?>
     

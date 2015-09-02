@@ -103,7 +103,12 @@ return $query;
 
 public function updateLiberacion($vars)
 {
-$this->Db->query("update configuracion set fecha_inicio_inscripcion = '$vars[ins_ini]', fecha_fin_inscripcion = '$vars[ins_fin]', fecha_inicio_liberacion = '$vars[lib_ini]', fecha_fin_liberacion = '$vars[lib_fin]', periodo = '$vars[periodo]', numero_clubes_periodo = '$vars[nper]'");
+	$this->Db->query("update conf_fechas set fecha_inicio_inscripcion = '$vars[ins_ini]', fecha_fin_inscripcion = '$vars[ins_fin]', fecha_inicio_liberacion = '$vars[lib_ini]', fecha_fin_liberacion = '$vars[lib_fin]', periodo = '$vars[periodo]', numero_clubes = '$vars[nper]'");
+}
+
+public function insertarLiberacion($vars)
+{
+	$this->Db->query("INSERT INTO conf_fechas( fecha_inicio_inscripcion, fecha_fin_inscripcion, fecha_inicio_liberacion, fecha_fin_liberacion, periodo, numero_clubes) VALUES('$vars[ins_ini]', '$vars[ins_fin]', '$vars[lib_ini]', '$vars[lib_fin]', '$vars[periodo]', '$vars[nper]') ");
 }
 
 public function updateRes($acred, $folio, $obs, $fl)
@@ -202,12 +207,15 @@ public function getFotos($album)
 return $this->Db->query("select * from galeria where id_album='$album'");
 }
 
-public function getCarreras($id)
+public function getCarreras($id,$bool)
 {
 if($id == NULL)
-return $data = $this->Db->query("select * from carreras where eliminada = false order by abreviatura_carrera asc");
+	if($bool == true)
+		return $data = $this->Db->query("select * from carreras order by abreviatura_carrera asc");
+	else
+		return $data = $this->Db->query("select * from carreras where eliminada = false order by abreviatura_carrera asc");
 
-return $data = $this->Db->query("select * from carreras where id_carrera = '$id' and eliminada = false order by abreviatura_carrera asc");
+return $data = $this->Db->query("select * from carreras where id_carrera = '$id' order by abreviatura_carrera asc");
 
 }
 
@@ -338,8 +346,8 @@ return $query;
 
 public function guardarcarrera($vars)
 {
-$query = "insert into carreras(nombre_carrera, abreviatura_carrera, semestres_carrera, eliminada)
-values ('$vars[nombre_carrera]','$vars[abreviatura_carrera]','$vars[semestres_carrera]',0)";
+$query = "INSERT INTO carreras(id_carrera, nombre_carrera, abreviatura_carrera, semestres_carrera, plan_estudio, fecha_registro)
+values ('$vars[id]','$vars[nombre_carrera]','$vars[abreviatura_carrera]','$vars[semestres_carrera]','$vars[plan]','".date("Y-m-d")."')";
 $this->acentos();
 $this->Db->query($query);
 return $query;
@@ -359,7 +367,7 @@ return $query;
 public function modcarrera($vars)
 {
 $query = "update carreras set nombre_carrera = '$vars[nombre_carrera]' , abreviatura_carrera = '$vars[abreviatura_carrera]' ,
-semestres_carrera = '$vars[semestres_carrera]' where id_carrera = '$vars[id_carrera]'";
+semestres_carrera = '$vars[semestres_carrera]', plan_estudio = '$vars[plan]' where id_carrera = '$vars[id_carrera]'";
 $this->acentos();
 $this->Db->query($query);
 return $query;
@@ -370,9 +378,9 @@ public function elimClub($id)
 return $this->Db->query("update clubes set eliminado_club = true where id_club = '$id' ");
 }
 
-public function elimcarrera($id)
+public function habilitarCarrera($id, $estado)
 {
-return $this->Db->query("update carreras set eliminada = true where id_carrera = '$id' ");
+return $this->Db->query("update carreras set eliminada = '$estado' where id_carrera = '$id' ");
 }
 
 public function elimActividad($folio)

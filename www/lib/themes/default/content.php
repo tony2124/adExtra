@@ -10,7 +10,7 @@
 	<!-- search for the student -->
 <?php if(SESSION('user_admin'))	{ ?>
 	<div class="col-md-3">
-		<h4><b class="glyphicon glyphicon-search"></b> Búsqueda de alumnos</h4>
+		<h4><b class="glyphicon glyphicon-search"></b> <strong>Búsqueda de alumnos</strong></h4>
 		<form class="well" align="center" action="<?php print get('webURL'). _sh .'admin/buscar' ?>" method="post">
 		  <label style="float: left">Buscar:</label>
 		  <input type="text" name="bus" class="form-control" placeholder="Núm. control / nombre / apellido">

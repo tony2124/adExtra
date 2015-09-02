@@ -1,4 +1,6 @@
-<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;Datos del alumno</legend>
+<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;<strong>Datos del alumno</strong></legend>
+<p >En la siguiente tabla se muestra los datos del alumno, el apartado de semestre aparace como NO DISP si el alumno tiene más de 12 semestres. Haga clic en editar si desea realizar alguna modificación.  </span>.</p>
+<hr>
 <?php 
 if(!$alumno){
   ?>
@@ -77,8 +79,8 @@ function folio(folio)
 </style>
 
 <!--<div class="well"><h4>A continuación se muestra los datos del alumno seleccionado.</h4></div>-->
-<a rel="tooltip" title="Modificar datos del alumno" data-toggle="modal" href="#miModal" class="pull-right">
-  <i class="icon-cog"></i> Editar
+<a title="Modificar datos del alumno" data-toggle="modal" data-target="#miModal" href="#" class="pull-right">
+  <i class="glyphicon glyphicon-refresh"></i> Editar
 </a>
 <table class="table table-striped table-condensed">
   <thead>
@@ -89,55 +91,46 @@ function folio(folio)
   </thead>
   <tbody>
       <tr>
-        <td>Número de control</td>
-        <td><?php print $alumno['numero_control'] ?></td>
+        <td width="200"><strong>Número de control</strong></td>
+        <td colspan="3"><?php print $alumno['numero_control'] ?></td>
       </tr>
       <tr>
-        <td>Nombre</td>
-        <td><?php print $alumno['nombre_alumno'] ?></td>
-      </tr>
-       <tr>
-        <td>Apellido paterno</td>
-        <td><?php print $alumno['apellido_paterno_alumno'] ?></td>
-      </tr>
-       <tr>
-        <td>Apellido materno</td>
-        <td><?php print $alumno['apellido_materno_alumno'] ?></td>
+        <td><strong>Nombre</td>
+        <td colspan="3"><?php print $alumno['apellido_paterno_alumno']." ". $alumno['apellido_materno_alumno'] ." ". $alumno['nombre_alumno'] ?></td>
       </tr>
       <tr>
-        <td>Carrera</td>
-        <td><?php print $alumno['nombre_carrera'] ?></td>
+        <td><strong>Carrera</td>
+        <td colspan="3"><?php print $alumno['nombre_carrera'] ?></td>
       </tr>
       <tr>
-        <td>Semestre</td>
-        <td><?php print (semestre( $alumno['fecha_inscripcion']) > 12) ? 'NO DISP.' : semestre( $alumno['fecha_inscripcion']) ?></td>
-      </tr>
-      <tr>
-        <td>Edad</td>
-        <td><?php print edad($alumno['fecha_nacimiento']) ?></td>
+        <td><strong>Semestre</td>
+        <td><?php print (semestre( $alumno['fecha_inscripcion']) > 12) ? '<label class="label label-danger">NO DISP.</label>' : semestre( $alumno['fecha_inscripcion']) ?></td>
+       </tr>
+      <tr> 
+        <td width="200"><strong>Edad</td>
+        <td><?php print edad($alumno['fecha_nacimiento']) ." años" ?></td>
       </tr>
       <tr> 
-        <td>Sexo</td>
+        <td><strong>Sexo</td>
         <td><?php print ($alumno['sexo']==1) ? 'HOMBRE' : 'MUJER' ?></td>
-      </tr>
-      <tr>
-        <td>Correo electrónico</td>
-        <td><?php print $alumno['correo_electronico'] ?></td>
-      </tr>
-      <tr>
-        <td>Situación escolar (SE)</td>
+       </tr>
+      <tr> 
+        <td><strong>Situación escolar (SE)</td>
         <td><?php print ($alumno['situacion_escolar']==1) ? '<label class="label label-success">ACTIVO</label>' : '<label class="label label-danger">INACTIVO</label>' ?></td>
       </tr>
       <tr>
-        <td>Clave del sitio</td>
+        <td><strong>Correo electrónico</td>
+        <td><?php print $alumno['correo_electronico'] ?></td>
+       </tr>
+      <tr> 
+        <td><strong>Clave del sitio</td>
         <td><?php print $alumno['clave'] ?></td>
       </tr>
   </tbody>
 </table>
 <div style="clear: both"></div>
 <p>&nbsp;</p>
-<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;Historial de participación</legend>
-<hr>
+<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;<strong>Historial de participación</strong></legend>
 <p>A continuación se muestran los clubes y actividades en las que ha particpado <span class="label label-primary"><?php print $nombreAlumno ?> </span>.</p>
 <hr><!--
 <?php // if($inscripciones == NULL) { ?>
@@ -206,10 +199,10 @@ function folio(folio)
                 </td>
                 <td>
                   <?php if($ins['observaciones']!=NULL) { ?>
-                  <button class="btn btn-default" rel="popover" data-content="<?php print $ins['observaciones'] ?>" data-original-title="Observación">ver</button><?php } ?></td>
+                  <button class="btn btn-default btn-xs" rel="popover" data-content="<?php print $ins['observaciones'] ?>" data-original-title="Observación">ver</button><?php } ?></td>
                 <td>
-                  <a style="margin-left: 10px" title="Eliminar" data-toggle="modal" href="#confirmModal" rel="tooltip" href="#" class="btn btn-danger pull-right" onclick="folio('<?php print $ins['folio'] ?>')"><span class="glyphicon glyphicon-remove"></span></a>
-                  <a  href="<?php print get('webURL')._sh.'admin/pdf/formatos/liberacion/'.$ins['folio'] ?>" target="_blank" title="Descargar formato de liberación de horas" rel="tooltip" class="btn btn-success pull-right"><span class="glyphicon glyphicon-download-alt"></span> </a>
+                  <a style="margin-left: 10px" title="Eliminar" data-toggle="modal" href="#confirmModal" rel="tooltip" href="#" class="btn btn-danger btn-xs pull-right" onclick="folio('<?php print $ins['folio'] ?>')"><span class="glyphicon glyphicon-remove"></span></a>
+                  <a  href="<?php print get('webURL')._sh.'admin/pdf/formatos/liberacion/'.$ins['folio'] ?>" target="_blank" title="Descargar formato de liberación de horas" rel="tooltip" class="btn btn-success btn-xs pull-right"><span class="glyphicon glyphicon-download-alt"></span> </a>
                   
                 </td>
               </tr>
@@ -250,7 +243,7 @@ function folio(folio)
     <p>En el siguiente formulario se cambiará la actividad.</p>
    
     <form id="editAct" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editActividad' ?>">
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label">Actividad</label> 
       <div class="controls">
             <select name="actividad">
@@ -284,7 +277,7 @@ function folio(folio)
     <p>En el siguiente formulario se cambiará la acreditación.</p>
    
     <form id="editres" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editResultado' ?>">
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label">Actividad</label> 
       <div class="controls">
             <span id="actividad" type="text" class="uneditable-input"></span>
@@ -326,7 +319,7 @@ function folio(folio)
     <p>Complete el siguiente formulario para inscribir a este alumno a una actividad.</p>
    
     <form id="insActForm" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/inscipcionActividad' ?>">
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label">Actividad</label> 
       <div class="controls">
              <select name="actividad">
@@ -359,81 +352,116 @@ function folio(folio)
 </div>
 
 <!-- DIALOGO PARA EDITAR ALUMNOS -->
-<div class="modal hide fade" id="miModal">
-  <div class="modal-header">
-    <button class="close" data-dismiss="modal">×</button>
-    <h3>Edición de datos del alumno&nbsp;&nbsp;&nbsp;&nbsp;<a rel="tooltip" title="Actualizar" href="<?php print get('webURL'). _sh . 'admin/alumno/'.$alumno['numero_control'] ?>">
-        <i class="icon-refresh"></i>
-      </a>
-    </h3>
-  </div>
-  <div class="modal-body">
-    <p>En el siguiente formulario se muestran los datos del alumno, por favor edite el campo correspondiente y haga clic en guardar cambios.</p>
-    <form id="editalumno" class="form-horizontal" method="POST" action="<?php print get('webURL')._sh.'admin/editalumno/' ?>">
-    <div class="control-group">
-      <label class="control-label" for="nombre">Nombre</label>
-      <div class="controls">
-  <!-- -->  <input type="text" name="nombre" class="input-xlarge" id="nombre" value="<?php print $alumno['nombre_alumno'] ?>">
-      </div><br>
-      <label class="control-label" for="ap">Apellido paterno</label>
-      <div class="controls">
-  <!-- -->  <input type="text" name="ap" class="input-xlarge" id="ap" value="<?php print $alumno['apellido_paterno_alumno'] ?>">
-      </div><br>
-      <label class="control-label" for="am">Apellido materno</label>
-      <div class="controls">
-  <!-- -->  <input type="text" name="am" class="input-xlarge" id="am"  value="<?php print $alumno['apellido_materno_alumno'] ?>">
-      </div><br>
-      <label class="control-label" for="fecha_nac">Fecha de nacimiento</label>
-      <div class="controls">
-  <!-- -->  <input type="text" name="fecha_nac" class="input-xlarge" id="fecha_nac"  value="<?php print $alumno['fecha_nacimiento'] ?>">
-      </div><br>
-      <label class="control-label" for="sexo">Sexo</label>
-      <div class="controls">
-  <!-- -->  <select name="sexo" id="sexo">
-              <option value="1">HOMBRE</option>
-              <option value="2" <?php if($alumno['sexo']!=1) print 'selected="selected"' ?>>MUJER</option>
-            </select>
-      </div><br>
-      <label class="control-label" for="email">Correo electrónico</label>
-      <div class="controls">
-  <!-- -->  <input type="text" name="email" class="input-xlarge" id="email"  value="<?php print $alumno['correo_electronico'] ?>">
-      </div><br>
-      <label class="control-label" for="se">Situación escolar</label>
-      <div class="controls">
-  <!-- -->  <input type="text" name="se" class="input-xlarge" id="se"  value="<?php print $alumno['situacion_escolar'] ?>">
-      </div><br>
-      <label class="control-label" for="clave">Clave del sitio</label>
-      <div class="controls">
-  <!-- -->  <input type="text" name="clave" class="input-xlarge" id="clave"  value="<?php print $alumno['clave'] ?>">
+<div class="modal fade" id="miModal" role="dialog">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Edición de datos del alumno&nbsp;&nbsp;&nbsp;&nbsp;<a rel="tooltip" title="Actualizar" href="<?php print get('webURL'). _sh . 'admin/alumno/'.$alumno['numero_control'] ?>">
+            <i class="icon-refresh"></i>
+          </a>
+        </h3>
       </div>
-      <input type="hidden" name="numero_control" value="<?php print $alumno['numero_control'] ?>"> 
+      <div class="modal-body">
+        <div class="form-horizontal">
+          <!--<p>En el siguiente formulario se muestran los datos del alumno, por favor edite el campo correspondiente y haga clic en guardar cambios.</p>-->
+          <form id="editalumno" method="POST" action="<?php print get('webURL')._sh.'admin/editalumno/' ?>">
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="nombre">Número de control</label>
+              <div class="col-sm-8">
+          <!-- -->  <input type="num" minlength="8" maxlenght="8" name="numero_control" class="form-control" id="numero_control" value="<?php print $alumno['numero_control'] ?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="nombre">Nombre</label>
+              <div class="col-sm-8">
+          <!-- -->  <input type="text" name="nombre" class="form-control" id="nombre" value="<?php print $alumno['nombre_alumno'] ?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="ap">Apellido paterno</label>
+              <div class="col-sm-8">
+          <!-- -->  <input type="text" name="ap" class="form-control" id="ap" value="<?php print $alumno['apellido_paterno_alumno'] ?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="am">Apellido materno</label>
+              <div class="col-sm-8">
+          <!-- -->  <input type="text" name="am" class="form-control" id="am"  value="<?php print $alumno['apellido_materno_alumno'] ?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="fecha_nac">Fecha de nacimiento</label>
+              <div class="col-sm-8">
+          <!-- -->  <input type="text" name="fecha_nac" class="form-control" id="fecha_nac"  value="<?php print $alumno['fecha_nacimiento'] ?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="sexo">Sexo</label>
+              <div class="col-sm-8">
+          <!-- -->  <select name="sexo" id="sexo" class="form-control">
+                      <option value="1">HOMBRE</option>
+                      <option value="2" <?php if($alumno['sexo']!=1) print 'selected="selected"' ?>>MUJER</option>
+                    </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="email">Correo electrónico</label>
+              <div class="col-sm-8">
+          <!-- -->  <input type="text" name="email" class="form-control" id="email"  value="<?php print $alumno['correo_electronico'] ?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="se">Situación escolar</label>
+              <div class="col-sm-8">
+                <select name="se" id="se" class="form-control">
+                      <option value="1">ACTIVO</option>
+                      <option value="2" <?php if($alumno['situacion_escolar']!=1) print 'selected="selected"' ?>>INACTIVO</option>
+                </select>
+          <!-- -  <input type="text" name="se" class="form-control" id="se"  value="<?php print $alumno['situacion_escolar'] ?>">-->
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="clave">Clave del sitio</label>
+              <div class="col-sm-8">
+          <!-- -->  <input type="text" name="clave" class="form-control" id="clave"  value="<?php print $alumno['clave'] ?>">
+              </div>
+              <input type="hidden" name="numero_control_ant" value="<?php print $alumno['numero_control'] ?>"> 
+            </div>
+            <div style="clear: both"></div>
+          </form> 
+        </div>
+      </div>
 
+      <div class="modal-footer">
+       <a href="#" class="btn btn-default" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <button class="btn btn-primary" onclick="$('#editalumno').submit()">Guardar cambios</button>
+      </div>
     </div>
-</form> 
-  </div>
-  <div class="modal-footer">
-   <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-    <button class="btn btn-primary" onclick="$('#editalumno').submit()">Guardar cambios</button>
   </div>
 </div>
 
 <!-- DIALOGO PARA CONFIRMACIÓN DE ELIMINACION -->
-<div class="modal hide fade" id="confirmModal">
-  <div class="modal-header">
-    <button class="close" data-dismiss="modal">×</button>
-    <h3>Confirmación</h3>
-  </div>
-  <div class="modal-body">
-    <p>¿Está seguro que desea eliminar esta actividad?</p>
-   
-    <form id="elimActividad" method="post" action="<?php print get('webURL')._sh.'admin/elimActividad' ?>">
-      <input name="folio" id="folioElim" type="hidden" value="">
-      <input name="nc" type="hidden" value="<?php print $alumno['numero_control'] ?>">
+<div class="modal fade" id="confirmModal">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Confirmación</h3>
+      </div>
+      <div class="modal-body">
+        <p>¿Está seguro que desea eliminar esta actividad?</p>
+       
+        <form id="elimActividad" method="post" action="<?php print get('webURL')._sh.'admin/elimActividad' ?>">
+          <input name="folio" id="folioElim" type="hidden" value="">
+          <input name="nc" type="hidden" value="<?php print $alumno['numero_control'] ?>">
 
-    </form> 
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
-    <a href="#" class="btn btn-danger" onclick="$('#elimActividad').submit()">Eliminar</a>
+        </form> 
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+        <a href="#" class="btn btn-danger" onclick="$('#elimActividad').submit()">Eliminar</a>
+      </div>
+    </div>
   </div>
 </div>

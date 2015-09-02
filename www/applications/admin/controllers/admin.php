@@ -82,7 +82,7 @@ class Admin_Controller extends ZP_Controller {
 		$clubes = $this->Admin_Model->getClubes('all');
 		$alumnos = $this->Admin_Model->getAlumnosInscritos( array($periodo) );
 		$todos_alumnos = $this->Admin_Model->getAlumnosInscritos( $periodos_grafico );
-		$carreras = $this->Admin_Model->getCarreras(NULL);
+		$carreras = $this->Admin_Model->getCarreras(NULL, false);
 
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
@@ -149,7 +149,7 @@ class Admin_Controller extends ZP_Controller {
 		if (!SESSION('user_admin'))
 			return redirect(get('webURL') .  _sh .'admin/login');
 
-		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL);
+		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL, false);
 		$vars['view'] = $this->view('registroalumno',true);
 		$vars['menu'] = 2;
 		$this->render("content",$vars);
@@ -163,7 +163,7 @@ class Admin_Controller extends ZP_Controller {
 		if (!SESSION('user_admin'))
 			return redirect(get('webURL') .  _sh .'admin/login');
 
-		$carreras = $this->Admin_Model->getCarreras(NULL);
+		$carreras = $this->Admin_Model->getCarreras(NULL, false);
 		$alumnos = $this->Admin_Model->getAlumnosCarreras($carrera, $periodo);
 		$vars['par1'] = $carrera;
 		$vars['par2'] = $periodo;
@@ -614,7 +614,7 @@ class Admin_Controller extends ZP_Controller {
 		redirect(get('webURL').'/admin/alumno/'.$numero_control);
 	}
 
-	public function updateLiberacion()
+	public function fech_liberacion($tipo)
 	{
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
@@ -625,7 +625,11 @@ class Admin_Controller extends ZP_Controller {
 		$vars['lib_fin'] = POST('lib_fin');
 		$vars['periodo'] = POST('periodo');
 		$vars['nper'] = POST('nper');
-		$this->Admin_Model->updateLiberacion($vars);
+		if($tipo == 1)
+			$this->Admin_Model->updateLiberacion($vars);
+		else
+			$this->Admin_Model->insertarLiberacion($vars);
+		
 		redirect(get('webURL')._sh.'admin/configLiberacion');
 	}
 
@@ -640,6 +644,7 @@ class Admin_Controller extends ZP_Controller {
  		$vars['conf'] = $conf[0];
  		$vars['mensaje'] = $mensaje[0]; 
  		$vars['view'] = $this->view('avisos',true);
+ 		$vars['menu'] = 6;
  		$this->render('content', $vars);
  	}
 
@@ -660,6 +665,7 @@ class Admin_Controller extends ZP_Controller {
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 		$vars['view'] = $this->view('subiralumnos',true);
+		$vars['menu'] = 0;
  		$this->render('content', $vars);
 
 	}
@@ -690,6 +696,7 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') . _sh . 'admin/login');
 		$vars['elim'] = $id;
 		$vars['view'] = $this->view('eliminarhistorial',true);
+		$vars['menu'] = 5;
  		$this->render('content', $vars);
 	}
 
@@ -736,6 +743,7 @@ class Admin_Controller extends ZP_Controller {
    		}
    		$vars['files'] = $files;
 		$vars['view'] = $this->view('subirarchivo',true);
+		$vars['menu'] = 6;
  		$this->render('content', $vars);
 	}
 
@@ -794,7 +802,7 @@ class Admin_Controller extends ZP_Controller {
    		}
 
    		$vars['files'] = $files;
-
+   		$vars['menu'] = 0;
 		$vars['view'] = $this->view("respaldobd",true);
 		$this->render("content", $vars);
 	}
@@ -803,7 +811,7 @@ class Admin_Controller extends ZP_Controller {
 	{
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
-		unlink( _spath . '/973164852/respaldos/' . $archivo);
+		unlink( _spath . '/respaldos/' . $archivo);
 		redirect(  get('webURL') . _sh . 'admin/respaldobd'  );
 	}
 
@@ -813,20 +821,21 @@ class Admin_Controller extends ZP_Controller {
 		/*$resultado = null;*/
 		$name = date("y-m-d_H-i-s");
 		
-		$this->Admin_Model->hacerespaldo( _spath.'/973164852/respaldos/'.$name );
-		redirect( get('webURL') . _sh . 'admin/respaldoBD' );
+		//$this->Admin_Model->hacerespaldo( _spath.'/respaldos/'.$name );
+		
 
-		/*$usuario = "itsaextr_root";
+		$usuario = "root";
 
-		$passwd = "simpus2124";
+		$passwd = "";
 		$host = "localhost";
 		$bd = "itsaextr_extra";
 
-		$executa = "mysqldump -h ". $host ." -u ".$usuario." -p ".$passwd." ".$bd." > "._spath.'/973164852/respaldos/'.$name.".sql";
+		$executa = "mysqldump -h ". $host ." -u ".$usuario." -p ".$passwd." ".$bd." > "._spath.'/respaldos/'.$name.".sql";
 		passthru($executa); 
-		//if($resultado) 
-		print "Error al ejecutar comando:   "  . $executa;*/
-		//else redirect( get('webURL') . _sh . 'admin/respaldoBD' );
+		if($resultado) 
+		print "Error al ejecutar comando:   "  . $executa;
+		else redirect( get('webURL') . _sh . 'admin/respaldoBD' );
+		//redirect( get('webURL') . _sh . 'admin/respaldoBD' );
 	}
 
 
@@ -847,6 +856,7 @@ class Admin_Controller extends ZP_Controller {
 			$n = $this->Admin_Model->getNoticia($id);
 			$vars['modnot'] = $n[0];
 		} 
+		$vars['menu'] = 6;
 
 		$this->render("content", $vars);
 	}
@@ -1016,17 +1026,27 @@ class Admin_Controller extends ZP_Controller {
 		redirect(get('webURL')._sh.'admin/noticias');
 	}
 
-	public function carreras($id = NULL)
+	public function carreras($tipo = NULL, $id = NULL)
  	{
  		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
-		if($id != NULL) $vars['carrera'] = $this->Admin_Model->getCarreras($id);
-		else $vars['carrera'] = NULL;
-		
-		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL);
- 		$vars['view'] = $this->view('carreras',true);
- 		$vars['menu'] = 2;
+		$vars['menu'] = 2;
+
+		if(strcmp($tipo,"nueva-edit") == 0){
+			if($id != NULL) 
+				$vars['carrera'] = $this->Admin_Model->getCarreras($id,true);
+			else 
+				$vars['carrera'] = NULL;
+			$vars['view'] = $this->view('regcarrera',true);
+		}
+		else
+		{
+			$vars['carreras'] = $this->Admin_Model->getCarreras(NULL, true);
+	 		$vars['view'] = $this->view('carreras',true);
+	 		
+	 		
+ 		}
  		$this->render('content', $vars);
  	}
 
@@ -1037,6 +1057,7 @@ class Admin_Controller extends ZP_Controller {
 		$reg = $this->Admin_Model->obtenerReglamento();
 		$vars['reglamento'] = $reg[0]; 
  		$vars['view'] = $this->view('reglamento',true);
+ 		$vars['menu'] = 6;
  		$this->render('content', $vars);
  	}
 
@@ -1147,16 +1168,22 @@ class Admin_Controller extends ZP_Controller {
 		if (!SESSION('user_admin'))
 			return redirect(get('webURL') .  _sh .'admin/login');
 
-		$nombre = $_POST['name'];
-		$abreviatura = $_POST['abreviatura'];
-		$sem = $_POST['sem'];
+		$id = $_POST['id_carrera'];
+		$nombre = strtoupper($_POST['name']);
+		$abreviatura = strtoupper(POST('abreviatura'));
+		$sem = POST('sem');
+		$plan = strtoupper(POST('plan'));
 
 		$abreviatura = str_replace( "'", "\"", $abreviatura);
 		$nombre = str_replace( "'", "\"", $nombre);
+		$plan = str_replace( "'", "\"", $plan);
 
+		$vars["id"] = $id;
 		$vars["nombre_carrera"] = $nombre;
 		$vars["abreviatura_carrera"] = $abreviatura;
 		$vars["semestres_carrera"] = $sem;
+		$vars["plan"] = $plan;
+		
 		
 
 		if(strcmp($vars["nombre_carrera"], "") != 0 || strcmp($vars["abreviatura_carrera"], "") != 0)
@@ -1170,16 +1197,19 @@ class Admin_Controller extends ZP_Controller {
 		if (!SESSION('user_admin'))
 			return redirect(get('webURL') .  _sh .'admin/login');
 
-		$nombre = $_POST['name'];
-		$abreviatura = $_POST['abreviatura'];
-		$sem = $_POST['sem'];
+		$nombre = strtoupper($_POST['name']);
+		$abreviatura = strtoupper(POST('abreviatura'));
+		$sem = POST('sem');
+		$plan = strtoupper(POST('plan'));
 
 		$abreviatura = str_replace( "'", "\"", $abreviatura);
 		$nombre = str_replace( "'", "\"", $nombre);
+		$plan = str_replace( "'", "\"", $plan);
 
 		$vars["nombre_carrera"] = $nombre;
 		$vars["abreviatura_carrera"] = $abreviatura;
 		$vars["semestres_carrera"] = $sem;
+		$vars["plan"] = $plan;
 		$vars["id_carrera"] = $id;
 		
 
@@ -1279,13 +1309,13 @@ class Admin_Controller extends ZP_Controller {
 		redirect(get('webURL'). _sh . 'admin/adminclubes');
 	}
 
-	public function elimcarrera()
+	public function habilitarCarrera($id, $estado)
 	{
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
-		$id_carrera = POST('id_carrera');
-		$this->Admin_Model->elimcarrera($id_carrera);
+		$this->Admin_Model->habilitarCarrera($id, $estado);
+
 		redirect(get('webURL'). _sh . 'admin/carreras');
 	}
 
@@ -1328,6 +1358,7 @@ class Admin_Controller extends ZP_Controller {
  		}
 
  		$vars['view'] = $this->view('galeria',true);
+ 		$vars['menu'] = 6;
  		$this->render('content', $vars);
  	}
 	
@@ -1416,17 +1447,30 @@ class Admin_Controller extends ZP_Controller {
 
 
 	
- 	public function configLiberacion()
+ 	public function configLiberacion($periodo = NULL)
  	{
  		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
- 		$vars['view'] = $this->view('configLiberacion', true);
- 		$config = $this->Admin_Model->getConfFechas(periodo_actual());
- 		$vars['periodos'] = periodos_combo('1082');
- 		$vars['config'] = $config[0];
+		if($periodo == NULL)
+			$periodo = periodo_actual();
+
+			
+		$config = $this->Admin_Model->getConfFechas($periodo);
+
+		if($config == null)
+			$vars['nuevo'] = 1;
+		else
+			$vars['nuevo'] = 0;
+
+		$vars['config'] = $config[0];
  		$vars['menu'] = 4;
 
+ 		$vars['periodo'] = $periodo;
+		$vars['periodos'] = periodos_combo('1142');
+
+ 		$vars['view'] = $this->view('configLiberacion', true);
+ 		
  		$this->render('content', $vars);
  	}
 
@@ -1529,6 +1573,7 @@ class Admin_Controller extends ZP_Controller {
 
  		$this->sessionOn();
  		$vars['date'] = date("Y-m-d");
+ 		$vars['menu'] = 0;
  		if(POST('btnSubmit'))
  		{
  			//Explainer
@@ -1621,9 +1666,10 @@ class Admin_Controller extends ZP_Controller {
 		$vars = $this->getDatosAdmin($id);
 		$vars["view"] = $this->view("adminconfig",true);
 		//$vars["view"]['registroAdmin'] = $this->view("registroAdmin",true);
+		$vars['menu'] = 0;
 		$this->render("content",$vars);
 	}
-
+/*
 	public function excel($periodo = null)
 	{
 		if (!SESSION('user_admin'))
@@ -1632,9 +1678,9 @@ class Admin_Controller extends ZP_Controller {
 			$periodo = periodo_actual();
 		$vars['period'] = $periodo;
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
-		$periodossss = $this->Admin_Model->getPeriodos();
+//		$periodossss = $this->Admin_Model->getPeriodos();
 		//____($periodossss);
-		$i = 0;
+/*		$i = 0;
 		$bandera = false;
 		foreach ($periodossss as $per) {
 			if(strcmp($per['periodo'], periodo_actual()) == 0)
@@ -1644,13 +1690,13 @@ class Admin_Controller extends ZP_Controller {
 		}
 		if($bandera == false) $periodos[$i] = periodo_actual(); //en caso de que no esté el periodo actual
 		$vars["periodos"] = $periodos; //periodos_combo("2082");
-		/****************************************************/
-
+/*		/****************************************************/
+/*
 		$vars['datos'] = $this->Admin_Model->getAlumnosInscritos( array($periodo) );
 		$vars["view"] = $this->view("excel",true);
 		$this->render("noRightContent",$vars);
 	}
-
+*/
 	public function generarexcel($periodo)
 	{
 		if (!SESSION('user_admin'))

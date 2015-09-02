@@ -47,7 +47,7 @@ $().ready(function() {
 </style>
  <form id="registroalumno" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/regisalumno' ?>">
     <fieldset>
-      <legend><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Registro de un nuevo alumno</legend>
+      <legend><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<strong>Registro de un nuevo alumno</strong></legend>
        <div class="well">
        <h5>Antes de registrar el alumno debe tomar en cuenta los siguientes aspectos:</h5>
         <ul>

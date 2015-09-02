@@ -1,7 +1,7 @@
 <div class="col-sm-12">
 	<form action="<?php print get('webURL')._sh.'admin/listaclub/' ?>" method="get" class="form-horizontal">
 		<fieldset>
-			<legend><span class="glyphicon glyphicon-folder-open"></span> Elije un club y un periodo</legend>
+			<legend><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp; <strong>Lista de alumnos</strong></legend>
 			<div class="form-group">
 				<!--<label class="control-label">CLUB</label>-->
 				<div class="col-sm-4">

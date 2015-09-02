@@ -1,5 +1,5 @@
   <script src="<?php print path("www/lib/google/jsapi.js","www") ?>"></script>
- <legend><span class="glyphicon glyphicon-stats"></span>&nbsp;  Estadísticas</legend>
+ <legend><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;  <strong>Estadísticas</strong></legend>
 <!--COMBO PARA SELECCIONAR EL PERIODO -->
 <p class="label label-primary">SELECCIONA UN PERIODO: </p>
 <div class="form-group">
@@ -731,4 +731,4 @@
 
 <hr>
 
-<p><h3>IMPORTANTE</h3><i>Los datos que aquí se presentan hacen referencia únicamente a los alumnos que se inscribieron a los diferentes clubes deportivos y culturales. Los gráficos no incluyen los datos de los alumnos que liberaron en otras actividades.</i></p>
+<p><h3><strong>IMPORTANTE</strong></h3><i>Los datos que aquí se presentan hacen referencia únicamente a los alumnos que se inscribieron a los diferentes clubes deportivos y culturales. Los gráficos no incluyen los datos de los alumnos que liberaron en otras actividades.</i></p>

@@ -27,37 +27,38 @@
 <div style="clear: both"></div>
 <p>&nbsp;</p>
 <p>Registros encontrados: <?php if($promotores != null) print sizeof($promotores); else print "0"; ?></p>
+<hr>
 <div class="table-responsive">
-<table class="table table-hover table-condensed" >
-	<tr style="background: #eeeeee">
+<table class="table table-hover table-condensed table-striped" >
+	<thead>
 		<th>Usuario</th>
 		<th>Nombre</th>
-		<th>Sexo</th>
+		<th align="center">Sexo</th>
 		<th>E-mail</th>
 		<th>Teléfono</th>
-		<th>Edad</th>
+		<th align="center">Edad</th>
 		<th>Estado</th>
 		<th></th>
-	</tr>
+	</thead>
 	<tbody>
 		<?php 
 		if($promotores != null)
 			foreach ($promotores as $prom) { ?>
 			<tr>
 				<td><?php print $prom['usuario_promotor'] ?></td>
-				<td><?php print $prom['apellido_paterno_promotor']." ".$prom['apellido_materno_promotor']." ".$prom['nombre_promotor'] ?></td>
-				<td><?php print ($prom['sexo_promotor']==1) ? "H" : "M"; ?></td>
+				<td><a href=""> <?php print $prom['apellido_paterno_promotor']." ".$prom['apellido_materno_promotor']." ".$prom['nombre_promotor'] ?></a></td>
+				<td align="center"><?php print ($prom['sexo_promotor']==1) ? "H" : "M"; ?></td>
 				<td><?php print $prom['correo_electronico_promotor'] ?></td>
 				<td><?php print $prom['telefono_promotor'] ?></td>
-				<td><?php print edad($prom['fecha_nacimiento_promotor']) ?></td>
+				<td align="center"><?php print edad($prom['fecha_nacimiento_promotor']) ?></td>
 				<td><?php print ($prom['eliminado_promotor'] == 0) ? "<span class='label label-success'>Activo</span>" : "<span class='label label-danger'>No activo</span>" ?></td>
 				<td align="right">
-					<a href="<?php print get("webURL") . "/admin/formEdicionPromotor/$prom[usuario_promotor]" ?>" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> </a>
-					&nbsp;
+					<a href="<?php print get("webURL") . "/admin/formEdicionPromotor/$prom[usuario_promotor]" ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> </a>
+
 			<?php	if($prom['eliminado_promotor'] == 0) { ?>
-					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/1" ?>" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span> </a>
+					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/1" ?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> </a>
 			<?php } else { ?>
-					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/0" ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-ok"></span> </a>
+					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/0" ?>" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-ok"></span> </a>
 			<?php } ?>
 				</td>
 			</tr>
