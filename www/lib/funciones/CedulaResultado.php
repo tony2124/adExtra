@@ -7,6 +7,15 @@ SESSION('periodo',$periodo);
 SESSION('actividad', $data[0]['nombre_club']);
 SESSION('promotor',strtoupper($promotor[0]['apellido_paterno_promotor'].' '.$promotor[0]['apellido_materno_promotor'].' '.$promotor[0]['nombre_promotor']));
 
+/***** obtener datos de revision ****/
+
+$rev = $this->Admin_Model->getRevisionActual(2);
+SESSION('codigo',$rev[0]['codigo']);
+SESSION('norma',$rev[0]['norma']);
+SESSION('rev',$rev[0]['nombre_revision']);
+
+/******************************************/
+
 $pdf = new Resultados('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 $pdf->SetCreator(PDF_CREATOR);

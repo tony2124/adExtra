@@ -8,7 +8,7 @@ function eliminar(nombre, id)
 </script>
 
 
-<legend><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;  <strong>Lista de carreras</strong> <a class="btn btn-primary pull-right" href="<?php print get('webURL').'/admin/carreras/nueva-edit' ?>">Nueva carrera</a>
+<legend><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;  <strong>Lista de carreras</strong> <a class="btn btn-primary btn-sm pull-right" href="<?php print get('webURL').'/admin/carreras/nueva-edit' ?>">Nueva carrera</a>
 </legend>
 <table class="table table-striped table-condensed">
 	<thead>
@@ -32,6 +32,10 @@ function eliminar(nombre, id)
 			<td><?php echo $car['fecha_registro'] ?></td>
 			<td><?php print ($car['eliminada'] == 0) ? "<span class='label label-success'>Activo</span>" : "<span class='label label-danger'>No activo</span>" ?></td>
 			<td>
+				
+				<a rel="tooltip" title="Editar" href="<?php print get("webURL")._sh.'admin/carreras/nueva-edit/'.$car['id_carrera'] ?>" class="btn btn-default btn-xs">
+					<span class="glyphicon glyphicon-pencil"></span>
+				</a>
 				<?php  if($car['eliminada'] == 0) { ?>
 				<a rel="tooltip" title="Eliminar" href="<?php print get('webURL')._sh.'admin/habilitarCarrera/'.$car['id_carrera'].'/1' ?>" class="btn btn-danger btn-xs">
 					<span class="glyphicon glyphicon-remove"></span>
@@ -41,9 +45,6 @@ function eliminar(nombre, id)
 					<span class="glyphicon glyphicon-ok"></span>
 				</a>
 <?php			} ?>
-				<a rel="tooltip" title="Editar" href="<?php print get("webURL")._sh.'admin/carreras/nueva-edit/'.$car['id_carrera'] ?>" class="btn btn-default btn-xs">
-					<span class="glyphicon glyphicon-pencil"></span>
-				</a>
 			</td>
 		</tr>
 

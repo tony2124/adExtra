@@ -1,48 +1,9 @@
-<script type="text/javascript" src="<?php print path("libraries/editor/scripts/jHtmlArea-0.7.0.js", "zan"); ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php print path("libraries/editor/style/jHtmlArea.css", "zan"); ?>" />
-<script>
-$(document).ready(function() {
-	$(".txtDefaultHtmlArea").htmlarea(); 
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	$(".txtCustomHtmlArea").htmlarea({
-	    // Override/Specify the Toolbar buttons to show
-	    toolbar: [
-	        ["bold", "italic", "underline", "|", "forecolor"],
-	        ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
-	        ["link", "unlink", "|", "image"],                    
-	        [{
-	            // This is how to add a completely custom Toolbar Button
-	            css: "custom_disk_button",
-	            text: "Save",
-	            action: function(btn) {
-	                // 'this' = jHtmlArea object
-	                // 'btn' = jQuery object that represents the <A> "anchor" tag for the Toolbar Button
-	                alert('SAVE!\n\n' + this.toHtmlString());
-	            }
-	        }]
-	    ],
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	    // Override any of the toolbarText values - these are the Alt Text / Tooltips shown
-	    // when the user hovers the mouse over the Toolbar Buttons
-	    // Here are a couple translated to German, thanks to Google Translate.
-	    toolbarText: $.extend({}, jHtmlArea.defaultOptions.toolbarText, {
-	            "bold": "fett",
-	            "italic": "kursiv",
-	            "underline": "unterstreichen"
-	        }),
-
-	    // Specify a specific CSS file to use for the Editor
-	    css: "style//jHtmlArea.Editor.css",
-
-	    // Do something once the editor has finished loading
-	    loaded: function() {
-	        //// 'this' is equal to the jHtmlArea object
-	        //alert("jHtmlArea has loaded!");
-	        //this.showHTMLView(); // show the HTML view once the editor has finished loading
-	    }
-			 });
-});
-</script>
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 function eliminar(nombre, id)
@@ -50,91 +11,134 @@ function eliminar(nombre, id)
    $('#nombre_club').html(nombre);
    $('#id_club').val(id);
 }
+
+$(function () {
+  $('[rel="popover"]').popover()
+})
 </script>
 
-<h2>Administración de clubes</h2><hr>
-<p><a class="btn btn-success pull-right" href="<?php print get('webURL').'/admin/adminclubes' ?>">Nuevo</a></p>
-<p>
-<form id="textoForm" action="<?php print isset($club) ? get('webURL')._sh.'admin/modclub/'.$club[0]['id_club'] : get('webURL')._sh.'admin/guardarclub' ?>" method="post" enctype="multipart/form-data">
-	<label for="titulo">Nombre del club</label>
-	<input style="width: 300px" name="name" id="titulo" type="text" size="40" maxlength="40" value="<?php print ($club) ? $club[0]['nombre_club'] : NULL ?>" />
-	<?php
-	if(isset($club))
-		if($club[0]['foto_club'])
-		{ ?>
-			<p>Foto actual del club, para reemplazarla elija una nueva foto.</p>
-			<img style="border: 3px solid black; " src="<?php print _rs ?>/paginas/clubes/IMAGEN/<?php print $club[0]['foto_club'] ?>" width="330">
-			
-			<p>
-				<input type="checkbox" name="mostrarfoto" id="mostrarfoto" value="<?php echo $club[0]['foto_club'] ?>" checked="checked" />&nbsp;Mostrar esta foto.
-			</p>
 
-		<?php } 	?>
-	<label for="foto">Subir una foto</label>
-	<input name="foto" id="foto" type="file" /><br>
-	Tipo de club<br>
-	<select name="tipo">
-		<option value="3">Selecciona un tipo</option>
-		<option value="1" <?php if(strcmp($club[0]['tipo_club'], "1") == 0) print 'selected="selected"' ?>>Deportivo</option>
-		<option value="2" <?php if(strcmp($club[0]['tipo_club'], "2") == 0) print 'selected="selected"' ?>>Cultural</option>
-	</select>
-	<textarea style="width: 100%"  name="aviso" id="aviso" class="txtDefaultHtmlArea" cols="100" rows="15">
-	<?php 
-	if(isset($club))
-	{
-		print $club[0]['texto_club'];
-	}
-	?>
-	</textarea>
-	<input type="hidden" id="texto" name="texto" />
+<?php if($club == NULL) { ?>
+<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Registrar nuevo club</strong></legend>
+<?php }else{ ?>
+<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Editar club</strong><a class="btn btn-primary btn-sm pull-right" href="<?php print get('webURL').'/admin/adminclubes' ?>">Nuevo club</a></legend>
+<?php } ?>
+<form id="textoForm" action="<?php print ($club != NULL) ? get('webURL')._sh.'admin/modclub/'.$club[0]['id_club'] : get('webURL')._sh.'admin/guardarclub' ?>" method="post" enctype="multipart/form-data">
+	<div class="col-sm-12 form-horizontal">
+		<div class="form-group">
+			<label class="label-control col-sm-2"for="foto">Tipo de club</label>
+			<div class="col-sm-3">
+				<select class="form-control" name="tipo">
+					<option value="3">Selecciona un tipo</option>
+					<option value="1" <?php if(strcmp($club[0]['tipo_club'], "1") == 0) print 'selected="selected"' ?>>Deportivo</option>
+					<option value="2" <?php if(strcmp($club[0]['tipo_club'], "2") == 0) print 'selected="selected"' ?>>Cultural</option>
+				</select>
+			</div>
+		
+			<label class="label-control col-sm-2" for="titulo">Nombre del club</label>
+			<div class="col-sm-5">
+				<input class="form-control" name="name" id="titulo" type="text" size="40" maxlength="40" value="<?php print ($club) ? $club[0]['nombre_club'] : NULL ?>" />
+			</div>
+		</div>
+		<?php
+		if(isset($club))
+			if($club[0]['foto_club'])
+			{ ?>
+			<div class="form-group">
+				<div class="col-sm-5">
+					<a href="#" data-toggle="collapse" data-target="#fotocollapse" aria-expanded="false" aria-controls="fotocollapse">Ver foto actual del club.</a>
+					<div class="collapse" id="fotocollapse">
+					    <img class="img-thumbnail" src="<?php print _rs ?>/paginas/clubes/IMAGEN/<?php print $club[0]['foto_club'] ?>" width="330">				
+					</div>
+					<p>
+							<input type="checkbox" name="mostrarfoto" id="mostrarfoto" value="<?php echo $club[0]['foto_club'] ?>" checked="checked" />&nbsp;Mantener foto actual.
+						</p>
+				</div>
+			</div>
+				
+
+			<?php } 	?>
+		<div class="form-group">
+			<label class="label-control col-sm-3"for="foto">Subir una foto</label>
+			<div class="col-sm-9">
+				<input name="foto" id="foto" type="file" /><br>
+			</div>
+		</div>
+		
+		
+	</div>	
+	<div class="form-group">
+		<div class="col-sm-12">
+			<textarea  name="texto" id="edit" ><?php 
+				if(isset($club))
+				{
+					print $club[0]['texto_club'];
+				}
+		?></textarea>
+		</div>
+	</div>
+	<p>&nbsp;</p>
+	<div class="form-group">
+		<div class="col-sm-12">
+			<input type="submit" class="btn btn-success pull-right" value="Guardar">
+		</div>
+	</div>
+	<!--<input type="hidden" id="texto" name="texto" />-->
 </form>
-</p>
-<p>
-<input type="button" style="background:red; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'red');" />
-<input type="button" style="background:blue; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'blue');" />
-<input type="button" style="background:green; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'green');" />
-<input type="button" style="background:black; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'black');" />
-<input type="button" style="background:yellow; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'yellow');" />
-<input type="button" style="background:orange; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'orange');" />
-<input type="button" style="background:purple; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'purple');" />
-<input type="button" class="btn btn-primary pull-right" value="Guardar" onclick="document.getElementById('texto').value = $('#aviso').htmlarea('toHtmlString'); $('#textoForm').submit();" />
-</p>
-<h2>Todos los clubes inscritos</h2><hr>
+
+<div style="clear: both"></div>
+<hr>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Lista de clubes</strong> </legend>
 <table class="table table-striped table-condensed">
 	<thead>
-		<th>Id</th>
+		<th>ID CLUB</th>
+		<th>Tipo club</th>
 		<th>Nombre del club</th>
-		<th>Foto</th>
-		<th>Fech. de creación</th>
-		<th>Conf.</th>
+<!--	<th>Foto</th>-->
+		<th>Fecha creación</th>
+		<th>Fecha creación</th>
+		<th>Estado</th>
+		<th width="70"></th>
 	</thead>
 	<tbody>
 		<?php foreach ($clubes as $not) { ?>
 		<tr class="roll">
 			<td><?php echo $not['id_club'] ?></td>
+			<td><?php if($not['tipo_club']==1)  print "DEPORTIVO"; else if($not['tipo_club']==2) print "CULTURAL"; else print "OTROS"; ?></td>
 			<td><a href="<?php print get("webURL")._sh.'admin/adminclubes/'.$not['id_club'] ?>"><?php echo $not['nombre_club'] ?></a></td>
-			<td>
+			<!--<td>
 				<?php if($not['foto_club']!=NULL) { ?>
 				<a href="#" rel="popover" data-content="<?php print "<img src='"._rs."/paginas/clubes/IMAGEN/".$not['foto_club']."' width='250' >" ?>" data-original-title="Imagen">ver</a>
 				<?php } ?>
-			</td>
+			</td>-->
 			
 			<td><?php echo $not['fecha_creacion'] ?></td>
-			
+			<td><?php echo $not['fecha_modificacion'] ?></td>
+			<td><?php print ($not['eliminado_club'] == 0) ? "<span class='label label-success'>Activo</span>" : "<span class='label label-danger'>No activo</span>" ?></td>
 			<td>
-				<a rel="tooltip" title="Eliminar" class="pull-right" onclick="eliminar('<?php print $not['nombre_club'] ?>','<?php print $not['id_club'] ?>');" data-toggle="modal" href="#confirmModal">
-					<i class="icon-trash"></i>
+				<a rel="tooltip" title="Editar" class="btn btn-default btn-xs" href="<?php print get("webURL")._sh.'admin/adminclubes/'.$not['id_club'] ?>">
+					<span class="glyphicon glyphicon-pencil"></span>
 				</a>
-				<a rel="tooltip" title="Editar" class="pull-right" href="<?php print get("webURL")._sh.'admin/adminclubes/'.$not['id_club'] ?>">
-					<i class="icon-cog"></i>
+<?php 			if($not['eliminado_club'] == 0){    		?>
+				<a rel="tooltip" title="Eliminar" class="btn btn-danger btn-xs" data-toggle="modal" href="<?php print get('webURL')._sh.'admin/habilitarClub/'.$not['id_club'].'/1' ?>">
+					<span class="glyphicon glyphicon-remove"></span>
 				</a>
+<?php 			}else{ 	?>
+				<a rel="tooltip" title="Eliminar" class="btn btn-success btn-xs" data-toggle="modal" href="<?php print get('webURL')._sh.'admin/habilitarClub/'.$not['id_club'].'/0' ?>">
+					<span class="glyphicon glyphicon-ok"></span>
+				</a>
+<?php 			} 	?>
+
+
 			</td>
 		</tr>
 
 		<?php } ?>
 	</tbody>
 </table>
-
+<!--
 <div class="modal hide fade" id="confirmModal">
   <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
@@ -152,3 +156,26 @@ function eliminar(nombre, id)
     <a href="#" class="btn btn-danger" onclick="$('#elimClub').submit()">Eliminar</a>
   </div>
 </div>
+-->
+
+<!-- Include JS files. -->
+  <script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+
+  <!-- Include IE8 JS. -->
+  <!--[if lt IE 9]>
+      <script src="../js/froala_editor_ie8.min.js"></script>
+  <![endif]-->
+
+  <!-- Initialize the editor. -->
+  <script>
+      $(function() {
+          $('#edit').editable({
+          	inlineMode: false,
+          	allowStyle: true,
+          	colors: [
+		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
+		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
+		      ]
+          })
+      });
+  </script>

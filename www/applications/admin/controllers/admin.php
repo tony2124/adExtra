@@ -512,6 +512,59 @@ class Admin_Controller extends ZP_Controller {
 		$this->render("content",$vars);
 	}
 
+	public function revisiones($id = NULL)
+	{
+		if (!SESSION('user_admin'))
+			return redirect(get('webURL') .  _sh .'admin/login');
+		//include(_corePath . _sh .'/libraries/funciones/funciones.php');
+		
+		$vars['revactual'] = $this->Admin_Model->getRevision($id);
+
+		$vars['type'] = $id;
+
+ 		$formatos = $this->Admin_Model->getFormatos();
+		$revisiones = $this->Admin_Model->getRevisiones();
+		$vars['formatos'] = $formatos;
+		$vars['revisiones'] = $revisiones;
+		$vars['menu'] = 4;
+
+		$vars["view"] = $this->view("revisiones",true);
+
+		$this->render("content",$vars);
+	}
+
+	public function guardarRevision()
+	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		$vars['nombre'] = POST("nombre");
+		$vars['codigo'] = POST("codigo");
+		$vars['norma'] = POST("norma");
+		$vars['tipo_formato'] = POST("tipo_formato");
+		$vars['fecha'] = POST("fecha");
+
+		$this->Admin_Model->guardarRevision($vars);
+		//____($vars);
+		redirect(get('webURL')._sh.'admin/revisiones/success');
+	}
+
+	public function actualizarRevision($id)
+	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		$vars['nombre'] = POST("nombre");
+		$vars['codigo'] = POST("codigo");
+		$vars['norma'] = POST("norma");
+		$vars['tipo_formato'] = POST("tipo_formato");
+		$vars['fecha'] = POST("fecha");
+
+		$this->Admin_Model->actualizarRevision($vars, $id);
+		//____($vars);
+		redirect(get('webURL')._sh.'admin/revisiones');
+	}
+
 
 	public function regisalumno()
 	{
@@ -543,6 +596,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['nombre'] = POST('nombre');
 		$vars['ap'] = POST('ap');
 		$vars['am'] = POST('am');
+		//$vars['car'] = POST('car');
 		$vars['fecha_nac'] = POST('fecha_nac');
 		$vars['sexo'] = POST('sexo');
 		$vars['email'] = POST('email');
@@ -1082,7 +1136,7 @@ class Admin_Controller extends ZP_Controller {
 		if($id != NULL) $vars['club'] = $this->Admin_Model->obtenerDatosClub($id);
 		else $vars['club'] = NULL;
 		
-		$vars['clubes'] = $this->Admin_Model->getClubes();
+		$vars['clubes'] = $this->Admin_Model->getClubes("elim");
  		$vars['view'] = $this->view('adminclubes',true);
  		$vars['menu'] = 3;
  		$this->render('content', $vars);
@@ -1299,13 +1353,12 @@ class Admin_Controller extends ZP_Controller {
 	
 
 
-	public function elimClub()
+	public function habilitarClub($id, $estado)
 	{
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
-		$id_club = POST('id_club');
-		$this->Admin_Model->elimClub($id_club);
+		$this->Admin_Model->hclub($id, $estado);
 		redirect(get('webURL'). _sh . 'admin/adminclubes');
 	}
 

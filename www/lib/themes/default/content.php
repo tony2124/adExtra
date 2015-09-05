@@ -25,7 +25,7 @@
 			<div class="collapse" id="collapseExample">
 			  <div >
 			    <label>
-		    		<input type="checkbox" name="sit" value="5"> Incluir alumnos egresados.
+		    		<input type="checkbox" name="sit" value="5"> Incluir alumnos inactivos.
 		  		</label>
 			  </div>
 			</div>

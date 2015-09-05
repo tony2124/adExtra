@@ -123,7 +123,7 @@
         	<ul class="dropdown-menu">
         		<li><a href="<?php print get('webURL'). _sh .'admin/configLiberacion/'  ?>">Fechas (inscr. / lib.)</a></li>
         		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Imágenes y logos</a></li>
-        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Códigos y revisiones</a></li>
+        		<li><a href="<?php print get('webURL'). _sh .'admin/revisiones'  ?>">Códigos y revisiones</a></li>
         		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Datos del instituto</a></li>
         	</ul>
         </li>

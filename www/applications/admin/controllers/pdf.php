@@ -27,22 +27,22 @@ class Cedula extends TCPDF {
           &nbsp;<br><img src="'._spath.'/formatos/formatoliberacionhoras_clip_image002.jpg" width="140"  />
         </td>
           
-        <td height="60" width="450" align="center" valign="middle">
-          <strong> Nombre del documento: Formato para  Cédula de Inscripción a Actividades Culturales, Deportivas y Recreativas</strong>
+        <td height="60" width="450" align="center" >
+          <strong><br> Formato para  Cédula de Inscripción a Actividades Culturales, <br>Deportivas y Recreativas</strong>
         </td>
           
-        <td width="250" valign="middle">
-          <strong> Código: SNEST/D-VI-PO-003-01</strong>
+        <td width="250" align="center">
+          <strong><br> Código: '.SESSION("codigo").'</strong>
         </td> 
         </tr>
 
         <tr>    
         <td rowspan="2" valign="middle" align="center">
-          <strong><br> Referencia a la Norma ISO 9001:2008   7.2.1</strong>
+          <strong><br> Referencia a la Norma '.SESSION("norma").'</strong>
         </td>
 
         <td height="25" valign="middle">
-          <strong> Revisión: 3</strong>
+          <strong> '.SESSION("rev").'</strong>
         </td>  
         </tr>
 
@@ -112,7 +112,7 @@ class Cedula extends TCPDF {
         $this->writeHTML($html,true,false,true,false,'');
 
         $this->SetFont('helvetica', 'I', 10);
-        $this->Cell(0, 10, "SNEST/D-VI/D-PO-003-01                                                                                                                                                     				Rev. 3", 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, SESSION("codigo")."                                                                                                                                                    				".SESSION("rev"), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
@@ -132,22 +132,22 @@ class Resultados extends TCPDF {
           &nbsp;<br><img src="'._spath.'/formatos/formatoliberacionhoras_clip_image002.jpg" width="140"  />
         </td>
           
-        <td height="60" width="450" align="center" valign="middle">
-          <strong> Nombre del documento: Formato para Cédula de Resultados de Actividades Culturales, Deportivas y Recreativas.</strong>
+        <td height="60" width="450" align="center">
+          <strong><br> Formato para Cédula de Resultados de Actividades Culturales, <br>Deportivas y Recreativas.</strong>
         </td>
           
-        <td width="250" valign="middle">
-          <strong> Código: SNEST/D-VI-PO-003-03</strong>
+        <td width="250" align="center">
+          <strong><br> Código: '.SESSION("codigo").'</strong>
         </td> 
         </tr>
 
         <tr>    
         <td rowspan="2" valign="middle" align="center">
-          <strong><br> Referencia a la Norma ISO 9001:2008   7.2.1</strong>
+          <strong><br> Referencia a la Norma '.SESSION("norma").'</strong>
         </td>
 
         <td height="25" valign="middle">
-          <strong> Revisión: 3</strong>
+          <strong> '.SESSION("rev").'</strong>
         </td>  
         </tr>
 
@@ -247,21 +247,21 @@ class Liberacion extends TCPDF {
         </td>
           
         <td height="60" width="280" align="center" valign="middle">
-          <strong> Formato para Boleta de Acreditación de Actividades Culturales, Deportivas y Recreativas.</strong>
+          <strong><br> Formato para Boleta de Acreditación de Actividades Culturales, Deportivas y Recreativas.</strong>
         </td>
           
-        <td width="190" valign="middle">
-          <strong> Código:SNEST/D-VI-PO-003-05</strong>
+        <td width="190" align="center">
+          <strong> <br>Código:<br>'.SESSION("codigo").'</strong>
         </td> 
         </tr>
 
         <tr>    
         <td rowspan="2" valign="middle" align="center">
-          <strong><br> Referencia a la Norma ISO 9001:2008  7.2.1</strong>
+          <strong><br> Referencia a la Norma '.SESSION("norma").'</strong>
         </td>
 
         <td height="25" valign="middle">
-          <strong> Revisión: 3</strong>
+          <strong> '.SESSION("rev").'</strong>
         </td>  
         </tr>
 
@@ -283,7 +283,7 @@ class Liberacion extends TCPDF {
         // Set font
         $this->SetFont('helvetica', 'N', 12);
         // Page number
-        $this->Cell(0, 10, "SNEST/D-VI-PO-003-05                                                Rev. 3" , 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, SESSION("codigo")."                                                ".SESSION("rev") , 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
@@ -405,11 +405,15 @@ class Pdf_Controller extends ZP_Controller {
 				    unlink($file); 
 				}
 
-				$zip = new ZipArchive();
-				$filename = _spath."/temp/FormatosAcreditacion.zip";
-				$zip->open($filename, ZipArchive::CREATE);
-
 				$alumnosEnElClub = $this->Admin_Model->getAlumnosClubes($club, $periodo);
+
+				$zip = new ZipArchive();
+				
+				$filename = "FormatosAcreditacion_$periodo.zip";
+				$ruta = _spath."/temp/".$filename;
+				$zip->open($ruta, ZipArchive::CREATE);
+
+				
 
 				foreach($alumnosEnElClub as $alumno){
 
@@ -421,9 +425,10 @@ class Pdf_Controller extends ZP_Controller {
 
 				$zip->close();
 
-				header('Content-type: application/force-download');
-				header('Content-Disposition: attachment; filename="FormatosAcreditacion_'.$alumnosEnElClub[0]["nombre_club"].'_'.$periodo.'.zip"');
-				readfile($filename);
+				//header('Content-type: application/force-download');
+				//header('Content-Disposition: attachment; filename="FormatosAcreditacion_'.$alumnosEnElClub[0]["nombre_club"].'_'.$periodo.'.zip"');
+				//readfile($filename);
+				header("Location: "._rs."/temp/".$filename);
  			break;
  			case "zip-ins":
  				//eliminar archivos temporales
@@ -434,8 +439,11 @@ class Pdf_Controller extends ZP_Controller {
 				}
 
 				$zip = new ZipArchive();
-				$filename = _spath."/temp/CedulasInscripcion.zip";
-				$zip->open($filename, ZipArchive::CREATE);
+				$filename = "CedulasInscripcion_$periodo.zip";
+				$ruta = _spath."/temp/".$filename;
+
+				//$filename = _spath."/temp/CedulasInscripcion.zip";
+				$zip->open($ruta, ZipArchive::CREATE);
 
 				$clubes = $this->Admin_Model->getClubes();
 
@@ -443,16 +451,17 @@ class Pdf_Controller extends ZP_Controller {
 
 					$club = $c['id_club'];
 				    include(_pathwww.'/lib/funciones/CedulaInscripcion.php');
-				    $pdf->Output (_spath.'/temp/cedins_' . $c['nombre_club'] ."_". $periodo .'.pdf', 'F');
-				    $zip->addFile(_spath.'/temp/cedins_' . $c['nombre_club'] ."_". $periodo .'.pdf', "cedins_".$c['id_club'] . "_".$periodo . '.pdf');
+				    $pdf->Output (_spath.'/temp/cedins_' . $periodo ."_". $c['nombre_club'] .'.pdf', 'F');
+				    $zip->addFile(_spath.'/temp/cedins_' . $periodo ."_". $c['nombre_club'] .'.pdf', "cedins_" . $periodo ."_" . $c['nombre_club'] . '.pdf');
 				}
 
 				$zip->close();
 
 				
-				header('Content-type: application/force-download');
-				header('Content-Disposition: attachment; filename="CedulasInscripcion_'.$periodo.'.zip"');
-				readfile($filename);
+				//header('Content-type: application/force-download');
+				//header('Content-Disposition: attachment; filename="CedulasInscripcion_'.$periodo.'.zip"');
+				//readfile($filename);
+				header("Location: "._rs."/temp/".$filename);
  			break;
  			case "zip-res":
  				//eliminar archivos temporales
@@ -463,8 +472,12 @@ class Pdf_Controller extends ZP_Controller {
 				}
 
 				$zip = new ZipArchive();
-				$filename = _spath."/temp/CedulasResultados.zip";
-				$zip->open($filename, ZipArchive::CREATE);
+
+				$filename = "CedulasResultados_$periodo.zip";
+				$ruta = _spath."/temp/".$filename;
+
+				//$filename = _spath."/temp/CedulasResultados_$periodo.zip";
+				$zip->open($ruta, ZipArchive::CREATE);
 
 				$clubes = $this->Admin_Model->getClubes();
 
@@ -472,16 +485,17 @@ class Pdf_Controller extends ZP_Controller {
 
 					$club = $c['id_club'];
 				    include(_pathwww.'/lib/funciones/CedulaResultado.php');
-				    $pdf->Output (_spath.'/temp/cedres_' . $c['nombre_club'] ."_". $periodo .'.pdf', 'F');
-				    $zip->addFile(_spath.'/temp/cedres_' . $c['nombre_club'] ."_". $periodo .'.pdf', "cedres_".$c['id_club'] . "_".$periodo . '.pdf');
+				    $pdf->Output (_spath.'/temp/cedres_' . $periodo  . "_" . $c['nombre_club'] . '.pdf', 'F');
+				    $zip->addFile(_spath.'/temp/cedres_' .  $periodo . "_" . $c['nombre_club'] . '.pdf', "cedres_". $periodo . "_" .$c['nombre_club'] . '.pdf');
 				}
 
 				$zip->close();
 
 				
-				header('Content-type: application/force-download');
-				header('Content-Disposition: attachment; filename="CedulasResultados_'.$periodo.'.zip"');
-				readfile($filename);
+				//header('Content-type: application/force-download');
+				//header('Content-Disposition: attachment; filename="CedulasResultados_'.$periodo.'.zip"');
+				//readfile($filename);
+				header("Location: "._rs."/temp/".$filename);
  			break;
  		}
  	}

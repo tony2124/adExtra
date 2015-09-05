@@ -11,6 +11,16 @@ SESSION('horario',substr($prommotor[0]['horario'],0,40));
 SESSION('actividad', $data[0]['nombre_club']);
 SESSION('admin', strtoupper($admin[0]['abreviatura_profesion'].' '.$admin[0]['apellido_paterno_administrador'].' '.$admin[0]['apellido_materno_administrador'].' '.$admin[0]['nombre_administrador'] ) );
 
+/***** obtener datos de revision ****/
+
+$rev = $this->Admin_Model->getRevisionActual(1);
+SESSION('codigo',$rev[0]['codigo']);
+SESSION('norma',$rev[0]['norma']);
+SESSION('rev',$rev[0]['nombre_revision']);
+
+/******************************************/
+
+
 $pdf = new Cedula('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Simpus Soluciones Informaticas');
@@ -37,11 +47,11 @@ $html = '
   	$html .= '<tr>
 		<td width = "25">&nbsp;'.($contador++).'</td>
 		<td width = "300">&nbsp;'.$row['apellido_paterno_alumno'].' '.$row['apellido_materno_alumno'].' '.$row['nombre_alumno'].'</td>
-		<td width = "90">&nbsp;'.$row['numero_control'].'</td>
+		<td align="center" width = "90">&nbsp;'.$row['numero_control'].'</td>
 		<td width = "150">&nbsp;'.$row['abreviatura_carrera'].'</td>
-		<td width = "45">&nbsp;'.$row['semestre'].'</td>
-		<td width = "45">&nbsp;'.calcularEdad($row['fecha_nacimiento'], $row['fecha_inscripcion_club']).'</td>
-		<td width = "45">&nbsp;';
+		<td align="center" width = "45">&nbsp;'.$row['semestre'].'</td>
+		<td align="center" width = "45">&nbsp;'.calcularEdad($row['fecha_nacimiento'], $row['fecha_inscripcion_club']).'</td>
+		<td align="center" width = "45">&nbsp;';
 		
 		if($row['sexo'] == 1) $html .= "H"; else $html.= "M";
 		

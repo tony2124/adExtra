@@ -6,6 +6,15 @@ $row = $this->Admin_Model->getAlumnoInscrito($folio);
 //obtener datos del administrador a cargo en el periodo
 $admin = $this->Admin_Model->getAdminData($row[0]['id_administrador']);
 
+/***** obtener datos de revision ****/
+
+$rev = $this->Admin_Model->getRevisionActual(3);
+SESSION('codigo',$rev[0]['codigo']);
+SESSION('norma',$rev[0]['norma']);
+SESSION('rev',$rev[0]['nombre_revision']);
+
+/******************************************/
+
 	//configuracion de la página del PDF
 $pdf = new Liberacion(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->SetCreator(PDF_CREATOR);
@@ -99,7 +108,7 @@ $style = array(
     'module_height' => 1 
 );
 
-$pdf->write2DBarcode('INSTITUTO TECNOLOGICO SUPERIOR DE APATZINGAN - DEPARTAMENTO DE ACTIVIDADES CULTURALES, DEPORTIVAS Y RECREATIVAS '.$row[0]["numero_control"].$folio, 'QRCODE,L', 145, 113, 45, 45, $style, 'N');
+$pdf->write2DBarcode('ITS9406305S8'.$row[0]["numero_control"].STR_PAD($folio,15,"0",STR_PAD_LEFT).STR_PAD($row[0]["id_carrera"],3,"0",STR_PAD_LEFT).STR_PAD($row[0]["id_club"],3,"0",STR_PAD_LEFT).SUBSTR($row[0]["periodo"],0,7).SUBSTR($row[0]["periodo"],8,7), 'QRCODE,L', 145, 113, 45, 45, $style, 'N');
 $pdf->lastPage();
 
 ?>

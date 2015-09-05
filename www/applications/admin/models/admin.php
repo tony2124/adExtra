@@ -163,13 +163,50 @@ return $query;
 
 public function getAviso()
 {
-return $this->Db->query("select * from noticias where id_noticias = 1");
+	return $this->Db->query("select * from noticias where id_noticias = 1");
 }
+
+
+public function getFormatos()
+{
+	return $this->Db->query("select * from formatos");
+}
+
+
+public function getRevisiones()
+{
+	return $this->Db->query("select * from revisiones, formatos where tipo_formato= id_formato order by fecha_inicio_revision DESC");
+}
+
+public function getRevisionActual($tipo)
+{
+	return $this->Db->query("select * from revisiones where tipo_formato = '$tipo' order by fecha_inicio_revision DESC");
+}
+
+public function getRevision($id)
+{
+	return $this->Db->query("select * from revisiones where id_revision = '$id'");
+}
+
+public function guardarRevision($v)
+{
+	return $this->Db->query("INSERT INTO revisiones (nombre_revision, codigo, norma, fecha_inicio_revision, tipo_formato) values ('$v[nombre]','$v[codigo]','$v[norma]','$v[fecha]',$v[tipo_formato])");
+}
+
+public function actualizarRevision($v, $id)
+{
+	return $this->Db->query("UPDATE revisiones set nombre_revision = '$v[nombre]', codigo = '$v[codigo]', norma = '$v[norma]', fecha_inicio_revision = '$v[fecha]', tipo_formato = $v[tipo_formato] where id_revision = '$id' ");
+}
+
+
 public function getClubes($hm = NULL)
 {
 	if(strcmp($hm, "all") == 0)
 		return $data = $this->Db->query("select * from clubes where eliminado_club = 0 order by nombre_club asc");	
-	
+
+	if(strcmp($hm, "elim") == 0)
+		return $data = $this->Db->query("SELECT * from clubes where tipo_club= 1 OR tipo_club = 2 order by nombre_club asc");	
+
 	if($hm == 1 || $hm == 2)
 		return $data = $this->Db->query("select * from clubes where eliminado_club = 0 and tipo_club = $hm order by nombre_club asc");	
 	
@@ -373,9 +410,9 @@ $this->Db->query($query);
 return $query;
 }
 
-public function elimClub($id)
+public function hclub($id, $e)
 {
-return $this->Db->query("update clubes set eliminado_club = true where id_club = '$id' ");
+	return $this->Db->query("update clubes set eliminado_club = '$e' where id_club = '$id' ");
 }
 
 public function habilitarCarrera($id, $estado)
