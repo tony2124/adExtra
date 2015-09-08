@@ -91,6 +91,9 @@ function folio(folio)
   </thead>
   <tbody>
       <tr>
+        <td width="210" rowspan="9">
+          <img onerror="this.src='<?php print ($alumno['sexo']==1) ? _rs."/img/alumnos/nofotoh.png" : _rs."/img/alumnos/nofotom.png" ?>'" class="img-thumbnail" width="200" src="<?php print _rs."/img/alumnos/".$alumno['numero_control'].".jpg" ?>">
+        </td>
         <td width="200"><strong>Número de control</strong></td>
         <td colspan="3"><?php print $alumno['numero_control'] ?></td>
       </tr>
@@ -108,7 +111,7 @@ function folio(folio)
        </tr>
       <tr> 
         <td width="200"><strong>Edad</td>
-        <td><?php print edad($alumno['fecha_nacimiento']) ." años" ?></td>
+        <td><?php print edad($alumno['fecha_nacimiento']) ." años. Su fecha de nacimiento es ".convertirFecha($alumno['fecha_nacimiento']) ?></td>
       </tr>
       <tr> 
         <td><strong>Sexo</td>
@@ -168,6 +171,7 @@ function folio(folio)
     <div class="tab-pane <?php print ($i==sizeof($periodos) - 1) ? 'active' : NULL; $i++; ?>" id="tab<?php print $i ?>">
       <table class="table table-striped table-condensed">
         <thead>
+        <th>Folio</th>
         <th>fecha insc.</th>
         <th>fecha lib.</th>
         <th>Actividad</th>
@@ -185,6 +189,7 @@ function folio(folio)
                 $band = true;
                 ?>
               <tr>
+                <td><?php print $ins['folio'] ?></td>
                 <td><?php print $ins['fecha_inscripcion_club'] ?></td>
                 <td><?php print $ins['fecha_liberacion_club'] ?></td>
                 <td>
@@ -202,7 +207,7 @@ function folio(folio)
                   <button class="btn btn-default btn-xs" rel="popover" data-content="<?php print $ins['observaciones'] ?>" data-original-title="Observación">ver</button><?php } ?></td>
                 <td>
                   <a style="margin-left: 10px" title="Eliminar" data-toggle="modal" href="#confirmModal" rel="tooltip" href="#" class="btn btn-danger btn-xs pull-right" onclick="folio('<?php print $ins['folio'] ?>')"><span class="glyphicon glyphicon-remove"></span></a>
-                  <a  href="<?php print get('webURL')._sh.'admin/pdf/formatos/liberacion/'.$ins['folio'] ?>" target="_blank" title="Descargar formato de liberación de horas" rel="tooltip" class="btn btn-success btn-xs pull-right"><span class="glyphicon glyphicon-download-alt"></span> </a>
+                  <a  href="<?php print get('webURL')._sh.'admin/pdf/formatos/liberacion/'.$ins['folio'] ?>" target="_blank" title="Descargar boleta de acreditación" rel="tooltip" class="btn btn-success btn-xs pull-right"><span class="glyphicon glyphicon-download-alt"></span> </a>
                   
                 </td>
               </tr>
@@ -214,9 +219,9 @@ function folio(folio)
               print '<tr><td colspan="6"><div class="alert alert-danger">No se encuentra inscrito en ningún club ó actividad</div></td></tr>';
             ?>
             <tr>
-              <td colspan="6">
+              <td colspan="7">
                 <a data-toggle="tooltip" title="Inscribir a una actividad" onclick="updateDataInsForm(<?php print $i.",'".$periodo."'" ?>)" class="pull-right btn btn-success" data-toggle="modal" href="#insActDialog" >
-                  <i class="glyphicon glyphicon-plus"></i>
+                  <i class="glyphicon glyphicon-plus"></i> Inscribir actividad
                 </a>
               </td>
             </tr>
@@ -367,7 +372,7 @@ function folio(folio)
           <!--<p>En el siguiente formulario se muestran los datos del alumno, por favor edite el campo correspondiente y haga clic en guardar cambios.</p>-->
           <form id="editalumno" method="POST" action="<?php print get('webURL')._sh.'admin/editalumno/' ?>">
             <div class="form-group">
-              <label class="control-label col-sm-4" for="nombre">Número de control</label>
+              <label class="control-label col-sm-4" >Número de control</label>
               <div class="col-sm-8">
           <!-- -->  <input type="num" minlength="8" maxlenght="8" name="numero_control" class="form-control" id="numero_control" value="<?php print $alumno['numero_control'] ?>">
               </div>
@@ -384,10 +389,22 @@ function folio(folio)
           <!-- -->  <input type="text" name="ap" class="form-control" id="ap" value="<?php print $alumno['apellido_paterno_alumno'] ?>">
               </div>
             </div>
+           
             <div class="form-group">
               <label class="control-label col-sm-4" for="am">Apellido materno</label>
               <div class="col-sm-8">
           <!-- -->  <input type="text" name="am" class="form-control" id="am"  value="<?php print $alumno['apellido_materno_alumno'] ?>">
+              </div>
+            </div>
+             <div class="form-group">
+              <label class="control-label col-sm-4" >Carrera</label>
+              <div class="col-sm-8">
+          <!--   <input type="text" name="ap" class="form-control" id="ap" value="<?php print $alumno['apellido_paterno_alumno'] ?>"> -->
+                   <select name="carrera" class="form-control">
+                    <?php foreach ($carreras as $car) { ?>
+                      <option <?php if($alumno['id_carrera'] == $car['id_carrera']) print "selected='selected'" ?> value="<?php print $car['id_carrera']  ?>"><?php print $car['nombre_carrera'] ?></option>
+                    <?php } ?>  
+                    </select>
               </div>
             </div>
             <div class="form-group">
@@ -429,14 +446,15 @@ function folio(folio)
               <input type="hidden" name="numero_control_ant" value="<?php print $alumno['numero_control'] ?>"> 
             </div>
             <div style="clear: both"></div>
+            <div class="modal-footer">
+             <a href="#" class="btn btn-default" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+              <button class="btn btn-primary" type="submit">Guardar cambios</button>
+            </div>      
           </form> 
         </div>
       </div>
 
-      <div class="modal-footer">
-       <a href="#" class="btn btn-default" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-        <button class="btn btn-primary" onclick="$('#editalumno').submit()">Guardar cambios</button>
-      </div>
+      
     </div>
   </div>
 </div>

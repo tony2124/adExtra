@@ -14,7 +14,9 @@ $().ready(function() {
                 changeYear: true });
 });
 </script>
-<?php if($nuevo == 1){ ?>
+<?php if($succ !=NULL){ ?>
+<div class="alert alert-success">Se ha guardado los datos satisfactoriamente.</div>
+<?php } if($nuevo == 1){ ?>
 <form class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/fech_liberacion/0' ?>">
 <?php } else { ?>
 <form class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/fech_liberacion/1' ?>">
@@ -36,6 +38,7 @@ $().ready(function() {
     </div>
     <div style="clear: both"></div>
      <p>&nbsp;</p>
+     
     <legend><span class="glyphicon glyphicon-flash"></span> &nbsp;&nbsp;<strong>Fecha de inscripción</strong></legend>
     <div class="well">
       Esta fecha hace referencia al periodo de inscripción del alumno. El campo de número de clubes por periodo indica el número máximo de clubes que el alumno puede inscribirse en un periodo.

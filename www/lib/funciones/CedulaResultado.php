@@ -8,8 +8,12 @@ SESSION('actividad', $data[0]['nombre_club']);
 SESSION('promotor',strtoupper($promotor[0]['apellido_paterno_promotor'].' '.$promotor[0]['apellido_materno_promotor'].' '.$promotor[0]['nombre_promotor']));
 
 /***** obtener datos de revision ****/
+if(strcmp(substr($periodo, 0,3), "AGO") == 0) 
+  $fecha = substr($periodo, 11,4)."-01-31"; 
+else  
+  $fecha = substr($periodo, 11,4)."-07-31";
 
-$rev = $this->Admin_Model->getRevisionActual(2);
+$rev = $this->Admin_Model->getRevisionActual(2, $fecha);
 SESSION('codigo',$rev[0]['codigo']);
 SESSION('norma',$rev[0]['norma']);
 SESSION('rev',$rev[0]['nombre_revision']);
@@ -43,12 +47,12 @@ $html = '
   	$html .= '<tr>
 		<td width = "25">&nbsp;'.($contador++).'</td>
 		<td width = "390">&nbsp;'.$row['apellido_paterno_alumno'].' '.$row['apellido_materno_alumno'].' '.$row['nombre_alumno'].'</td>
-		<td width = "90">&nbsp;'.$row['numero_control'].'</td>
+		<td align="center" width = "90">&nbsp;'.$row['numero_control'].'</td>
 		<td width = "150">&nbsp;'.$row['abreviatura_carrera'].'</td>
 		
-		<td width = "45">&nbsp;'.$row['semestre'].'</td>
+		<td align="center" width = "45">&nbsp;'.$row['semestre'].'</td>
 		
-		<td  width = "150" class="margin-left:10px"> '.( (strcmp($row['acreditado'],'1') == 0) ? 'ACREDITADO' : 'NO ACREDITADO').' </td>
+		<td align="center" width = "150" class="margin-left:10px"> '.( (strcmp($row['acreditado'],'1') == 0) ? 'ACREDITADO' : 'NO ACREDITADO').' </td>
 	</tr>';
 	
   }

@@ -86,16 +86,17 @@ class Admin_Controller extends ZP_Controller {
 
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
-		//____($periodossss);
 		$i = 0;
-		$bandera = false;
+		if(strcmp($periodossss[0]['periodo'], periodo_actual()) != 0)
+		{
+			$periodos[$i] = periodo_actual();
+			$i++;
+		}
+
 		foreach ($periodossss as $per) {
-			if(strcmp($per['periodo'], periodo_actual()) == 0)
-				$bandera = true;
 			$periodos[$i] = $per['periodo']; 
 			$i++;
 		}
-		if($bandera == false) $periodos[$i] = periodo_actual(); //en caso de que no esté el periodo actual
 		$vars["periodos"] = $periodos; //periodos_combo("2082");
 		/****************************************************/
 		
@@ -122,16 +123,18 @@ class Admin_Controller extends ZP_Controller {
 		$alumnos = $this->Admin_Model->getAlumnosClubes($club, $periodo);
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
-		//____($periodossss);
 		$i = 0;
-		$bandera = false;
+		if(strcmp($periodossss[0]['periodo'], periodo_actual()) != 0)
+		{
+			$periodos[$i] = periodo_actual();
+			$i++;
+		}
+
 		foreach ($periodossss as $per) {
-			if(strcmp($per['periodo'], periodo_actual()) == 0)
-				$bandera = true;
 			$periodos[$i] = $per['periodo']; 
 			$i++;
 		}
-		if($bandera == false) $periodos[$i] = periodo_actual();
+
 		$vars["periodos"] = $periodos; //periodos_combo("2082");
 		/****************************************************/
 		$vars['par1'] = $club;
@@ -187,7 +190,24 @@ class Admin_Controller extends ZP_Controller {
 		$vars['buscar'] = $buscar;
 		$vars['menu'] = 3;
 		$vars['view'] = $this->view('promotores',true);
-		$this->render('noRightContent', $vars);
+		$this->render('content', $vars);
+	}
+
+	function verpromotor($id)
+	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		
+		$result  = $this->Admin_Model->getpromotorId($id);
+		$vars['promotor'] = $result[0];
+
+		$result  = $this->Admin_Model->getHistorialPromotor($id);
+		$vars['historial'] = $result;
+		//____($vars['promotor']);
+		$vars['menu'] = 3;
+		$vars['view'] = $this->view('verpromotor',true);
+		$this->render('content', $vars);
 	}
 
 	function habilitarpromotor($id, $dato)
@@ -216,25 +236,39 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') . _sh . 'admin/login');
 
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
+		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
+		$periodossss = $this->Admin_Model->getPeriodos();
+		$i = 0;
+		if(strcmp($periodossss[0]['periodo'], periodo_actual()) != 0)
+		{
+			$periodos[$i] = periodo_actual();
+			$i++;
+		}
+
+		foreach ($periodossss as $per) {
+			$periodos[$i] = $per['periodo']; 
+			$i++;
+		}
+
+
+
 		$periodossss = $this->Admin_Model->getPeriodos();
 
 		$i = 0;
 		$bandera = false;
+		if(strcmp($periodossss[0]['periodo'], periodo_actual()) != 0)
+		{
+			$periodos[$i] = periodo_actual();
+			$i++;
+		}
 		foreach ($periodossss as $per) {
-			if(strcmp($per['periodo'], periodo_actual()) == 0)
-				$bandera = true;
 			$periodos[$i] = $per['periodo']; 
 			$i++;
 		}
 		
-		if($bandera == false){
-			$vars['periodo_anterior'] = $periodos[$i-1];	
-			$periodos[$i] = periodo_actual();
-		}
-		else
-		{
-			$vars['periodo_anterior'] = $periodos[$i-2];	
-		}
+		$vars['periodo_anterior'] = $periodos[1];	
+		
+		
 		$vars["periodos"] = $periodos; //periodos_combo("2082");
 		/****************************************************/
 		if($periodo == NULL)
@@ -295,7 +329,7 @@ class Admin_Controller extends ZP_Controller {
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
-		$data = $this->Admin_Model->getEditPromotor($id);
+		$data = $this->Admin_Model->getPromotorId($id);
 		$vars['promotor'] = $data[0];
 		$vars['clubes'] = $this->Admin_Model->getClubes();
 		$vars['menu'] = 3;
@@ -500,6 +534,9 @@ class Admin_Controller extends ZP_Controller {
 		$datos = $this->Admin_Model->getAlumno($nctrl);
 		$inscripciones = $this->Admin_Model->getClubesInscritosAlumno($nctrl);
 		$clubes = $this->Admin_Model->getClubes('all');
+
+		$vars["carreras"] = $this->Admin_Model->getCarreras(NULL, false);
+
 		$vars["nombreAlumno"] = $datos[0]['apellido_paterno_alumno'].' '.$datos[0]['apellido_materno_alumno'].' '.$datos[0]['nombre_alumno'];
 		$vars["periodos"] = periodos($datos[0]['fecha_inscripcion']);
 		$vars['clubes'] = $clubes;
@@ -593,16 +630,17 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') .  _sh .'admin/login');
 
 		$vars['numero_control'] = POST('numero_control');
+		$vars['numero_control_ant'] = POST('numero_control_ant');
 		$vars['nombre'] = POST('nombre');
 		$vars['ap'] = POST('ap');
 		$vars['am'] = POST('am');
-		//$vars['car'] = POST('car');
+		$vars['car'] = POST('carrera');
 		$vars['fecha_nac'] = POST('fecha_nac');
 		$vars['sexo'] = POST('sexo');
 		$vars['email'] = POST('email');
 		$vars['se'] = POST('se');
 		$vars['clave'] = POST('clave');
-		
+		//____($vars);
 		$this->Admin_Model->updateAlumno($vars);
 
 		redirect(get('webURL').'/admin/alumno/'.$vars['numero_control']);
@@ -684,7 +722,7 @@ class Admin_Controller extends ZP_Controller {
 		else
 			$this->Admin_Model->insertarLiberacion($vars);
 		
-		redirect(get('webURL')._sh.'admin/configLiberacion');
+		redirect(get('webURL')._sh.'admin/configLiberacion/'.$vars['periodo']."/success");
 	}
 
 	/*/***** ADMINISTRACION DEL SITIO ***/
@@ -838,7 +876,7 @@ class Admin_Controller extends ZP_Controller {
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 		
-		$ruta = _spath.'/973164852/respaldos/';
+		$ruta = _spath.'/respaldos/';
 		$files = array();
 
 		if (is_dir($ruta)) 
@@ -848,7 +886,7 @@ class Admin_Controller extends ZP_Controller {
       			$i=0;
          		while (($file = readdir($dh)) !== false) 
          		{
-            		if($file!="." && $file!="..")
+            		if($file!="." && $file!=".." && $file!="index.html")
                			$files[$i++] = $file;
          		}
       			closedir($dh);
@@ -880,12 +918,13 @@ class Admin_Controller extends ZP_Controller {
 
 		$usuario = "root";
 
+
 		$passwd = "";
 		$host = "localhost";
 		$bd = "itsaextr_extra";
 
 		$executa = "mysqldump -h ". $host ." -u ".$usuario." -p ".$passwd." ".$bd." > "._spath.'/respaldos/'.$name.".sql";
-		passthru($executa); 
+		$resultado = system($executa); 
 		if($resultado) 
 		print "Error al ejecutar comando:   "  . $executa;
 		else redirect( get('webURL') . _sh . 'admin/respaldoBD' );
@@ -1007,16 +1046,16 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') .  _sh .'admin/login');
 
 		$nombre = $_POST['name'];
-		$texto = $_POST['texto']; //porque necesito el código en formato HTML NO FORMATEADO
-
-		$cadena = str_replace( "'", "\"", $texto);
+		$cadena = $_POST['texto']; //porque necesito el código en formato HTML NO FORMATEADO
+		//____($nombre." ".$texto);
+		$cadena = str_replace( "'", "\"", $cadena);
 		$nombre = str_replace( "'", "\"", $nombre);
 
 		$name = POST('mostrarfoto');
 
 		if (FILES("foto", "tmp_name")) 
 		{
-			$path = _spath.'/IMAGENES/fotosNoticias/'; 
+			$path = _spath.'/img/noticias/'; 
 
 		    $tmp_name = $_FILES["foto"]["tmp_name"];
 			$name = $_FILES["foto"]["name"];
@@ -1157,7 +1196,7 @@ class Admin_Controller extends ZP_Controller {
 
 		if (FILES("foto", "tmp_name")) 
 		{
-		    $path = _spath.'/paginas/clubes/IMAGEN/';  
+		    $path = _spath.'/img/clubes/';  
 		    $tmp_name = $_FILES["foto"]["tmp_name"];
 			$name = $_FILES["foto"]["name"];
 	
@@ -1289,7 +1328,7 @@ class Admin_Controller extends ZP_Controller {
 
 		if (FILES("foto", "tmp_name")) 
 		{
-			$path = _spath.'/paginas/clubes/IMAGEN/'; 
+			$path = _spath.'/img/clubes/'; 
 
 		    $tmp_name = $_FILES["foto"]["tmp_name"];
 			$name = $_FILES["foto"]["name"];
@@ -1500,7 +1539,7 @@ class Admin_Controller extends ZP_Controller {
 
 
 	
- 	public function configLiberacion($periodo = NULL)
+ 	public function configLiberacion($periodo = NULL, $succ =null)
  	{
  		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
@@ -1516,6 +1555,7 @@ class Admin_Controller extends ZP_Controller {
 		else
 			$vars['nuevo'] = 0;
 
+		$vars['succ'] = $succ;
 		$vars['config'] = $config[0];
  		$vars['menu'] = 4;
 

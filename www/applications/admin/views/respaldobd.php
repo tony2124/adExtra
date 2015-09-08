@@ -5,8 +5,8 @@ function eliminar(name)
    $('#eliminar').attr("href","<?php print get('webURL') . _sh . 'admin/eliminarrespaldo/' ?>"+name);
 }
 </script>
-<h2>Realizar un respaldo</h2>
-<p>Tome en cuenta que al momento de realizar un respaldo este es almacenado en el servidor, por lo que le recomendamos que inmediatamente despues de hacer el respaldo descargue el archivo SQL y lo almacene en una unidad local.</p>
+<legend><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Respaldo de la base de datos</legend>
+<div class="well">Esta acción le permitirá descargar una copia de la base de datos del sistema. Es recomendable mantener respaldos periodicos. Por su seguridad e integridad de la información, guarde el archivo en un lugar seguro para evitar que personas no autorizadas tengan o alteren la información </div>
 <p>
 	<a href="<?php print get('webURL'). '/admin/respaldando' ?>" class="btn btn-success">Respaldar BD</a>
 </p>
@@ -20,12 +20,12 @@ function eliminar(name)
 	<tbody>
 		<?php $i = 0; while($i < sizeof($files)) { ?>
 		<tr class="roll">
-			<td><a href="<?php print _rs . '/973164852/respaldos/' . $files[$i] ?>" target="_blank"><?php echo $files[$i] ?></a></td>
+			<td><a href="<?php print _rs . '/respaldos/' . $files[$i] ?>" target="_blank"><?php echo $files[$i] ?></a></td>
 			<td>
 				<a rel="tooltip" title="Eliminar" data-toggle="modal" class="pull-right btn btn-danger" onclick="eliminar('<?php print $files[$i] ?>')" href="#confirmModal">
 					Eliminar
 				</a>
-				<a class="btn btn-success" target="_blank" href="<?php print _rs . '/973164852/respaldos/' . $files[$i++] ?>">
+				<a class="btn btn-success" target="_blank" href="<?php print _rs . '/respaldos/' . $files[$i++] ?>">
 					Descargar
 				</a>
 			</td>

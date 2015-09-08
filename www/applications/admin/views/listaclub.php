@@ -73,7 +73,7 @@ if($alumnos != NULL) { ?>
 		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/cedula/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de inscripción</a></li>
 		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/resultados/'.$par1.'/'.$par2 ?>" target="_blank">Cédula de resultados</a></li>
 		    <li class="divider"></li>
-		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/zip-lib/'.$par1.'/'.$par2 ?>" target="_blank">ZIP formatos de acred. de actividad</a></li>
+		    <li><a href="<?php print get('webURL')._sh.'admin/pdf/formatos/zip-lib/'.$par1.'/'.$par2 ?>" target="_blank">ZIP boletas de acreditación</a></li>
 		    <li><a href="<?php  ?>" target="_blank">ZIP formatos de act. comp.</a></li>
 		  </ul>
 		</div>

@@ -4,22 +4,22 @@
 	<div  class="busqueda-form">
 		<div class="form-group">
 	    	<label for="inputBuscar" style="margin-top:5px;margin-right:10px" class="col-sm-1 control-label">Buscar</label>
-	    	<div class="col-sm-7">
+	    	<div class="col-sm-6">
 	      		<input type="text" value="<?php print $buscar ?>" name="buscar" class="form-control" placeholder="Nombre promotor / apellido pat. / apellido mat. / usuario">
 	    	</div>
-	    	<div class="col-sm-3">
+	    	<div class="col-sm-4">
 	    		<button  type="submit" data-toggle="tooltip" class="btn btn-primary">
 	    			<span class="glyphicon glyphicon-search"></span> Buscar
 	    		</button>
-				<a  data-toggle="modal" data-target="#avanzada" title="Búsqueda avanzada" class="btn btn-primary" ><span class="glyphicon glyphicon-filter"></span>&nbsp;</a>			
+				<!--<a  data-toggle="modal" data-target="#avanzada" title="Búsqueda avanzada" class="btn btn-primary" ><span class="glyphicon glyphicon-filter"></span>&nbsp;</a>			-->
 				<div class="btn-group">
-		  <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
-		    Descarga
-		    <span class="caret"></span>
-		  </a>
-		  <ul class="dropdown-menu">
-		    <li><a href="<?php print get('webURL')._sh ?>" target="_blank">Lista de promotores</a></li>		  </ul>
-		</div>
+				  <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
+				    Descarga
+				    <span class="caret"></span>
+				  </a>
+				  <ul class="dropdown-menu">
+				    <li><a href="<?php print get('webURL')._sh ?>" target="_blank">Lista de promotores</a></li>		  </ul>
+				</div>
 	    	</div>
 	  	</div>
 	</div>
@@ -34,8 +34,8 @@
 		<th>Usuario</th>
 		<th>Nombre</th>
 		<th align="center">Sexo</th>
-		<th>E-mail</th>
-		<th>Teléfono</th>
+		<!--<th>E-mail</th>
+		<th>Teléfono</th>-->
 		<th align="center">Edad</th>
 		<th>Estado</th>
 		<th></th>
@@ -48,9 +48,9 @@
 				<td><?php print $prom['usuario_promotor'] ?></td>
 				<td><a href=""> <?php print $prom['apellido_paterno_promotor']." ".$prom['apellido_materno_promotor']." ".$prom['nombre_promotor'] ?></a></td>
 				<td align="center"><?php print ($prom['sexo_promotor']==1) ? "H" : "M"; ?></td>
-				<td><?php print $prom['correo_electronico_promotor'] ?></td>
-				<td><?php print $prom['telefono_promotor'] ?></td>
-				<td align="center"><?php print edad($prom['fecha_nacimiento_promotor']) ?></td>
+				<!--<td><?php print $prom['correo_electronico_promotor'] ?></td>
+				<td><?php print $prom['telefono_promotor'] ?></td>-->
+				<td align="center"><?php print edad($prom['fecha_nacimiento_promotor']) . " años" ?></td>
 				<td><?php print ($prom['eliminado_promotor'] == 0) ? "<span class='label label-success'>Activo</span>" : "<span class='label label-danger'>No activo</span>" ?></td>
 				<td align="right">
 					<a href="<?php print get("webURL") . "/admin/formEdicionPromotor/$prom[usuario_promotor]" ?>" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> </a>
@@ -60,6 +60,7 @@
 			<?php } else { ?>
 					<a href="<?php print get("webURL") ."/admin/habilitarpromotor/$prom[usuario_promotor]/0" ?>" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-ok"></span> </a>
 			<?php } ?>
+					<a href="<?php print get("webURL") . "/admin/verpromotor/$prom[usuario_promotor]" ?>" class="btn btn-default btn-xs">ver </a>
 				</td>
 			</tr>
 	<?php	}

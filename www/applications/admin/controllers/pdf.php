@@ -24,7 +24,7 @@ class Cedula extends TCPDF {
         $html = '<table style="border-collapse:collapse; font-family:Arial, Helvetica, sans-serif" border="1" cellspacing="0" cellpadding="0" width="620">
         <tr>
           <td height="110" width="150" rowspan="3" align="center" valign="middle">
-          &nbsp;<br><img src="'._spath.'/formatos/formatoliberacionhoras_clip_image002.jpg" width="140"  />
+          &nbsp;<br><img src="'._spath.'/formatos/DGEST.jpg" width="140"  />
         </td>
           
         <td height="60" width="450" align="center" >
@@ -129,7 +129,7 @@ class Resultados extends TCPDF {
         $html = '<table style="border-collapse:collapse; font-family:Arial, Helvetica, sans-serif" border="1" cellspacing="0" cellpadding="0" width="620">
         <tr>
           <td height="110" width="150" rowspan="3" align="center" valign="middle">
-          &nbsp;<br><img src="'._spath.'/formatos/formatoliberacionhoras_clip_image002.jpg" width="140"  />
+          &nbsp;<br><img src="'._spath.'/formatos/DGEST.jpg" width="140"  />
         </td>
           
         <td height="60" width="450" align="center">
@@ -225,7 +225,7 @@ class Resultados extends TCPDF {
         $this->writeHTML($html,true,false,true,false,'');
 
         $this->SetFont('helvetica', 'I', 10);
-        $this->Cell(0, 0, "SNEST/D-VI-PO-003-03                                                                                                                                                     				Rev. 3", 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, SESSION("codigo")."                                                                                                                                                    				".SESSION("rev"), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 
     }
 }
@@ -243,7 +243,7 @@ class Liberacion extends TCPDF {
         $html = '<table style="border-collapse:collapse; font-family:Arial, Helvetica, sans-serif" border="1" cellspacing="0" cellpadding="0" width="620">
         <tr>
           <td height="110" width="150" rowspan="3" align="center" valign="middle">
-          &nbsp;<br><img src="'._spath.'/formatos/formatoliberacionhoras_clip_image002.jpg" width="140"/>
+          &nbsp;<br><img src="'._spath.'/formatos/DGEST.jpg" width="140"/>
         </td>
           
         <td height="60" width="280" align="center" valign="middle">
@@ -394,7 +394,7 @@ class Pdf_Controller extends ZP_Controller {
 
 				$folio = $club;
 				include(_pathwww.'/lib/funciones/FormatoAcreditacion.php');
-				$pdf->Output($row[0]['numero_control']."_".$row[0]['nombre_club']."_".$row[0]['periodo'].".pdf", 'I');
+				$pdf->Output($row[0]['numero_control']."_".$row[0]['nombre_club']."_".$periodo.".pdf", 'I');
 
  			break;
  			case "zip-lib":

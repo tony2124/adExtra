@@ -74,7 +74,7 @@ $().ready(function() {
                 <p style="font-style: italic">* Para subir una nueva foto quite la selección de la casilla "mantener foto actual" y seleccione la foto. Nota: Si adjunta una foto nueva la anterior será destruida.</p>
               </div>
                <div class="col-sm-2">
-                <a style="width: 100%" class="btn btn-default" href=""><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+                <a style="width: 100%" class="btn btn-primary" onclick="goBack()" href=""><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
               </div>
           </div>
           <div class="form-group">

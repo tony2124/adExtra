@@ -1,48 +1,10 @@
-<script type="text/javascript" src="<?php print path("libraries/editor/scripts/jHtmlArea-0.7.0.js", "zan"); ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php print path("libraries/editor/style/jHtmlArea.css", "zan"); ?>" />
-<script>
-$(document).ready(function() {
-	$(".txtDefaultHtmlArea").htmlarea(); 
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	$(".txtCustomHtmlArea").htmlarea({
-	    // Override/Specify the Toolbar buttons to show
-	    toolbar: [
-	        ["bold", "italic", "underline", "|", "forecolor"],
-	        ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
-	        ["link", "unlink", "|", "image"],                    
-	        [{
-	            // This is how to add a completely custom Toolbar Button
-	            css: "custom_disk_button",
-	            text: "Save",
-	            action: function(btn) {
-	                // 'this' = jHtmlArea object
-	                // 'btn' = jQuery object that represents the <A> "anchor" tag for the Toolbar Button
-	                alert('SAVE!\n\n' + this.toHtmlString());
-	            }
-	        }]
-	    ],
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	    // Override any of the toolbarText values - these are the Alt Text / Tooltips shown
-	    // when the user hovers the mouse over the Toolbar Buttons
-	    // Here are a couple translated to German, thanks to Google Translate.
-	    toolbarText: $.extend({}, jHtmlArea.defaultOptions.toolbarText, {
-	            "bold": "fett",
-	            "italic": "kursiv",
-	            "underline": "unterstreichen"
-	        }),
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	    // Specify a specific CSS file to use for the Editor
-	    css: "style//jHtmlArea.Editor.css",
-
-	    // Do something once the editor has finished loading
-	    loaded: function() {
-	        //// 'this' is equal to the jHtmlArea object
-	        //alert("jHtmlArea has loaded!");
-	        //this.showHTMLView(); // show the HTML view once the editor has finished loading
-	    }
-			 });
-});
-</script>
 
 <script type="text/javascript">
 
@@ -57,49 +19,81 @@ function eliminar(id)
 
 </script>
 
-<h2>Publica una nueva notica</h2><hr>
-<p>
+<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Publica nueva noticia</strong></legend>
 <form id="textoForm" action="<?php print ($id) ? get('webURL')._sh.'admin/modnoticia/'.$id : get('webURL')._sh.'admin/guardarnoticia' ?>" method="post" enctype="multipart/form-data">
-	<label for="titulo">Título</label>
+<!--	<label for="titulo">Título</label>
 	<input style="width: 300px" name="name" id="titulo" type="text" size="40" maxlength="40" value="<?php print ($id) ? $modnot['nombre_noticia'] : NULL ?>" />
-	<?php
-	if($id)
-		if($modnot['imagen_noticia'])
-		{ ?>
-		
-			<p>Foto actual de la noticia, para reemplazarla elija una nueva foto.</p>
-			<div style="border: 3px solid black; width: 330px; height: 250px; background-size: cover; background:url(<?php print _rs ?>/IMAGENES/fotosNoticias/<?php print $modnot['imagen_noticia'] ?>)">
+	-->
+	
+	
+	<div class="col-sm-12 form-horizontal">
+		<div class="form-group">		
+			<label class="label-control col-sm-2" for="titulo">Título</label>
+			<div class="col-sm-10">
+				<input class="form-control" name="name" id="titulo" type="text" size="40" maxlength="40" value="<?php print ($id) ? $modnot['nombre_noticia'] : NULL ?>" />
 			</div>
-			<p>
-				<input type="checkbox" name="mostrarfoto" id="mostrarfoto" value="<?php echo $modnot['imagen_noticia'] ?>" checked="checked" />&nbsp;Mostrar esta foto.
-			</p>
+		</div>
+		<?php
+		if(isset($id))
+			if($modnot['imagen_noticia'])
+			{ ?>
+			<div class="form-group">
+				<div class="col-sm-5">
+					<a href="#" data-toggle="collapse" data-target="#fotocollapse" aria-expanded="false" aria-controls="fotocollapse">Ver foto de la noticia.</a>
+					<div class="collapse" id="fotocollapse">
+					    <img class="img-thumbnail" src="<?php print _rs ?>/img/noticias/<?php print $modnot['imagen_noticia'] ?>" width="330">				
+					</div>
+					<p>
+							<input type="checkbox" name="mostrarfoto" id="mostrarfoto" checked="checked" />&nbsp;Mantener foto actual.
+						</p>
+				</div>
+			</div>
+				
 
-		<?php } 	?>
-	<label for="foto">Subir una foto</label>
-	<input name="foto" id="foto" type="file" />
+			<?php } 	?>
+		<div class="form-group">
+			<label class="label-control col-sm-2"for="foto">Subir una foto</label>
+			<div class="col-sm-9">
+				<input name="foto" id="foto" type="file" />
+			</div>
+		</div>
+	</div>	
 
-	<textarea style="width: 100%"  name="aviso" id="aviso" class="txtDefaultHtmlArea" cols="100" rows="15">
+	<div class="form-group">
+		<div class="col-sm-12">
+			<textarea name="texto" id="edit" ><?php 
+				if(isset($id))
+				{
+					print $modnot['texto_noticia'];
+				}
+		?></textarea>
+		</div>
+	</div>
+	<p>&nbsp;</p>
+	<div class="form-group">
+		<div class="col-sm-10"></div>
+		<div class="col-sm-2">
+			<button style="width:100%" class="btn btn-success">Guardar</button>
+		</div>
+	</div>
+	
+<!--	<textarea style="width: 100%"  name="aviso" id="aviso" class="txtDefaultHtmlArea" cols="100" rows="15">
 	<?php 
 	if($id)
 	{
 		print $modnot['texto_noticia'];
 	}
 	?>
-	</textarea>
-	<input type="hidden" id="texto" name="texto" />
+	</textarea>-->
+	<!--<input type="hidden" id="texto" name="texto" />-->
+
 </form>
-</p>
-<p>
-<input type="button" style="background:red; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'red');" />
-<input type="button" style="background:blue; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'blue');" />
-<input type="button" style="background:green; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'green');" />
-<input type="button" style="background:black; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'black');" />
-<input type="button" style="background:yellow; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'yellow');" />
-<input type="button" style="background:orange; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'orange');" />
-<input type="button" style="background:purple; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'purple');" />
-<input type="button" class="btn btn-primary pull-right" value="Guardar noticia" onclick="document.getElementById('texto').value = $('#aviso').htmlarea('toHtmlString'); $('#textoForm').submit();" />
-</p>
-<h2>Historial de noticias.</h2><hr>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Historial de noticias</strong></legend>
 <table class="table table-striped table-condensed">
 	<thead>
 		<th>Id noticia</th>
@@ -108,7 +102,7 @@ function eliminar(id)
 		<th>Desc.</th>
 		<th>Fech. de pub.</th>
 		<th>Hora. de pub.</th>
-		<th>Configuración</th>
+		<th width="66"></th>
 	</thead>
 	<tbody>
 		<?php foreach ($noticias as $not) { ?>
@@ -128,11 +122,11 @@ function eliminar(id)
 			<td><?php echo $not['fecha_modificacion'] ?></td>
 			<td><?php echo $not['hora'] ?></td>
 			<td>
-				<a rel="tooltip" title="Eliminar" class="pull-right" onclick="eliminar('<?php print $not['id_noticias'] ?>');" href="#">
-					<i class="icon-trash"></i>
+				<a title="Editar noticia" class="btn btn-default btn-xs" href="<?php print get('webURL')._sh.'admin/noticias/'.$not['id_noticias'] ?>">
+					<span class="glyphicon glyphicon-pencil"></span>
 				</a>
-				<a rel="tooltip" title="Editar noticia" class="pull-right" href="<?php print get('webURL')._sh.'admin/noticias/'.$not['id_noticias'] ?>">
-					<i class="icon-cog"></i>
+				<a title="Eliminar" class="btn btn-danger btn-xs" onclick="eliminar('<?php print $not['id_noticias'] ?>');" href="#">
+					<span class="glyphicon glyphicon-remove"></span>
 				</a>
 			</td>
 		</tr>
@@ -140,3 +134,18 @@ function eliminar(id)
 		<?php } ?>
 	</tbody>
 </table>
+
+<script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+
+<script type="text/javascript">
+      $(function() {
+          $('#edit').editable({
+          	inlineMode: false,
+          	allowStyle: true,
+          	colors: [
+		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
+		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
+		      ]
+          })
+      });
+</script>

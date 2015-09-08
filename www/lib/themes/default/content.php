@@ -21,13 +21,12 @@
 		  	<span class="glyphicon glyphicon-filter"></span>
 		  </button>
 		</span>
-		  <p>&nbsp;</p>
+		  
 			<div class="collapse" id="collapseExample">
-			  <div >
-			    <label>
-		    		<input type="checkbox" name="sit" value="5"> Incluir alumnos inactivos.
-		  		</label>
-			  </div>
+				<p>&nbsp;</p>
+			 	<label>
+			 		<input type="checkbox" name="sit" value="5"> Incluir alumnos inactivos.
+			 	</label>
 			</div>
 
 

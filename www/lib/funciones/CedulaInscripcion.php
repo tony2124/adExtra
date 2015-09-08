@@ -12,8 +12,12 @@ SESSION('actividad', $data[0]['nombre_club']);
 SESSION('admin', strtoupper($admin[0]['abreviatura_profesion'].' '.$admin[0]['apellido_paterno_administrador'].' '.$admin[0]['apellido_materno_administrador'].' '.$admin[0]['nombre_administrador'] ) );
 
 /***** obtener datos de revision ****/
+if(strcmp(substr($periodo, 0,3), "AGO") == 0) 
+  $fecha = substr($periodo, 11,4)."-01-31"; 
+else  
+  $fecha = substr($periodo, 11,4)."-07-31";
 
-$rev = $this->Admin_Model->getRevisionActual(1);
+$rev = $this->Admin_Model->getRevisionActual(1, $fecha);
 SESSION('codigo',$rev[0]['codigo']);
 SESSION('norma',$rev[0]['norma']);
 SESSION('rev',$rev[0]['nombre_revision']);

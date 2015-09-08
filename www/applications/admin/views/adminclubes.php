@@ -48,7 +48,7 @@ $(function () {
 				<div class="col-sm-5">
 					<a href="#" data-toggle="collapse" data-target="#fotocollapse" aria-expanded="false" aria-controls="fotocollapse">Ver foto actual del club.</a>
 					<div class="collapse" id="fotocollapse">
-					    <img class="img-thumbnail" src="<?php print _rs ?>/paginas/clubes/IMAGEN/<?php print $club[0]['foto_club'] ?>" width="330">				
+					    <img class="img-thumbnail" src="<?php print _rs ?>/img/clubes/<?php print $club[0]['foto_club'] ?>" width="330">				
 					</div>
 					<p>
 							<input type="checkbox" name="mostrarfoto" id="mostrarfoto" value="<?php echo $club[0]['foto_club'] ?>" checked="checked" />&nbsp;Mantener foto actual.
@@ -79,8 +79,9 @@ $(function () {
 	</div>
 	<p>&nbsp;</p>
 	<div class="form-group">
-		<div class="col-sm-12">
-			<input type="submit" class="btn btn-success pull-right" value="Guardar">
+		<div class="col-sm-10"></div>
+		<div class="col-sm-2">
+			<input style="width:100%" type="submit" class="btn btn-success" value="Guardar">
 		</div>
 	</div>
 	<!--<input type="hidden" id="texto" name="texto" />-->
@@ -110,7 +111,7 @@ $(function () {
 			<td><a href="<?php print get("webURL")._sh.'admin/adminclubes/'.$not['id_club'] ?>"><?php echo $not['nombre_club'] ?></a></td>
 			<!--<td>
 				<?php if($not['foto_club']!=NULL) { ?>
-				<a href="#" rel="popover" data-content="<?php print "<img src='"._rs."/paginas/clubes/IMAGEN/".$not['foto_club']."' width='250' >" ?>" data-original-title="Imagen">ver</a>
+				<a href="#" rel="popover" data-content="<?php print "<img src='"._rs."/img/clubes/".$not['foto_club']."' width='250' >" ?>" data-original-title="Imagen">ver</a>
 				<?php } ?>
 			</td>-->
 			

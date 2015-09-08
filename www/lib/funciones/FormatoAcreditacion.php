@@ -7,8 +7,13 @@ $row = $this->Admin_Model->getAlumnoInscrito($folio);
 $admin = $this->Admin_Model->getAdminData($row[0]['id_administrador']);
 
 /***** obtener datos de revision ****/
+$periodo = $row[0]['periodo'];
+if(strcmp(substr($periodo, 0,3), "AGO") == 0) 
+  $fecha = substr($periodo, 11,4)."-01-31"; 
+else  
+  $fecha = substr($periodo, 11,4)."-07-31";
 
-$rev = $this->Admin_Model->getRevisionActual(3);
+$rev = $this->Admin_Model->getRevisionActual(3, $fecha);
 SESSION('codigo',$rev[0]['codigo']);
 SESSION('norma',$rev[0]['norma']);
 SESSION('rev',$rev[0]['nombre_revision']);

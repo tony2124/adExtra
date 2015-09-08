@@ -27,7 +27,11 @@
 		<style>
 	      body { padding-top: 70px; }
 		</style>
-
+		<script>
+			function goBack() {
+			    window.history.back();
+			}
+		</script>
 		<script>
 		$( document ).ready(function() {
 			$(function () {

@@ -28,7 +28,7 @@ return $this->Db->query("select * from ");
 
 public function obtenerListaPromotores($buscar)
 {
-	return $this->Db->query("SELECT * from promotores WHERE eliminado_promotor = 0 AND (nombre_promotor like '%$buscar%' OR apellido_paterno_promotor like '%$buscar%' OR apellido_materno_promotor like '%$buscar%' OR usuario_promotor like '%$buscar%')  order by  apellido_paterno_promotor asc, apellido_materno_promotor asc, nombre_promotor asc");	
+	return $this->Db->query("SELECT * from promotores WHERE (nombre_promotor like '%$buscar%' OR apellido_paterno_promotor like '%$buscar%' OR apellido_materno_promotor like '%$buscar%' OR usuario_promotor like '%$buscar%')  order by  apellido_paterno_promotor asc, apellido_materno_promotor asc, nombre_promotor asc");	
 	
 }
 
@@ -51,15 +51,29 @@ public function subirBDAlumnos($ruta)
 	return $this->Db->query("load data local infile '$ruta' into table alumnos FIELDS TERMINATED BY ',' ESCAPED BY '\\\\' LINES TERMINATED BY '\\r\\n'");
 }
 
-public function getEditPromotor($id)
+/*public function getEditPromotor($id)
 {
 return $this->Db->query("select * from promotores where eliminado_promotor = false and usuario_promotor = '$id'");
-}
+}*/
 
 public function getPromotor($club, $periodo)
 {
 	return $this->Db->query("select nombre_promotor, horario, apellido_materno_promotor, apellido_paterno_promotor, nombre_club from promotores natural join horarios natural join clubes where id_club = '$club' and periodo ='$periodo'");
 }
+
+public function getPromotorId($id)
+{
+	return $this->Db->query("SELECT * from promotores where usuario_promotor = '$id'");
+}
+
+public function getHistorialPromotor($id)
+{
+	return $this->Db->query("SELECT horarios.periodo as per, substring(horarios.periodo,4,4) as ini, substring(horarios.periodo, 12,4) as fin, clubes.id_club as idclub, nombre_club, horario, lugar, count(folio) as ins from promotores, horarios, clubes, inscripciones where inscripciones.periodo = horarios.periodo AND horarios.id_club = inscripciones.id_club AND clubes.id_club = horarios.id_club AND promotores.usuario_promotor = horarios.usuario_promotor AND promotores.usuario_promotor = '$id' GROUP BY horarios.periodo ORDER BY ini DESC, fin DESC");
+	//"SELECT periodo, substring(periodo,4,4) as ini, substring(periodo, 12,4) as fin,clubes.id_club as idclub, nombre_club, horario, lugar from promotores, horarios, clubes where clubes.id_club = horarios.id_club AND promotores.usuario_promotor = horarios.usuario_promotor AND promotores.usuario_promotor = '$id' ORDER BY ini DESC, fin DESC");
+
+}
+
+
 
 public function elimPromotor($id)
 {
@@ -68,7 +82,9 @@ return $this->Db->query("update promotores set eliminado_promotor = true where u
 
 public function getPeriodos()
 {
-	return $this->Db->query("select distinct periodo from inscripciones");	
+	//return $this->Db->query("SELECT periodo from inscripciones group by periodo ORDER BY fecha_inscripcion_club desc");	
+	return $this->Db->query("SELECT periodo, substring(periodo,4,4) as ini, substring(periodo, 12,4) as fin from inscripciones group by periodo order by ini DESC, fin DESC");	
+	
 }
 
 public function regPromotor($vars)
@@ -84,7 +100,7 @@ return $query;
 public function updatePromotor($vars)
 {
 
-$query = "UPDATE promotores set usuario_promotor = '$vars[usuarionuevo]', contrasena_promotor = '$vars[pass]', foto_promotor = '$vars[foto]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', fecha_registro_promotor = '$vars[fecha_reg]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
+$query = "UPDATE promotores set fecha_modificacion_promotor = '".date("Y-m-d")."', usuario_promotor = '$vars[usuarionuevo]', contrasena_promotor = '$vars[pass]', foto_promotor = '$vars[foto]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
 $this->Db->query($query);
 return $query;
 }
@@ -92,7 +108,7 @@ return $query;
 public function updatePromotorMantener($vars)
 {
 
-$query = "UPDATE promotores set usuario_promotor = '$vars[usuarionuevo]', contrasena_promotor = '$vars[pass]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', fecha_registro_promotor = '$vars[fecha_reg]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
+$query = "UPDATE promotores set fecha_modificacion_promotor = '".date("Y-m-d")."', usuario_promotor = '$vars[usuarionuevo]', contrasena_promotor = '$vars[pass]', nombre_promotor = '$vars[nombre]', apellido_paterno_promotor = '$vars[ap]', apellido_materno_promotor = '$vars[am]', sexo_promotor = $vars[sexo], fecha_nacimiento_promotor = '$vars[fecha_nac]', correo_electronico_promotor = '$vars[email]', telefono_promotor = '$vars[tel]', ocupacion_promotor = '$vars[ocupacion]', direccion_promotor = '$vars[direccion]' where usuario_promotor = '$vars[usuario]'";
 $this->Db->query($query);
 return $query;
 }
@@ -142,7 +158,7 @@ $this->Db->query("insert into albumes values('$id','$club','$album','$fec','')")
 
 public function getConfiguracion()
 {
-return $data = $this->Db->query("select * from configuracion");
+	return $data = $this->Db->query("select * from configuracion");
 }
 
 public function getConfFechas($periodo)
@@ -152,13 +168,13 @@ public function getConfFechas($periodo)
 
 public function inscribirActividad($vars)
 {
-$this->acentos();
-$query = "insert into inscripciones(id_administrador, numero_control, id_club, periodo, semestre,
-fecha_inscripcion_club, fecha_liberacion_club, observaciones, acreditado )
-values('$vars[id_administrador]','$vars[numero_control]','$vars[club]','$vars[periodo]','$vars[semestre]','$vars[fecha_inscripcion]',
-'$vars[fecha_modificacion]','$vars[observaciones]',$vars[acreditado])";
-$data = $this->Db->query($query);
-return $query;
+	$this->acentos();
+	$query = "insert into inscripciones(id_administrador, numero_control, id_club, periodo, semestre,
+		fecha_inscripcion_club, fecha_liberacion_club, observaciones, acreditado )
+		values('$vars[id_administrador]','$vars[numero_control]','$vars[club]','$vars[periodo]','$vars[semestre]','$vars[fecha_inscripcion]',
+		'$vars[fecha_modificacion]','$vars[observaciones]',$vars[acreditado])";
+	$data = $this->Db->query($query);
+	return $query;
 }
 
 public function getAviso()
@@ -166,21 +182,20 @@ public function getAviso()
 	return $this->Db->query("select * from noticias where id_noticias = 1");
 }
 
-
 public function getFormatos()
 {
 	return $this->Db->query("select * from formatos");
 }
-
 
 public function getRevisiones()
 {
 	return $this->Db->query("select * from revisiones, formatos where tipo_formato= id_formato order by fecha_inicio_revision DESC");
 }
 
-public function getRevisionActual($tipo)
-{
-	return $this->Db->query("select * from revisiones where tipo_formato = '$tipo' order by fecha_inicio_revision DESC");
+public function getRevisionActual($tipo, $fecha)
+{	
+
+	return $this->Db->query("SELECT * FROM revisiones WHERE tipo_formato = '$tipo' AND '$fecha' > fecha_inicio_revision ORDER BY fecha_inicio_revision DESC");
 }
 
 public function getRevision($id)
@@ -197,7 +212,6 @@ public function actualizarRevision($v, $id)
 {
 	return $this->Db->query("UPDATE revisiones set nombre_revision = '$v[nombre]', codigo = '$v[codigo]', norma = '$v[norma]', fecha_inicio_revision = '$v[fecha]', tipo_formato = $v[tipo_formato] where id_revision = '$id' ");
 }
-
 
 public function getClubes($hm = NULL)
 {
@@ -231,29 +245,28 @@ public function getClubesProm()
 
 public function getAlbumes($var, $value)
 {
-switch($var)
-{
-case 'club': return $this->Db->query("select * from albumes where id_club = '$value'");break;
-case 'album': return $this->Db->query("select * from albumes where dependiente = '$value'");break;	
-}
+	switch($var)
+	{
+		case 'club': return $this->Db->query("select * from albumes where id_club = '$value'");break;
+		case 'album': return $this->Db->query("select * from albumes where dependiente = '$value'");break;	
+	}
 
 }
 
 public function getFotos($album)
 {
-return $this->Db->query("select * from galeria where id_album='$album'");
+	return $this->Db->query("select * from galeria where id_album='$album'");
 }
 
 public function getCarreras($id,$bool)
 {
-if($id == NULL)
-	if($bool == true)
-		return $data = $this->Db->query("select * from carreras order by abreviatura_carrera asc");
-	else
-		return $data = $this->Db->query("select * from carreras where eliminada = false order by abreviatura_carrera asc");
+	if($id == NULL)
+		if($bool == true)
+			return $data = $this->Db->query("select * from carreras order by abreviatura_carrera asc");
+		else
+			return $data = $this->Db->query("select * from carreras where eliminada = false order by abreviatura_carrera asc");
 
-return $data = $this->Db->query("select * from carreras where id_carrera = '$id' order by abreviatura_carrera asc");
-
+	return $data = $this->Db->query("select * from carreras where id_carrera = '$id' order by abreviatura_carrera asc");
 }
 
 public function getAlumnosInscritos($periodo)
@@ -431,9 +444,10 @@ return $this->Db->query("delete from galeria where id_imagen = '$id_foto'");
 }
 public function updateAlumno($vars)
 {
-$query = "update alumnos set nombre_alumno = '$vars[nombre]' , apellido_paterno_alumno = '$vars[ap]', apellido_materno_alumno = '$vars[am]',
+$query = "update alumnos set numero_control = '$vars[numero_control]', nombre_alumno = '$vars[nombre]', id_carrera = '$vars[car]' , 
+apellido_paterno_alumno = '$vars[ap]', apellido_materno_alumno = '$vars[am]',
 sexo = $vars[sexo], fecha_nacimiento = '$vars[fecha_nac]', correo_electronico = '$vars[email]',
-situacion_escolar = $vars[se], clave = '$vars[clave]' where numero_control = '$vars[numero_control]'";
+situacion_escolar = $vars[se], clave = '$vars[clave]' where numero_control = '$vars[numero_control_ant]'";
 
 $this->Db->query($query);
 return $query;

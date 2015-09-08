@@ -1,49 +1,25 @@
-<script type="text/javascript" src="<?php print path("libraries/editor/scripts/jHtmlArea-0.7.0.js", "zan"); ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php print path("libraries/editor/style/jHtmlArea.css", "zan"); ?>" />
-<script>
-$(document).ready(function() {
-	$(".txtDefaultHtmlArea").htmlarea(); 
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	$(".txtCustomHtmlArea").htmlarea({
-	    toolbar: [
-	        ["bold", "italic", "underline", "|", "forecolor"],
-	        ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
-	        ["link", "unlink", "|", "image"],                    
-	        [{
-	            css: "custom_disk_button",
-	            text: "Save",
-	            action: function(btn) {
-	                alert('SAVE!\n\n' + this.toHtmlString());
-	            }
-	        }]
-	    ],
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	    toolbarText: $.extend({}, jHtmlArea.defaultOptions.toolbarText, {
-	            "bold": "fett",
-	            "italic": "kursiv",
-	            "underline": "unterstreichen"
-	        }),
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	    css: "style//jHtmlArea.Editor.css",
 
-	    loaded: function() {   }
-			 });
-});
-</script>
-<h2>Publica un aviso</h2><hr>
+<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Publica un aviso</strong></legend>
 <?php if($conf['mostraraviso'] == 0) { ?>
 <div class="alert">
 	<a href="#" class="close" data-dismiss="alert">x</a>
 	<p>La configuración actual indica que el aviso NO se está mostrando en el sitio web.</p>
 	</div>
 <?php } ?>
-<p>En el siguiente apartado usted podrá escribir un aviso o varios avisos a las personas que visiten el sitio de Servicios Extraescolores.</p>
+<div class="well">En el siguiente apartado usted podrá escribir un aviso o varios avisos a las personas que visiten el sitio de Servicios Extraescolores.</div>
 <hr>
 <form id="textoForm" name="textoForm" action="<?php print get('webURL'). _sh . 'admin/guardarAviso' ?>" method="post">
 	<textarea style="width: 100%" name="aviso" id="aviso" class="txtDefaultHtmlArea" cols="50" rows="15">
 		<?php echo $mensaje['texto_noticia'] ?>
 	</textarea>
-	<input type="hidden" id="texto" name="texto" value="" />
+	<!--<input type="hidden" id="texto" name="texto" value="" />-->
 <p>
 	<input type="button" style="background:red; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'red');" />
 	<input type="button" style="background:blue; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'blue');" />
@@ -61,3 +37,18 @@ $(document).ready(function() {
 	name="mostrarAviso"> Mostrar el aviso cuando se entre al sitio de extraescolares.</label>
 </p>
 </form>
+
+<script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+
+<script type="text/javascript">
+      $(function() {
+          $('#aviso').editable({
+          	inlineMode: false,
+          	allowStyle: true,
+          	colors: [
+		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
+		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
+		      ]
+          })
+      });
+</script>
