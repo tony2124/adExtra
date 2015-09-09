@@ -1,4 +1,6 @@
-<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;<strong>Datos del alumno</strong></legend>
+<legend><span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;<strong>Datos del alumno</strong> <a title="Modificar datos del alumno" data-toggle="modal" data-target="#miModal" href="#" class="pull-right btn btn-primary btn-sm">
+  <i class="glyphicon glyphicon-pencil"></i> Editar
+</a> </legend>
 <p >En la siguiente tabla se muestra los datos del alumno, el apartado de semestre aparace como NO DISP si el alumno tiene más de 12 semestres. Haga clic en editar si desea realizar alguna modificación.  </span>.</p>
 <hr>
 <?php 
@@ -79,9 +81,7 @@ function folio(folio)
 </style>
 
 <!--<div class="well"><h4>A continuación se muestra los datos del alumno seleccionado.</h4></div>-->
-<a title="Modificar datos del alumno" data-toggle="modal" data-target="#miModal" href="#" class="pull-right">
-  <i class="glyphicon glyphicon-refresh"></i> Editar
-</a>
+
 <table class="table table-striped table-condensed">
   <thead>
     <tr>
@@ -239,120 +239,132 @@ function folio(folio)
 </div>
 
 <!-- DIALOGO PARA CAMBIAR ACTIVIDAD -->
-<div class="modal hide fade" id="cambiarActividad">
-  <div class="modal-header">
-    <button class="close" data-dismiss="modal">×</button>
-    <h3>Edición de acreditación </h3>
-  </div>
-  <div class="modal-body">
-    <p>En el siguiente formulario se cambiará la actividad.</p>
-   
-    <form id="editAct" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editActividad' ?>">
-    <div class="form-group">
-        <label class="control-label">Actividad</label> 
-      <div class="controls">
-            <select name="actividad">
-              <?php foreach ($clubes as $club) { ?>
-                <option value="<?php print $club['id_club'] ?>"><?php print $club['nombre_club'] ?></option>
-              <?php } ?>
-            </select> 
-      </div><br>
-      <label class="control-label">Periodo</label> 
-      <div class="controls">
-          <span id="periodoAct" type="text" class="uneditable-input"></span>
-      </div><br>
-      <input type="hidden" value="" id="folioAct" name="folio">
-      <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="nc">
+<div class="modal fade" id="cambiarActividad">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Edición de acreditación </h3>
+      </div>
+      <div class="modal-body">
+        <p>En el siguiente formulario se cambiará la actividad.</p>
+       
+        <form id="editAct" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editActividad' ?>">
+        <div class="form-group">
+            <label class="control-label">Actividad</label> 
+          <div class="controls">
+                <select name="actividad">
+                  <?php foreach ($clubes as $club) { ?>
+                    <option value="<?php print $club['id_club'] ?>"><?php print $club['nombre_club'] ?></option>
+                  <?php } ?>
+                </select> 
+          </div><br>
+          <label class="control-label">Periodo</label> 
+          <div class="controls">
+              <span id="periodoAct" type="text" class="uneditable-input"></span>
+          </div><br>
+          <input type="hidden" value="" id="folioAct" name="folio">
+          <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="nc">
+        </div>
+    </form> 
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <a href="#" class="btn btn-primary" onclick="$('#editAct').submit()">Guardar cambios</a>
+      </div>
     </div>
-</form> 
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-    <a href="#" class="btn btn-primary" onclick="$('#editAct').submit()">Guardar cambios</a>
   </div>
 </div>
 
 <!-- DIALOGO PARA CAMBIAR ACREDITACION -->
-<div class="modal hide fade" id="cambiarAcreditado">
-  <div class="modal-header">
-    <button class="close" data-dismiss="modal">×</button>
-    <h3>Edición de acreditación </h3>
-  </div>
-  <div class="modal-body">
-    <p>En el siguiente formulario se cambiará la acreditación.</p>
-   
-    <form id="editres" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editResultado' ?>">
-    <div class="form-group">
-        <label class="control-label">Actividad</label> 
-      <div class="controls">
-            <span id="actividad" type="text" class="uneditable-input"></span>
-      </div><br>
-      <label class="control-label">Periodo</label> 
-      <div class="controls">
-          <span id="periodo" type="text" class="uneditable-input"></span>
-      </div><br>
-      <label class="control-label">Resultado</label> 
-      <div class="controls">
-          <select name="acreditado" id="selectRes">
-              <option value="1">ACREDITADO</option>
-              <option value="0">NO ACREDITADO</option>
-          </select>
-      </div><br>
-      <label class="control-label">Observación</label> 
-      <div class="controls">
-          <textarea name="obs" id="obs"></textarea>
-      </div><br>
-      <input type="hidden" value="" id ="folio" name="folio">
-      <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="numero_control">
+<div class="modal fade" id="cambiarAcreditado">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Edición de acreditación </h3>
+      </div>
+      <div class="modal-body">
+        <p>En el siguiente formulario se cambiará la acreditación.</p>
+       
+        <form id="editres" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editResultado' ?>">
+        <div class="form-group">
+            <label class="control-label">Actividad</label> 
+          <div class="controls">
+                <span id="actividad" type="text" class="uneditable-input"></span>
+          </div><br>
+          <label class="control-label">Periodo</label> 
+          <div class="controls">
+              <span id="periodo" type="text" class="uneditable-input"></span>
+          </div><br>
+          <label class="control-label">Resultado</label> 
+          <div class="controls">
+              <select name="acreditado" id="selectRes">
+                  <option value="1">ACREDITADO</option>
+                  <option value="0">NO ACREDITADO</option>
+              </select>
+          </div><br>
+          <label class="control-label">Observación</label> 
+          <div class="controls">
+              <textarea name="obs" id="obs"></textarea>
+          </div><br>
+          <input type="hidden" value="" id ="folio" name="folio">
+          <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="numero_control">
+        </div>
+    </form> 
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <a href="#" class="btn btn-primary" onclick="$('#editres').submit()">Guardar cambios</a>
+      </div>
     </div>
-</form> 
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-    <a href="#" class="btn btn-primary" onclick="$('#editres').submit()">Guardar cambios</a>
   </div>
 </div>
 
 <!-- DIALOGO PARA INSCRIBIR A UNA ACTIVIDAD -->
 
-<div class="modal hide fade" id="insActDialog">
-  <div class="modal-header">
-    <button class="close" data-dismiss="modal">×</button>
-    <h3>Inscripción a una actividad</h3>
-  </div>
-  <div class="modal-body">
-    <p>Complete el siguiente formulario para inscribir a este alumno a una actividad.</p>
-   
-    <form id="insActForm" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/inscipcionActividad' ?>">
-    <div class="form-group">
-        <label class="control-label">Actividad</label> 
-      <div class="controls">
-             <select name="actividad">
-                <?php foreach ($clubes as $club) { if($club['tipo_club'] != 1 && $club['tipo_club'] != 2) { ?>
-                <option value="<?php print $club['id_club'] ?>"><?php print $club['nombre_club'] ?></option>
-              <?php } } ?>
-          </select>
-      </div><br>
-      <label class="control-label">Resultado</label> 
-      <div class="controls">
-          <select name="acreditado" id="selectRes">
-              <option value="1">ACREDITADO</option>
-              <option value="0">NO ACREDITADO</option>
-          </select>
-      </div><br>
-      <label class="control-label">Observación</label> 
-      <div class="controls">
-          <textarea name="obsIns" id="obsIns"></textarea>
-      </div><br>
-      <input type="hidden" value="" id ="periodoIns" name="periodo">
-      <input type="hidden" value="" id ="semestre" name="semestre">
-      <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="numero_control">
+<div class="modal fade" id="insActDialog">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Inscripción a una actividad</h3>
+      </div>
+      <div class="modal-body">
+        <p>Complete el siguiente formulario para inscribir a este alumno a una actividad.</p>
+       
+        <form id="insActForm" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/inscipcionActividad' ?>">
+        <div class="form-group">
+            <label class="control-label">Actividad</label> 
+          <div class="controls">
+                 <select name="actividad">
+                    <?php foreach ($clubes as $club) { if($club['tipo_club'] != 1 && $club['tipo_club'] != 2) { ?>
+                    <option value="<?php print $club['id_club'] ?>"><?php print $club['nombre_club'] ?></option>
+                  <?php } } ?>
+              </select>
+          </div><br>
+          <label class="control-label">Resultado</label> 
+          <div class="controls">
+              <select name="acreditado" id="selectRes">
+                  <option value="1">ACREDITADO</option>
+                  <option value="0">NO ACREDITADO</option>
+              </select>
+          </div><br>
+          <label class="control-label">Observación</label> 
+          <div class="controls">
+              <textarea name="obsIns" id="obsIns"></textarea>
+          </div><br>
+          <input type="hidden" value="" id ="periodoIns" name="periodo">
+          <input type="hidden" value="" id ="semestre" name="semestre">
+          <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="numero_control">
+        </div>
+    </form> 
+      </div>
+      <div class="modal-footer">
+       <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <a href="#" class="btn btn-primary" onclick="$('#insActForm').submit()">Guardar cambios</a>
+      </div>
     </div>
-</form> 
-  </div>
-  <div class="modal-footer">
-   <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-    <a href="#" class="btn btn-primary" onclick="$('#insActForm').submit()">Guardar cambios</a>
   </div>
 </div>
 

@@ -22,7 +22,7 @@ if(isset($URL['tipo']))
 		case '2': $URL['tipo_nombre'] = 'CULTURAL'; break;
 	}
 ?>	
-
+<legend><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;  <strong>Galería</strong></legend>
 
 <script type="text/javascript" src="<?php print path("www/lib/fancybox/jquery.mousewheel-3.0.4.pack.js",true) ?>"></script>
 <script type="text/javascript" src="<?php print path("www/lib/fancybox/jquery.fancybox-1.3.4.pack.js",true) ?>"></script>

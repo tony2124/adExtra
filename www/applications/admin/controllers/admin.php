@@ -745,7 +745,7 @@ class Admin_Controller extends ZP_Controller {
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
-		$cuerpo =str_replace( "'", "\"",  $_POST['texto'] );
+		$cuerpo =str_replace( "'", "\"",  $_POST['aviso'] );
 		$mostrar = POST('mostrarAviso');
 		if($mostrar) $mostrar = 1; else $mostrar = 0;
 		$this->Admin_Model->guardarAviso($cuerpo, $mostrar);
@@ -857,7 +857,7 @@ class Admin_Controller extends ZP_Controller {
 			$nombre = $_FILES['archivo']['name'];
 			$arreglo = explode(".", $nombre);
 			$tempname = $arreglo[0];
-			$caracteres = array("ñ","Ñ"," ");
+			$caracteres = array("ñ","Ñ"," ","á","é","í","ó","ú","Á","É","Í","Ó","Ú");
 			$tempname = str_replace($caracteres, "_", $tempname);
 
 			$tempname = $tempname . "." . $arreglo[1];
@@ -954,6 +954,21 @@ class Admin_Controller extends ZP_Controller {
 		$this->render("content", $vars);
 	}
 
+
+	public function vernoticia($id = NULL)
+	{
+		if (!SESSION('user_admin'))
+			return redirect(get('webURL') .  _sh .'admin/login');
+
+		$not = $this->Admin_Model->getNoticia($id);
+		$vars['noticia'] = $not[0];
+		
+		$vars['view'] = $this->view("vernoticia",true);
+		$vars['menu'] = 6;
+
+		$this->render("content", $vars);
+	}
+
 	public function elimnoticia($id)
 	{
 		if (!SESSION('user_admin'))
@@ -963,6 +978,8 @@ class Admin_Controller extends ZP_Controller {
 		redirect(get('webURL')._sh.'admin/noticias');
 		
 	}
+
+
 
 	public function guardarnoticia()
 	{
@@ -1573,7 +1590,7 @@ class Admin_Controller extends ZP_Controller {
  	{
  		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
-
+		
  		$this->sessionOn();
 		if($estado == 'Vigente')
 			$array = array("actual" => "1");
@@ -1581,7 +1598,9 @@ class Admin_Controller extends ZP_Controller {
  			$array = array("actual" => "0");
  		else
  		{
+
  			$vars = $this->getDatosAdmin(SESSION('id_admin'));
+ 			$vars['menu'] = 0;
  			$vars['errorEstado'] = true;
  			$vars["view"] = $this->view("adminconfig",true);
  			$this->render("content",$vars);
@@ -1589,6 +1608,7 @@ class Admin_Controller extends ZP_Controller {
  		}
  		$idAdministrador = $this->Admin_Model->getCampos("administradores","id_administrador","usuario_administrador='$userAdmin'");
  		$this->Admin_Model->setCampos("administradores",$array,isset($userAdmin)?$idAdministrador[0]['id_administrador']:SESSION('id_admin'));
+
  		return redirect(get('webURL') .  _sh .'admin/adminconfig/');
  	}
 
@@ -1609,7 +1629,8 @@ class Admin_Controller extends ZP_Controller {
  				4 => array(utf8_encode(POST('email')),NULL,NULL,45,"/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/","administradores","correo_electronico"),
  				5 => array(utf8_encode(POST('direc')),NULL,NULL,100,"/^[[:ascii:]]*$/i",NULL,NULL),
  				6 => array(utf8_encode(POST('profe')),NULL,NULL,45,"/^[[:ascii:]]*$/i",NULL,NULL),
- 				7 => array(utf8_encode(POST('abrevi')),NULL,NULL,40,"/^[[:ascii:]]*$/i",NULL,NULL)
+ 				7 => array(utf8_encode(POST('abrevi')),NULL,NULL,40,"/^[[:ascii:]]*$/i",NULL,NULL),
+ 				8 => array(utf8_encode(POST('fecha')),NULL,NULL,40,NULL,NULL,NULL)
  				);
 
  			$campos = array(
@@ -1620,7 +1641,8 @@ class Admin_Controller extends ZP_Controller {
  				4 => array("correo_electronico","E-mail"),
  				5 => array("direccion_administrador","Dirección"),
  				6 => array("profesion_administrador","Profesión"),
- 				7 => array("abreviatura_profesion","Abreviatura")
+ 				7 => array("abreviatura_profesion","Abreviatura"),
+ 				8 => array("fecha_nacimiento_admin","Fecha de nacimiento")
  				);
  			$array = array();
  			$i = 1;
@@ -1656,6 +1678,7 @@ class Admin_Controller extends ZP_Controller {
  		}
  		$vars = $this->getDatosAdmin(SESSION('id_admin'),$vars);
 		$vars["view"] = $this->view("adminconfig",true);
+		$vars['menu'] = 0;
 		$this->render("content",$vars);
  	}
 
@@ -1762,109 +1785,19 @@ class Admin_Controller extends ZP_Controller {
 		$vars['menu'] = 0;
 		$this->render("content",$vars);
 	}
-/*
-	public function excel($periodo = null)
+
+	public function editadmin($id = NULL)
 	{
 		if (!SESSION('user_admin'))
 			return redirect(get('webURL') . _sh .'admin/login');	
-		if($periodo == null)
-			$periodo = periodo_actual();
-		$vars['period'] = $periodo;
-		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
-//		$periodossss = $this->Admin_Model->getPeriodos();
-		//____($periodossss);
-/*		$i = 0;
-		$bandera = false;
-		foreach ($periodossss as $per) {
-			if(strcmp($per['periodo'], periodo_actual()) == 0)
-				$bandera = true;
-			$periodos[$i] = $per['periodo']; 
-			$i++;
-		}
-		if($bandera == false) $periodos[$i] = periodo_actual(); //en caso de que no esté el periodo actual
-		$vars["periodos"] = $periodos; //periodos_combo("2082");
-/*		/****************************************************/
-/*
-		$vars['datos'] = $this->Admin_Model->getAlumnosInscritos( array($periodo) );
-		$vars["view"] = $this->view("excel",true);
-		$this->render("noRightContent",$vars);
-	}
-*/
-	public function generarexcel($periodo)
-	{
-		if (!SESSION('user_admin'))
-			return redirect(get('webURL') . _sh .'admin/login');	
-
-require_once _corePath . _sh .'/libraries/Classes/PHPExcel.php';
-require_once _corePath . _sh .'/libraries/Classes/PHPExcel/Writer/Excel2007.php';
-// Create new PHPExcel object
-echo date('H:i:s') . " Create new PHPExcel object\n";
-$objPHPExcel = new PHPExcel();
-
-// Set properties
-echo date('H:i:s') . " Set properties\n";
-$objPHPExcel->getProperties()->setCreator("Maarten Balliauw");
-$objPHPExcel->getProperties()->setLastModifiedBy("Maarten Balliauw");
-$objPHPExcel->getProperties()->setTitle("Office 2007 XLSX Test Document");
-$objPHPExcel->getProperties()->setSubject("Office 2007 XLSX Test Document");
-$objPHPExcel->getProperties()->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.");
-
-
-// Add some data
-echo date('H:i:s') . " Add some data\n";
-$objPHPExcel->setActiveSheetIndex(0);
-$objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Hello');
-$objPHPExcel->getActiveSheet()->SetCellValue('B2', 'world!');
-$objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Hello');
-$objPHPExcel->getActiveSheet()->SetCellValue('D2', 'world!');
-
-// Rename sheet
-echo date('H:i:s') . " Rename sheet\n";
-$objPHPExcel->getActiveSheet()->setTitle('Simple');
-
 		
-// Save Excel 2007 file
-echo date('H:i:s') . " Write to Excel2007 format\n";
-$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
-
-/*
-		 $resultado = $this->Admin_Model->getAlumnosInscritos( array($periodo) );
-
-		 //$registros = mysql_num_rows ($resultado);
-
-		// if ($registros > 0) {
-		   require_once _corePath . _sh .'/libraries/Classes/PHPExcel.php';
-		   $objPHPExcel = new PHPExcel();
-		    
-		   //Informacion del excel
-		   $objPHPExcel->
-		    getProperties()
-		        ->setCreator("Alfonso Calderon")
-		        ->setLastModifiedBy("Alfonso Calderón")
-		        ->setTitle("CONSULTA DE RESULTADOS")
-		        ->setSubject("CONSULTA DE RESULTADOS")
-		        ->setDescription("CONSULTA DE RESULTADOS")
-		        ->setKeywords("CONSULTA DE RESULTADOS")
-		        ->setCategory("CONSULTA DE RESULTADOS");    
-		 
-		   $i = 1;    
-		   foreach ($resultado as $registro) {
-		    	
-		      $objPHPExcel->setActiveSheetIndex(0)
-		            ->setCellValue('A'.$i, $registro['nombre_alumno']);
-		  
-		      $i++;
-		       
-		   }
-		//}
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="ejemplo1.xls"');
-		header('Cache-Control: max-age=0');
-		/* 
-		$objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,' ejemplo1');
-		$objWriter->save('php://output');
-		*/
+		if(!$id) $id = SESSION('id_admin');
 		
+		$vars = $this->getDatosAdmin($id);
+		$vars["view"] = $this->view("editadmin",true);
+		//$vars["view"]['registroAdmin'] = $this->view("registroAdmin",true);
+		$vars['menu'] = 0;
+		$this->render("content",$vars);
 	}
+
 }

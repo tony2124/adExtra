@@ -564,7 +564,7 @@ return $this->Db->insert($tabla,$datos);
 		if($argumentos[4])
 			if(!preg_match($argumentos[4], $argumentos[0]))
 			{
-				return "Valor del campo no valido, introdusca un valor aceptable";
+				return "Valor del campo no valido, ingrese un valor aceptable";
 			}
 		if($argumentos[5] && $argumentos[6])
 		{	

@@ -15,9 +15,9 @@ $().ready(function() {
 <?php if (strcmp($type,"success") == 0) { ?>
 <div class="alert alert-success">Los datos de la revisión han sido actualizados satisfactoriamente.</div>
 <?php } if ($revactual) { ?>
-<legend><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;  <strong>Actualizar revisión</strong></legend>
+<legend><span class="glyphicon glyphicon-star"></span>&nbsp;&nbsp;  <strong>Actualizar revisión</strong></legend>
 <?php }else{ ?>
-<legend><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;  <strong>Registrar revisión</strong></legend>
+<legend><span class="glyphicon glyphicon-star"></span>&nbsp;&nbsp;  <strong>Registrar revisión</strong></legend>
 <?php } ?>
 <div class="well">Utilice el siguiente formulario para registrar una nueva revisión de formatos. NOTA: Tenga cuidado al momento de registrar la fecha de la revisión. Se tomará en cuenta la revisión con la fecha más reciente.</div>
 <form id="textoForm" action="<?php print (!$revactual) ? get("webURL")."/admin/guardarRevision" : get("webURL")."/admin/actualizarRevision/".$revactual[0]['id_revision'] ?>" method="post" enctype="multipart/form-data">
@@ -76,7 +76,7 @@ $().ready(function() {
 <hr>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Historial de revisiones</strong> </legend>
+<legend><span class="glyphicon glyphicon-star"></span>&nbsp;&nbsp;  <strong>Historial de revisiones</strong> </legend>
 <table class="table table-striped table-condensed">
 	<thead>
 		<th>ID</th>

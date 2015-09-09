@@ -23,6 +23,7 @@ $(function () {
 <?php }else{ ?>
 <legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Editar club</strong><a class="btn btn-primary btn-sm pull-right" href="<?php print get('webURL').'/admin/adminclubes' ?>">Nuevo club</a></legend>
 <?php } ?>
+<div class="well">Use el siguiente formulario para registrar / editar un nuevo club. Tenga en cuenta que mientras más resolución tenga la foto del club se visualizará mejor en el sitio publicitario.</div>
 <form id="textoForm" action="<?php print ($club != NULL) ? get('webURL')._sh.'admin/modclub/'.$club[0]['id_club'] : get('webURL')._sh.'admin/guardarclub' ?>" method="post" enctype="multipart/form-data">
 	<div class="col-sm-12 form-horizontal">
 		<div class="form-group">

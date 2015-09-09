@@ -110,7 +110,8 @@
           <ul class="dropdown-menu">
 		      <li><a href="<?php print get('webURL'). _sh .'admin/listaclub/'  ?>">Listas de alumnos</a></li>
 		      <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroalumno/'  ?>">Registrar nuevo alumno</a></li>
-		      <li><a href="<?php print get('webURL'). _sh .'admin/carreras/' ?>">Admon. carreras</a></li>
+		      <li class="divider"></li>
+		      <li><a href="<?php print get('webURL'). _sh .'admin/carreras/' ?>">Carreras / Licenciaturas</a></li>
 		  </ul>
         </li>
         <li <?php if($menu == 3) print "class='active'" ?>>
@@ -119,16 +120,18 @@
 				 <li><a href="<?php print get('webURL'). _sh .'admin/promotores/'  ?>">Lista de promotores</a></li>
 				 <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroPromotor/' ?>">Registrar nuevo promotor</a></li>
 				 <li><a href="<?php print get('webURL'). _sh .'admin/formHorarios' ?>">Horarios</a></li>
-				 <li><a href="<?php print get('webURL'). _sh .'admin/adminclubes/' ?>">Admon. clubes</a></li>
+				 <li class="divider"></li>
+				 <li><a href="<?php print get('webURL'). _sh .'admin/adminclubes/' ?>">Administración de Clubes</a></li>
 			 </ul>
         </li>
         <li <?php if($menu == 4) print "class='active'" ?>>
         	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Configuración <span class="caret"></span></a>
         	<ul class="dropdown-menu">
         		<li><a href="<?php print get('webURL'). _sh .'admin/configLiberacion/'  ?>">Fechas (inscr. / lib.)</a></li>
-        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Imágenes y logos</a></li>
+        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Imágenes y logos <label class="label label-primary">Pro</label></a></li>
         		<li><a href="<?php print get('webURL'). _sh .'admin/revisiones'  ?>">Códigos y revisiones</a></li>
-        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Datos del instituto</a></li>
+        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Datos del instituto <label class="label label-primary">Pro</label></a></li>
+        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Conexión a BD de alumnos <label class="label label-primary">Pro</label></a></li>
         	</ul>
         </li>
 

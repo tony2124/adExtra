@@ -1,10 +1,10 @@
-<legend><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Información del promotor</legend>
+<legend><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Información del promotor <a style="margin-left: 10px" class="btn btn-primary pull-right btn-sm" href="<?php print get('webURL'). _sh .'admin/formEdicionPromotor/'.$promotor['usuario_promotor']  ?>"><span class="glyphicon glyphicon-pencil"></span> Editar</a><a style="margin-left: 10px" class="btn btn-primary pull-right btn-sm" href="<?php print get('webURL'). _sh .'admin/promotores/'  ?>"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a></legend>
 <div class="col-sm-8"></div>
 <div class="col-sm-2">
-  <a style="width: 100%" class="btn btn-primary" href="<?php print get('webURL'). _sh .'admin/promotores/'  ?>"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+  
 </div>
 <div class="col-sm-2">
-  <a style="width: 100%" class="btn btn-primary" href="<?php print get('webURL'). _sh .'admin/formEdicionPromotor/'.$promotor['usuario_promotor']  ?>"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+  
 </div>
 <table class="table table-striped table-condensed">
   <thead>

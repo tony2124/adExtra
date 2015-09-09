@@ -19,7 +19,7 @@ function eliminar(id)
 
 </script>
 
-<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Publica nueva noticia</strong></legend>
+<legend><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;  <strong>Publica una nueva noticia</strong></legend>
 <form id="textoForm" action="<?php print ($id) ? get('webURL')._sh.'admin/modnoticia/'.$id : get('webURL')._sh.'admin/guardarnoticia' ?>" method="post" enctype="multipart/form-data">
 <!--	<label for="titulo">Título</label>
 	<input style="width: 300px" name="name" id="titulo" type="text" size="40" maxlength="40" value="<?php print ($id) ? $modnot['nombre_noticia'] : NULL ?>" />
@@ -76,16 +76,6 @@ function eliminar(id)
 			<button style="width:100%" class="btn btn-success">Guardar</button>
 		</div>
 	</div>
-	
-<!--	<textarea style="width: 100%"  name="aviso" id="aviso" class="txtDefaultHtmlArea" cols="100" rows="15">
-	<?php 
-	if($id)
-	{
-		print $modnot['texto_noticia'];
-	}
-	?>
-	</textarea>-->
-	<!--<input type="hidden" id="texto" name="texto" />-->
 
 </form>
 
@@ -93,16 +83,16 @@ function eliminar(id)
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<legend><span class="glyphicon glyphicon-tower"></span>&nbsp;&nbsp;  <strong>Historial de noticias</strong></legend>
+<legend><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;  <strong>Historial de noticias</strong></legend>
 <table class="table table-striped table-condensed">
 	<thead>
 		<th>Id noticia</th>
 		<th>Título de la noticia</th>
 		<th>Foto</th>
 		<th>Desc.</th>
-		<th>Fech. de pub.</th>
-		<th>Hora. de pub.</th>
-		<th width="66"></th>
+		<th>Fecha</th>
+		<th>Hora.</th>
+		<th width="100"></th>
 	</thead>
 	<tbody>
 		<?php foreach ($noticias as $not) { ?>
@@ -111,15 +101,15 @@ function eliminar(id)
 			<td><?php echo $not['nombre_noticia'] ?></td>
 			<td>
 				<?php if($not['imagen_noticia']!=NULL) { ?>
-				<a href="#" rel="popover" data-content="<?php print "<div style='width: 250px; height: 200px; background-size: cover;  background: url("._rs."/IMAGENES/fotosNoticias/".$not['imagen_noticia'].")'></div>" ?>" data-original-title="Imagen">ver</a>
+					<span class="glyphicon glyphicon-ok"></span>
 				<?php } ?>
 			</td>
 			<td>
 				<?php if($not['texto_noticia']!=NULL) { ?>
-				<a href="#" rel="popover" data-content='<?php print $not['texto_noticia'] ?>' data-original-title="Descripción">ver</a>
+					<span class="glyphicon glyphicon-ok"></span>
 				<?php } ?>
 			</td>
-			<td><?php echo $not['fecha_modificacion'] ?></td>
+			<td><?php echo convertirFecha($not['fecha_modificacion']) ?></td>
 			<td><?php echo $not['hora'] ?></td>
 			<td>
 				<a title="Editar noticia" class="btn btn-default btn-xs" href="<?php print get('webURL')._sh.'admin/noticias/'.$not['id_noticias'] ?>">
@@ -127,6 +117,9 @@ function eliminar(id)
 				</a>
 				<a title="Eliminar" class="btn btn-danger btn-xs" onclick="eliminar('<?php print $not['id_noticias'] ?>');" href="#">
 					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+				<a title="Eliminar" class="btn btn-default btn-xs" href="<?php print get("webURL")."/admin/vernoticia/".$not['id_noticias'] ?>">
+					ver
 				</a>
 			</td>
 		</tr>

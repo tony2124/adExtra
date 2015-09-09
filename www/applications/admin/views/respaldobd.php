@@ -5,7 +5,7 @@ function eliminar(name)
    $('#eliminar').attr("href","<?php print get('webURL') . _sh . 'admin/eliminarrespaldo/' ?>"+name);
 }
 </script>
-<legend><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Respaldo de la base de datos</legend>
+<legend><span class="glyphicon glyphicon-hdd"></span>&nbsp;&nbsp;Respaldo de la base de datos</legend>
 <div class="well">Esta acción le permitirá descargar una copia de la base de datos del sistema. Es recomendable mantener respaldos periodicos. Por su seguridad e integridad de la información, guarde el archivo en un lugar seguro para evitar que personas no autorizadas tengan o alteren la información </div>
 <p>
 	<a href="<?php print get('webURL'). '/admin/respaldando' ?>" class="btn btn-success">Respaldar BD</a>

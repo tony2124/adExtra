@@ -1,52 +1,43 @@
-<script type="text/javascript" src="<?php print path("libraries/editor/scripts/jHtmlArea-0.7.0.js", "zan"); ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php print path("libraries/editor/style/jHtmlArea.css", "zan"); ?>" />
-<script>
-$(document).ready(function() {
-	$(".txtDefaultHtmlArea").htmlarea(); 
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	$(".txtCustomHtmlArea").htmlarea({
-	    toolbar: [
-	        ["bold", "italic", "underline", "|", "forecolor"],
-	        ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
-	        ["link", "unlink", "|", "image"],                    
-	        [{
-	            css: "custom_disk_button",
-	            text: "Save",
-	            action: function(btn) {
-	                alert('SAVE!\n\n' + this.toHtmlString());
-	            }
-	        }]
-	    ],
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	    toolbarText: $.extend({}, jHtmlArea.defaultOptions.toolbarText, {
-	            "bold": "fett",
-	            "italic": "kursiv",
-	            "underline": "unterstreichen"
-	        }),
+<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
-	    css: "style//jHtmlArea.Editor.css",
 
-	    loaded: function() {   }
-			 });
-});
-
-</script>
-<h2>Reglamento del Departamento de Difusion cultural, deportiva y recreativa</h2><hr>
+<legend><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;  <strong>Reglamento del departamento</strong></legend>
 <p>Escriba el reglamento del departamento cultural, deportiva y recreativa, tome en cuenta que este reglamento es el que se muestra en el sitio informativo y nada esta enlazado con el archivo de descarga del reglamento.</p>
 <hr>
 <form id="textoForm" name="textoForm" action="<?php print get('webURL'). _sh . 'admin/guardarReglamento' ?>" method="post">
-	<textarea style="width: 100%" name="aviso" id="aviso" class="txtDefaultHtmlArea" cols="50" rows="15">
-		<?php echo $reglamento['reglamento'] ?>
-	</textarea>
-	<input type="hidden" id="texto" name="reglamento" value="" />
-<p>
-	<input type="button" style="background:red; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'red');" />
-	<input type="button" style="background:blue; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'blue');" />
-	<input type="button" style="background:green; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'green');" />
-	<input type="button" style="background:black; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'black');" />
-	<input type="button" style="background:yellow; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'yellow');" />
-	<input type="button" style="background:orange; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'orange');" />
-	<input type="button" style="background:purple; width:20px" value="" onclick="$('#aviso').htmlarea('forecolor', 'purple');" />
-	<input type="button" class="btn btn-primary pull-right" value="Guardar reglamento" onclick="document.getElementById('texto').value = $('#aviso').htmlarea('toHtmlString'); $('#textoForm').submit();" />
-</p>
+	<div class="form-group">
+		<div class="col-sm-12">
+		<textarea style="width: 100%" name="reglamento" id="reglamento">
+			<?php echo $reglamento['reglamento'] ?>
+		</textarea>
+		</div>
+	</div>
+<p>&nbsp;</p>
+	<div class="form-group">
+		<div class="col-sm-10"></div>
+		<div class="col-sm-2">
+			<button type="submit" style="width:100%" class="btn btn-success">Guardar</button>
+		</div>
+	</div>
+
 </form>
+
+<script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+
+<script type="text/javascript">
+      $(function() {
+          $('#reglamento').editable({
+          	inlineMode: false,
+          	allowStyle: true,
+          	colors: [
+		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
+		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
+		      ]
+          })
+      });
+</script>

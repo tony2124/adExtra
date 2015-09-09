@@ -46,7 +46,7 @@
 			foreach ($promotores as $prom) { ?>
 			<tr>
 				<td><?php print $prom['usuario_promotor'] ?></td>
-				<td><a href=""> <?php print $prom['apellido_paterno_promotor']." ".$prom['apellido_materno_promotor']." ".$prom['nombre_promotor'] ?></a></td>
+				<td><a href="<?php print get("webURL") . "/admin/verpromotor/$prom[usuario_promotor]" ?>"> <?php print $prom['apellido_paterno_promotor']." ".$prom['apellido_materno_promotor']." ".$prom['nombre_promotor'] ?></a></td>
 				<td align="center"><?php print ($prom['sexo_promotor']==1) ? "H" : "M"; ?></td>
 				<!--<td><?php print $prom['correo_electronico_promotor'] ?></td>
 				<td><?php print $prom['telefono_promotor'] ?></td>-->
