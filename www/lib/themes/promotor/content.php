@@ -7,7 +7,8 @@
 		include "mobile/content.php";
 	} else {
 ?>
-<div class="span10">
+<div class="col-md-1"></div>
+<div class="col-md-10">
 	<?php $this->load(isset($view) ? $view : NULL, TRUE); ?>
 </div>
 <?php } ?>

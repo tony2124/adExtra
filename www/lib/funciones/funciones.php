@@ -1,4 +1,49 @@
 <?php
+
+function hace_tiempo($init,$finish)
+{
+    //formateamos las fechas a segundos tipo 1374998435
+    $diferencia = strtotime($finish) - strtotime($init);
+ 
+    if(!is_numeric($diferencia) || $diferencia<0){
+        $tiempo = "Error";
+    }else{
+        //comprobamos el tiempo que ha pasado en segundos entre las dos fechas
+        //floor devuelve el número entero anterior, si es 5.7 devuelve 5
+        if($diferencia < 60){
+            $tiempo = "Hoy";
+        }else if($diferencia < 3600){
+            $tiempo = "Hoy";
+        }else if($diferencia < 86400){
+            $tiempo = "Hoy";
+        }else if($diferencia < 2592000){
+            $tiempo = "Hace " . floor($diferencia/86400) . " días";
+        }else if($diferencia > 31104000){
+            $tiempo = "Hace " . floor($diferencia/31104000) . " años";
+        }else{
+            $tiempo = "Error";
+        }
+        return $tiempo;
+	}
+}
+
+function createThumbs( $pathToImages, $image, $pathToThumbs, $thumbWidth ) 
+{
+    $info = pathinfo($pathToImages . $image);
+   
+    if ( strtolower($info['extension']) == 'jpg' ) 
+    {
+      $img = imagecreatefromjpeg( "{$pathToImages}{$image}" );
+      $width = imagesx( $img );
+      $height = imagesy( $img );
+      $new_width = $thumbWidth;
+      $new_height = floor( $height * ( $thumbWidth / $width ) );
+      $tmp_img = imagecreatetruecolor( $new_width, $new_height );
+      imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height );
+      imagejpeg( $tmp_img, "{$pathToThumbs}{$image}" );
+    }
+}
+
 function convertirFecha($date)
 {
 	$f = explode("-", $date);

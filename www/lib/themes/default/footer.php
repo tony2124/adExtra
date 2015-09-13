@@ -9,7 +9,7 @@
 		<footer style="position:relative; bottom: 0px; text-align: center; width: auto">
 			<hr>
 			<center>
-				<p>Instituto Tecnológico Superior de Apatzingán - - - Departamento de Actividades Culturales, Deportivas y Recreativas</p>
+				<center><a href="http://itsa.edu.mx">Instituto Tecnológico Superior de Apatzingán</a> | <a href="http://itsaextraescolares.com">Departamento de Actividades Culturales, Deportivas y Recreativas</a> | <a href="http://simpus.com.mx/es/software/acerca">acerca de</a></center>
 			</center>
 		</footer>
 	</div>

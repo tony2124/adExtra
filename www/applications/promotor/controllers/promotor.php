@@ -2,7 +2,7 @@
 /**
  * Access from index.php:
  */
-include(_corePath . _sh .'/libraries/funciones/funciones.php');
+include(_pathwww.'/lib/funciones/funciones.php');
 
 if(!defined("_access")) {
 	die("Error: You don't have permission to access here...");
@@ -20,11 +20,36 @@ class Promotor_Controller extends ZP_Controller {
 		$this->Promotor_Model = $this->model("Promotor_Model");
 	}
 	
-	public function index() {	
+	public function index($periodo = NULL) {	
 		if(!SESSION('usuario_promotor')) redirect(get('webURL')._sh.'promotor/login');
-		$conf = $this->Promotor_Model->getConfiguracion();
-		$vars['conf'] = $conf;
-		$vars['alumnos'] = $this->Promotor_Model->getAlumnos(SESSION('id_club'),$conf[0]['periodo']);
+
+		//$id_club = SESSION('id_club');
+		if(!isset($periodo)) 
+		{
+			$periodo = periodo_actual();
+		}
+
+		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
+		$periodossss = $this->Promotor_Model->getPeriodos();
+		$i = 0;
+		if(strcmp($periodossss[0]['periodo'], periodo_actual()) != 0)
+		{
+			$periodos[$i] = periodo_actual();
+			$i++;
+		}
+
+		foreach ($periodossss as $per) {
+			$periodos[$i] = $per['periodo']; 
+			$i++;
+		}
+		$vars["periodos"] = $periodos; //periodos_combo("2082");
+		$vars["periodo"] = $periodo;
+
+		/****************************************************/
+		$vars['liberacion'] = $this->Promotor_Model->verificarAcreditacion($periodo);
+		$vars['alumnos'] = $this->Promotor_Model->getAlumnos(SESSION('usuario_promotor'),$periodo);
+		$vars['promotorasignado'] = $this->Promotor_Model->getPromotorAsignado(SESSION('usuario_promotor'),$periodo);
+		$vars['menu'] = 1;
 		$vars['view'] = $this->view('liberarAlumnos', true);
 		$this->render('content', $vars);
 	}
@@ -45,22 +70,21 @@ class Promotor_Controller extends ZP_Controller {
 
 		$data = $this->Promotor_Model->getPromotor($user);
 
-		if($data!=NULL && $data[0]['contrasena_promotor'] == $clave)
-		{
-			SESSION('usuario_promotor', $data[0]['usuario_promotor']);
-			SESSION('nombre_promotor', $data[0]['nombre_promotor']);
-			SESSION('ap_promotor', $data[0]['apellido_paterno_promotor']);
-			SESSION('am_promotor', $data[0]['apellido_materno_promotor']);
-			SESSION('id_club', $data[0]['id_club']);
-			SESSION('email', $data[0]['correo_electronico_promotor']);
-			redirect(get('webURL')._sh.'promotor');
-		}
-		else
-		{
-			$vars['error'] = '1';
-			$vars['view']=$this->view('loginForm',true);
-			$this->render('content', $vars);
-		}
+		if($data != NULL)
+			if(strcmp($data[0]['contrasena_promotor'], $clave) == 0)
+			{
+				SESSION('usuario_promotor', $data[0]['usuario_promotor']);
+				SESSION('nombre_promotor', $data[0]['nombre_promotor']);
+				SESSION('ap_promotor', $data[0]['apellido_paterno_promotor']);
+				SESSION('am_promotor', $data[0]['apellido_materno_promotor']);
+				SESSION('email', $data[0]['correo_electronico_promotor']);
+				redirect(get('webURL')._sh.'promotor');
+			}
+		
+		$vars['error'] = '1';
+		$vars['view']=$this->view('loginForm',true);
+		$this->render('content', $vars);
+		
 		
 	}
 
@@ -70,14 +94,62 @@ class Promotor_Controller extends ZP_Controller {
 		redirect(get('webURL')._sh.'promotor');
 	}
 
-	public function acreditando()
+	public function alumno($nctrl = NULL)
+	{
+		if (!SESSION('user_admin'))
+			return redirect(get('webURL') .  _sh .'admin/login');
+
+		$datos = $this->Promotor_Model->getAlumno($nctrl);
+		$vars["alumno"] = $datos[0];
+		$vars['menu'] = 0;
+		$vars["view"] = $this->view("alumno",true);
+
+		$this->render("content",$vars);
+	}
+
+	function datos()
+	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		$id = SESSION("usuario_promotor");
+		$result  = $this->Promotor_Model->getpromotorId($id);
+		$vars['promotor'] = $result[0];
+
+		$result  = $this->Promotor_Model->getHistorialPromotor($id);
+		$vars['historial'] = $result;
+		
+		$vars['menu'] = 2;
+		$vars['view'] = $this->view('verpromotor',true);
+		$this->render('content', $vars);
+	}
+
+	function horarios(){
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+		
+		$vars['promotores']  = $this->Promotor_Model->getPromotores(periodo_actual());
+		$vars['clubes'] = $this->Promotor_Model->getClubes();
+
+		$vars['menu'] = 2;
+		$vars['view'] = $this->view('horarios',true);
+		$this->render('content', $vars);
+	}
+
+
+	public function acreditando($periodo)
 	{
 		if(!SESSION('usuario_promotor')) redirect(get('webURL')._sh.'promotor/login');
-		$conf = $this->Promotor_Model->getConfiguracion();
+
+		$datospromotor = $this->Promotor_Model->getPromotorAsignado(SESSION('usuario_promotor'),$periodo);
+		
 		$vars['id_creador'] = SESSION('usuario_promotor');
-		$conf = $this->Promotor_Model->getConfiguracion();
-		$vars['periodo'] = $conf[0]['periodo'];
-		$vars['id_club'] = SESSION('id_club');
+		$vars['id_club'] = $datospromotor[0]['id_club'];
+		$vars['periodo'] = $periodo;
+
+		$conf = $this->Promotor_Model->getConfiguracion($periodo);
+		
+		
 		$i = 0;
 		while($i < POST('na')){
 			$vars['folio'] = POST('folio'.$i);
@@ -88,7 +160,7 @@ class Promotor_Controller extends ZP_Controller {
 			$this->Promotor_Model->operacion($vars);
 			$i++;
 		}
-		redirect(get('webURL')._sh.'promotor');
+		redirect(get('webURL')._sh.'promotor/index/'.$periodo);
 
 	}
 

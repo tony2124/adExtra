@@ -368,7 +368,6 @@ class Pdf_Controller extends ZP_Controller {
 				$pdf->lastPage();
 				$pdf->Output("lista".$club.$periodo.".pdf", 'I');
  			break;
-
  			case 'cedula':
  				if (!SESSION('user_admin'))
 				return redirect(get('webURL') .  _sh .'admin/login');
@@ -377,7 +376,6 @@ class Pdf_Controller extends ZP_Controller {
 
 				$pdf->Output("cedins_".$data[0]['nombre_club']."_".$periodo.".pdf", 'I');
  			break;
-
  			case 'resultados':
 	 			if (!SESSION('user_admin'))
 				return redirect(get('webURL') .  _sh .'admin/login');
@@ -386,7 +384,6 @@ class Pdf_Controller extends ZP_Controller {
  				
 				$pdf->Output("cedres".$promotor[0]['nombre_club'].$periodo.".pdf", 'I');
  			break;
-
  			case 'liberacion':
  				//seguridad
 	 			if (!SESSION('user_admin'))
@@ -395,107 +392,83 @@ class Pdf_Controller extends ZP_Controller {
 				$folio = $club;
 				include(_pathwww.'/lib/funciones/FormatoAcreditacion.php');
 				$pdf->Output($row[0]['numero_control']."_".$row[0]['nombre_club']."_".$periodo.".pdf", 'I');
-
  			break;
  			case "zip-lib":
- 				//eliminar archivos temporales
- 				$files = glob(_spath.'/temp/*'); 
-				foreach($files as $file){ 
-				  if(is_file($file))
-				    unlink($file); 
-				}
-
-				$alumnosEnElClub = $this->Admin_Model->getAlumnosClubes($club, $periodo);
-
-				$zip = new ZipArchive();
-				
-				$filename = "FormatosAcreditacion_$periodo.zip";
-				$ruta = _spath."/temp/".$filename;
-				$zip->open($ruta, ZipArchive::CREATE);
-
-				
-
-				foreach($alumnosEnElClub as $alumno){
-
-					$folio = $alumno['folio'];
+					$folio = $club;
 				    include(_pathwww.'/lib/funciones/FormatoAcreditacion.php');
-				    $pdf->Output(_spath.'/temp/' .$row[0]['numero_control'] ."_". $folio . '.pdf', 'F');
-				    $zip->addFile(_spath.'/temp/'  .$row[0]['numero_control'] ."_". $folio .  '.pdf',$row[0]['numero_control'] ."_". $folio .  '.pdf');
+				    $pdf->Output(_spath.'/temp/' .$row[0]['numero_control'] ."_". $folio . '.pdf', 'F');				    
+ 			break;
+ 			case "zip-lib-desc":
+ 				$ruta = _spath."/temp/";
+
+ 				$zip = new ZipArchive();
+				$filename = "BoletasAcreditacion_".$periodo."_".$club.".zip";
+				$zip->open($ruta.$filename, ZipArchive::CREATE);
+
+ 				$directorio = opendir($ruta); 
+				while ($archivo = readdir($directorio)) 
+				{
+				    if (!is_dir($archivo))
+				    {
+				    	$archivo_ruta = _spath.'/temp/'.$archivo;
+				    	$zip->addFile($archivo_ruta, $archivo);
+				    }
 				}
-
 				$zip->close();
-
-				//header('Content-type: application/force-download');
-				//header('Content-Disposition: attachment; filename="FormatosAcreditacion_'.$alumnosEnElClub[0]["nombre_club"].'_'.$periodo.'.zip"');
-				//readfile($filename);
-				header("Location: "._rs."/temp/".$filename);
  			break;
  			case "zip-ins":
+				//$ruta = _spath."/temp/".$filename;
+				include(_pathwww.'/lib/funciones/CedulaInscripcion.php');
+				$pdf->Output (_spath.'/temp/cedins_' . $periodo ."_". POST('nombre_club').'.pdf', 'F');
+ 			break;
+ 			case "zip-ins-desc":
+ 				$ruta = _spath."/temp/";
+
+ 				$zip = new ZipArchive();
+				$filename = "CedulasInscripcion_$periodo.zip";
+				$zip->open($ruta.$filename, ZipArchive::CREATE);
+
+ 				$directorio = opendir($ruta); 
+				while ($archivo = readdir($directorio)) 
+				{
+				    if (!is_dir($archivo))
+				    {
+				    	$archivo_ruta = _spath.'/temp/'.$archivo;
+				    	$zip->addFile($archivo_ruta, $archivo);
+				    }
+				}
+				$zip->close();
+ 			break;
+ 			case "re-temp":
  				//eliminar archivos temporales
  				$files = glob(_spath.'/temp/*'); 
 				foreach($files as $file){ 
 				  if(is_file($file))
 				    unlink($file); 
 				}
-
-				$zip = new ZipArchive();
-				$filename = "CedulasInscripcion_$periodo.zip";
-				$ruta = _spath."/temp/".$filename;
-
-				//$filename = _spath."/temp/CedulasInscripcion.zip";
-				$zip->open($ruta, ZipArchive::CREATE);
-
-				$clubes = $this->Admin_Model->getClubes();
-
-				foreach($clubes as $c){
-
-					$club = $c['id_club'];
-				    include(_pathwww.'/lib/funciones/CedulaInscripcion.php');
-				    $pdf->Output (_spath.'/temp/cedins_' . $periodo ."_". $c['nombre_club'] .'.pdf', 'F');
-				    $zip->addFile(_spath.'/temp/cedins_' . $periodo ."_". $c['nombre_club'] .'.pdf', "cedins_" . $periodo ."_" . $c['nombre_club'] . '.pdf');
-				}
-
-				$zip->close();
-
-				
-				//header('Content-type: application/force-download');
-				//header('Content-Disposition: attachment; filename="CedulasInscripcion_'.$periodo.'.zip"');
-				//readfile($filename);
-				header("Location: "._rs."/temp/".$filename);
  			break;
  			case "zip-res":
- 				//eliminar archivos temporales
- 				$files = glob(_spath.'/temp/*'); 
-				foreach($files as $file){ 
-				  if(is_file($file))
-				    unlink($file); 
-				}
+ 				//$ruta = _spath."/temp/".$filename;
+				include(_pathwww.'/lib/funciones/CedulaResultado.php');
+				$pdf->Output (_spath.'/temp/cedres_' . $periodo ."_". POST('nombre_club') .'.pdf', 'F');
+ 			break;
+ 			case "zip-res-desc":
+ 				$ruta = _spath."/temp/";
 
-				$zip = new ZipArchive();
-
+ 				$zip = new ZipArchive();
 				$filename = "CedulasResultados_$periodo.zip";
-				$ruta = _spath."/temp/".$filename;
+				$zip->open($ruta.$filename, ZipArchive::CREATE);
 
-				//$filename = _spath."/temp/CedulasResultados_$periodo.zip";
-				$zip->open($ruta, ZipArchive::CREATE);
-
-				$clubes = $this->Admin_Model->getClubes();
-
-				foreach($clubes as $c){
-
-					$club = $c['id_club'];
-				    include(_pathwww.'/lib/funciones/CedulaResultado.php');
-				    $pdf->Output (_spath.'/temp/cedres_' . $periodo  . "_" . $c['nombre_club'] . '.pdf', 'F');
-				    $zip->addFile(_spath.'/temp/cedres_' .  $periodo . "_" . $c['nombre_club'] . '.pdf', "cedres_". $periodo . "_" .$c['nombre_club'] . '.pdf');
+ 				$directorio = opendir($ruta); 
+				while ($archivo = readdir($directorio)) 
+				{
+				    if (!is_dir($archivo))
+				    {
+				    	$archivo_ruta = _spath.'/temp/'.$archivo;
+				    	$zip->addFile($archivo_ruta, $archivo);
+				    }
 				}
-
 				$zip->close();
-
-				
-				//header('Content-type: application/force-download');
-				//header('Content-Disposition: attachment; filename="CedulasResultados_'.$periodo.'.zip"');
-				//readfile($filename);
-				header("Location: "._rs."/temp/".$filename);
  			break;
  		}
  	}

@@ -1,20 +1,4 @@
 
-
-<!--<div class="span3">
-	<?php if($error=='1') { ?>
-	<div class="alert alert-error">
-		 <a class="close" data-dismiss="alert" href="#">×</a>
-	  Datos de inicio de sesión incorrectos.
-	</div>
-	<?php } ?>
-	<h3>Inicio de sesión</h3>
-	<form class="well" align="center" method="post" action="<?php print get('webURL') . _sh . 'admin/iniciarsesion' ?>">
-	  <p><label>Usuario</label><input type="text" name="usuario" class="input-medium" placeholder="Usuario"></p>
-	  <p><label>Contraseña</label><input type="password" name="clave" class="input-medium" placeholder="Contraseña"><br></p>
-	  <p><input type="submit" value="Entrar" class="btn btn-primary" /></p>
-	</form>
-</div>
--->
 <style type="text/css">
 
 body{

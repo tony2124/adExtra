@@ -228,7 +228,7 @@ function guardar(posicion)
                           </tr>
                           <tr>
                              <td>NOMBRE</td>
-                            <td><a href=""> <?php print $promotor['apellido_paterno_promotor'].' '.$promotor['apellido_materno_promotor'].' '.$promotor['nombre_promotor'] ?></a></td>
+                            <td><a href="<?php print get("webURL")."/admin/verpromotor/".$promotor['usuario_promotor'] ?>"> <?php print $promotor['apellido_paterno_promotor'].' '.$promotor['apellido_materno_promotor'].' '.$promotor['nombre_promotor'] ?></a></td>
                             </tr>
                           <tr>
                              <td>CLUB</td>
@@ -271,10 +271,9 @@ function guardar(posicion)
                  ?>
               </tbody>
             </table>
-<hr>
 
 
-<a href="<?php print get('webURL'). _sh . 'admin/formRegistroPromotor' ?>">Agregar un nuevo promotor</a>
+<!--<a href="<?php print get('webURL'). _sh . 'admin/formRegistroPromotor' ?>">Agregar un nuevo promotor</a>-->
 
 <div class="modal hide fade" id="confirmModal">
   <div class="modal-header">

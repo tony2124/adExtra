@@ -26,6 +26,13 @@ public function getResultadoProm()
 return $this->Db->query("select * from ");
 }
 
+
+public function getPromotorAsignado($id_club, $periodo){
+		return $this->Db->query("SELECT * from horarios, clubes, promotores where horarios.id_club = clubes.id_club AND 
+				horarios.usuario_promotor = promotores.usuario_promotor AND 
+					horarios.id_club = '$id_club' AND horarios.periodo = '$periodo'");
+}
+
 public function obtenerListaPromotores($buscar)
 {
 	return $this->Db->query("SELECT * from promotores WHERE (nombre_promotor like '%$buscar%' OR apellido_paterno_promotor like '%$buscar%' OR apellido_materno_promotor like '%$buscar%' OR usuario_promotor like '%$buscar%')  order by  apellido_paterno_promotor asc, apellido_materno_promotor asc, nombre_promotor asc");	
@@ -119,7 +126,7 @@ return $query;
 
 public function updateLiberacion($vars)
 {
-	$this->Db->query("update conf_fechas set fecha_inicio_inscripcion = '$vars[ins_ini]', fecha_fin_inscripcion = '$vars[ins_fin]', fecha_inicio_liberacion = '$vars[lib_ini]', fecha_fin_liberacion = '$vars[lib_fin]', periodo = '$vars[periodo]', numero_clubes = '$vars[nper]'");
+	$this->Db->query("UPDATE conf_fechas set fecha_inicio_inscripcion = '$vars[ins_ini]', fecha_fin_inscripcion = '$vars[ins_fin]', fecha_inicio_liberacion = '$vars[lib_ini]', fecha_fin_liberacion = '$vars[lib_fin]', numero_clubes = '$vars[nper]' where periodo = '$vars[periodo]'");
 }
 
 public function insertarLiberacion($vars)
@@ -131,7 +138,7 @@ public function updateRes($acred, $folio, $obs, $fl)
 {
 //$this->acentos();
 $dat = $this->Db->query("select * from inscripciones where folio = $folio");
-$observaciones = $dat[0]['observaciones']."<br>".$fl."&nbsp;".$obs;
+$observaciones = $obs;
 $this->acentos();
 $query = "update inscripciones set acreditado = $acred, fecha_liberacion_club = '$fl', observaciones = '$observaciones' where folio = '$folio'";
 $this->Db->query($query);
@@ -387,8 +394,8 @@ return $this->Db->query("delete from noticias where id_noticias = '$id'");
 
 public function guardarClub($vars)
 {
-$query = "insert into clubes(nombre_club, tipo_club, texto_club, foto_club, fecha_creacion)
-values ('$vars[nombre_club]','$vars[tipo_club]','$vars[texto_club]','$vars[foto_club]','$vars[fecha_creacion]')";
+$query = "insert into clubes(nombre_club, tipo_club, texto_club, foto_club, fecha_creacion, fecha_modificacion)
+values ('$vars[nombre_club]','$vars[tipo_club]','$vars[texto_club]','$vars[foto_club]','$vars[fecha_creacion]','$vars[fecha_creacion]')";
 $this->acentos();
 $this->Db->query($query);
 return $query;
@@ -407,7 +414,7 @@ return $query;
 public function updateClub($vars)
 {
 $query = "update clubes set nombre_club = '$vars[nombre_club]' , tipo_club = '$vars[tipo_club]' ,
-texto_club = '$vars[texto_club]', foto_club = '$vars[foto_club]'
+texto_club = '$vars[texto_club]', foto_club = '$vars[foto_club]', fecha_modificacion = '$vars[fecha_modificacion]'
 where id_club = '$vars[id_club]'";
 $this->acentos();
 $this->Db->query($query);

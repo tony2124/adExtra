@@ -61,9 +61,18 @@ $(function () {
 			<?php } 	?>
 		<div class="form-group">
 			<label class="label-control col-sm-3"for="foto">Subir una foto</label>
-			<div class="col-sm-9">
+			<div class="col-sm-6">
 				<input name="foto" id="foto" type="file" /><br>
 			</div>
+			<!--<label class="label-control col-sm-1">Grupo</label>
+			<div class="col-sm-2">
+				<select class="form-control">
+					<option>A</option>
+					<option>B <span class="label labe-primary">Pro</span></option>
+					<option>C <span class="label labe-primary">Pro</span></option>
+					<option>D <span class="label labe-primary">Pro</span></option>
+				</select>
+			</div>-->
 		</div>
 		
 		
@@ -100,7 +109,7 @@ $(function () {
 		<th>Nombre del club</th>
 <!--	<th>Foto</th>-->
 		<th>Fecha creación</th>
-		<th>Fecha creación</th>
+		<th>Fecha modif.</th>
 		<th>Estado</th>
 		<th width="70"></th>
 	</thead>
@@ -116,8 +125,8 @@ $(function () {
 				<?php } ?>
 			</td>-->
 			
-			<td><?php echo $not['fecha_creacion'] ?></td>
-			<td><?php echo $not['fecha_modificacion'] ?></td>
+			<td><?php echo convertirFecha($not['fecha_creacion']) ?></td>
+			<td><?php echo hace_tiempo($not['fecha_modificacion'],date("Y-m-d")) ?></td>
 			<td><?php print ($not['eliminado_club'] == 0) ? "<span class='label label-success'>Activo</span>" : "<span class='label label-danger'>No activo</span>" ?></td>
 			<td>
 				<a rel="tooltip" title="Editar" class="btn btn-default btn-xs" href="<?php print get("webURL")._sh.'admin/adminclubes/'.$not['id_club'] ?>">

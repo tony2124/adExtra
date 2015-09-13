@@ -5,6 +5,7 @@ if(!defined("_access")) {
 
 include(_pathwww.'/lib/funciones/funciones.php');
 
+
 class Admin_Controller extends ZP_Controller {
 	
 	public function __construct() {
@@ -20,6 +21,46 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') .  _sh .'admin/estadistica');
 
 		redirect(get('webURL') . _sh . 'admin/login');
+	}
+
+	public function subirfoto(){
+		// Define a destination
+		$tipo = $_POST['tipo'];
+		$club = $_POST['club'];
+		$album = $_POST['album'];
+
+		$targetFolder = '/extra/img/galeria/'.$club.'/'.$album.'/'; // Relative to the root 
+		mysql_connect("localhost","root","simpus2124");
+
+		mysql_select_db("itsaextr_extra");
+
+		if (!empty($_FILES)) {
+			$tempFile = $_FILES['Filedata']['tmp_name'];
+
+			$name = $_FILES['Filedata']['name'];
+			$ext = explode(".",$name);				 		
+			$id = uniqid(); //date("YmdHis").rand(0,100).rand(0,100);
+			$name = $id.".".$ext[1];
+
+			$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
+			mkdir($targetPath,0700);
+			$targetFile = rtrim($targetPath,'/') . '/' . $name;
+			
+				// Validate the file type
+			$fileTypes = array('jpg','jpeg','JPG','JPEG', 'PNG','png'); // File extensions
+			$fileParts = pathinfo($_FILES['Filedata']['name']);
+			  
+			if (in_array($fileParts['extension'],$fileTypes)) {
+			    move_uploaded_file($tempFile,$targetFile);
+			    createThumbs($targetPath, $name, $targetPath,800);
+			    createThumbs($targetPath, $name, $targetPath."/thumbs/",200);
+			    $query = "INSERT into galeria values('$id','$name','$album','".date("Y-m-d")."','1','')";
+			    mysql_query($query) or die(mysql_error());
+			    echo '1';
+			  } else {
+			    echo 'Invalid file type.';
+			  }
+		}
 	}
 
 
@@ -83,6 +124,7 @@ class Admin_Controller extends ZP_Controller {
 		$alumnos = $this->Admin_Model->getAlumnosInscritos( array($periodo) );
 		$todos_alumnos = $this->Admin_Model->getAlumnosInscritos( $periodos_grafico );
 		$carreras = $this->Admin_Model->getCarreras(NULL, false);
+		$clubesdescarga = $this->Admin_Model->getClubes();
 
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
@@ -103,6 +145,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars["view"]	 = $this->view("estadistica3", TRUE);
 		$vars["periodo"] = $periodo;
 		$vars["clubes"] = $clubes;
+		$vars["clubesdescarga"] = $clubesdescarga;
 		$vars["alumnos"] = $alumnos;
 		
 		$vars["carreras"] = $carreras;
@@ -141,6 +184,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['par2'] = $periodo;
 		$vars['alumnos'] = $alumnos;
 		$vars['clubes'] = $clubes;
+		$vars['promotorasignado'] = $this->Admin_Model->getPromotorAsignado($club, $periodo);
 		$vars['view'] = $this->view("listaclub", true);
 		$vars["menu"] = 2;
 		$this->render("content", $vars);
@@ -168,11 +212,28 @@ class Admin_Controller extends ZP_Controller {
 
 		$carreras = $this->Admin_Model->getCarreras(NULL, false);
 		$alumnos = $this->Admin_Model->getAlumnosCarreras($carrera, $periodo);
+		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
+		$periodossss = $this->Admin_Model->getPeriodos();
+		$i = 0;
+		if(strcmp($periodossss[0]['periodo'], periodo_actual()) != 0)
+		{
+			$periodos[$i] = periodo_actual();
+			$i++;
+		}
+
+		foreach ($periodossss as $per) {
+			$periodos[$i] = $per['periodo']; 
+			$i++;
+		}
+
+		$vars["periodos"] = $periodos; //periodos_combo("2082");
+		/****************************************************/
 		$vars['par1'] = $carrera;
 		$vars['par2'] = $periodo;
 		$vars['alumnos'] = $alumnos;
 		$vars['carreras'] = $carreras;
-		$vars['periodos'] = periodos('2083');
+		//$vars['periodos'] = periodos('2083');
+		$vars["menu"] = 2;
 		$vars['view'] = $this->view("listacarrera", true);
 		$this->render("content", $vars);
  	}
@@ -717,6 +778,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['lib_fin'] = POST('lib_fin');
 		$vars['periodo'] = POST('periodo');
 		$vars['nper'] = POST('nper');
+		//____($vars);
 		if($tipo == 1)
 			$this->Admin_Model->updateLiberacion($vars);
 		else
@@ -752,10 +814,13 @@ class Admin_Controller extends ZP_Controller {
 		redirect(get('webURL')._sh.'admin/avisos');
 	}
 
-	public function subirBD()
+	public function subirBD($data = NULL)
 	{
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
+		if($data != NULL)
+			$vars['estado'] = 1;
+
 		$vars['view'] = $this->view('subiralumnos',true);
 		$vars['menu'] = 0;
  		$this->render('content', $vars);
@@ -777,42 +842,9 @@ class Admin_Controller extends ZP_Controller {
 		}
 		$ruta = _spath.'/datos/'.$tempname;
 		$this->Admin_Model->subirBDAlumnos($ruta);
-//		____("load data local infile '$ruta' into table alumnos FIELDS TERMINATED BY ',' ESCAPED BY '\\\\' LINES TERMINATED BY '\\r\\n' ");
-		redirect(  get('webURL') . _sh . 'admin/subirBD'  );
+		redirect(  get('webURL') . _sh . 'admin/subirBD/ingresado'  );
 
 	}
-
-	public function eliminarhistorial($id = NULL)
-	{
-		if( !SESSION('user_admin') )
-			return redirect(get('webURL') . _sh . 'admin/login');
-		$vars['elim'] = $id;
-		$vars['view'] = $this->view('eliminarhistorial',true);
-		$vars['menu'] = 5;
- 		$this->render('content', $vars);
-	}
-
-	public function eliminargeneracion()
-	{
-		if( !SESSION('user_admin') )
-			return redirect(get('webURL') . _sh . 'admin/login');
-		
-		$gen = POST('generacion');
-		$clave = POST('clave');
-
-		$data = $this->Admin_Model->getData(SESSION('user_admin'));
-
-		if(strcmp($data[0]['contrasena_administrador'],$clave)==0)
-		{
-			$generacion = substr($gen, 2, 2 );
-			$this->Admin_Model->eliminargeneracion($generacion);
-			redirect(get("webURL")._sh."admin/eliminarhistorial/".$gen);
-		}
-		else
-			redirect(get("webURL")._sh."admin/eliminarhistorial/error");
-
-	}
-
 
 	public function subirarchivos()
 	{
@@ -862,7 +894,6 @@ class Admin_Controller extends ZP_Controller {
 
 			$tempname = $tempname . "." . $arreglo[1];
 			move_uploaded_file($_FILES['archivo']['tmp_name'], _spath.'/descarga/'.$tempname);
-			//____($tempname);
 		}
 
 		
@@ -1267,6 +1298,8 @@ class Admin_Controller extends ZP_Controller {
 		$vars["fecha_creacion"] = date("Y-m-d");
 		$vars["tipo_club"] = $tipo;
 
+	
+
 		if(strcmp($vars["nombre_club"], "") != 0)
 			$this->Admin_Model->guardarClub($vars);
 
@@ -1400,6 +1433,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars["texto_club"] = $cadena;
 		$vars["foto_club"] = $name;
 		$vars["tipo_club"] = $tipo;
+		$vars["fecha_modificacion"] = date("Y-m-d");
 
 		$this->Admin_Model->updateClub($vars);
 
@@ -1478,10 +1512,12 @@ class Admin_Controller extends ZP_Controller {
 
 		$nombre_album = strtoupper( POST('nombre_album') );
 		$id=uniqid();
-		mkdir(_spath . _sh . 'IMAGENES/clubes/'.$club.'/'.$id, 0777);
-		chmod(_spath . _sh . 'IMAGENES/clubes/'.$club.'/'.$id, 0777);
-		mkdir(_spath . _sh . 'IMAGENES/clubes/'.$club.'/'.$id . '/thumbs', 0777);
-		chmod(_spath . _sh . 'IMAGENES/clubes/'.$club.'/'.$id, 0777);
+		mkdir(_spath . _sh . 'img/galeria/'.$club, 0777);
+		chmod(_spath . _sh . 'img/galeria/'.$club, 0777);
+		mkdir(_spath . _sh . 'img/galeria/'.$club.'/'.$id, 0777);
+		chmod(_spath . _sh . 'img/galeria/'.$club.'/'.$id, 0777);
+		mkdir(_spath . _sh . 'img/galeria/'.$club.'/'.$id . '/thumbs', 0777);
+		chmod(_spath . _sh . 'img/galeria/'.$club.'/'.$id, 0777);
 		$this->Admin_Model->crearAlbum($id, $nombre_album, $club);
 		redirect(get('webURL')._sh.'admin/galeria/'.$tipo._sh.$club);
 	}
@@ -1499,7 +1535,7 @@ class Admin_Controller extends ZP_Controller {
 	{
 
 		/* ELIMINO TODOS LOS ARCHIVOS DENTRO DEL ÁLBUM */
-		$filename = _spath."/IMAGENES/clubes/".$club."/".$album."/";
+		$filename = _spath."/img/galeria/".$club."/".$album."/";
 		$handle = opendir($filename."thumbs/");
 
 		while ($file = readdir($handle))
@@ -1542,7 +1578,7 @@ class Admin_Controller extends ZP_Controller {
 		$image_name = POST('image_name');
 		$url = $_POST['url'];
 		$path = $_POST['path'];
-		$filename = _spath.'/IMAGENES/clubes/'.$path._sh;
+		$filename = _spath.'/img/galeria/'.$path._sh;
 		/** DELETING PHISICS FILES ***/
 		chmod($filename."thumbs/".$image_name, 0777);
 		unlink($filename."thumbs/".$image_name);

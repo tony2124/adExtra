@@ -29,7 +29,7 @@ function eliminar(nombre, id)
 			<td><a href="<?php print get("webURL")._sh.'admin/carreras/nueva-edit/'.$car['id_carrera'] ?>"><?php echo $car['abreviatura_carrera'] ?></a></td>
 			<td><?php echo $car['semestres_carrera'] ?></td>
 			<td><?php echo $car['plan_estudio'] ?></td>
-			<td><?php echo $car['fecha_registro'] ?></td>
+			<td><?php echo convertirFecha($car['fecha_registro']) ?></td>
 			<td><?php print ($car['eliminada'] == 0) ? "<span class='label label-success'>Activo</span>" : "<span class='label label-danger'>No activo</span>" ?></td>
 			<td>
 				

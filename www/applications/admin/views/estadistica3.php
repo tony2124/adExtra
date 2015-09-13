@@ -27,8 +27,9 @@
 	        <span class="caret"></span>
 	      </a>
 	      <ul class="dropdown-menu">
-	        <li><a target="_blank" href="<?php print get("webURL")."/admin/pdf/formatos/zip-ins/0/$periodo"  ?>">ZIP Cédulas de Inscripción</a></li>
-	        <li><a href="<?php print get("webURL")."/admin/pdf/formatos/zip-res/0/$periodo"  ?>" target="_blank">ZIP Cédulas de resultados</a></li>
+	        <!--<li><a data-toggle="modal" data-target="#myModal" target="_blank" href="<?php print get("webURL")."/admin/pdf/formatos/zip-ins/0/$periodo"  ?>">ZIP Cédulas de Inscripción</a></li>-->
+	        <li><a data-toggle="modal" data-target="#myModal" href="#">ZIP Cédulas de Inscripción</a></li>
+	        <li><a data-toggle="modal" data-target="#myModalRes" href="#" >ZIP Cédulas de resultados</a></li>
 	      </ul>
 	    </div>
 	</div>
@@ -372,7 +373,7 @@
 								<td><?php echo $carreras[$i]['id_carrera'] ?></td>
 										
 								<td>
-									<a href="<?php print get("webURL")._sh.'admin/listacarrera/'.$carreras[$i]['id_carrera'].'/'.$periodo ?>"><?php echo $carreras[$i]['nombre_carrera'] ?></a>		
+									<a href="<?php print get("webURL")._sh.'admin/listacarrera/'.$carreras[$i]['id_carrera'].'/'.$periodo ?>"><?php echo $carreras[$i]['nombre_carrera']." (".$carreras[$i]['plan_estudio'].")" ?></a>		
 								</td>
 								<td><?php print $mujeres ?></td>
 								<td><?php print $hombres ?></td>
@@ -729,6 +730,152 @@
 		<div style="clear: both"></div>
 	<p>&nbsp;</p>	
 
-<hr>
-
 <p><h3><strong>IMPORTANTE</strong></h3><i>Los datos que aquí se presentan hacen referencia únicamente a los alumnos que se inscribieron a los diferentes clubes deportivos y culturales. Los gráficos no incluyen los datos de los alumnos que liberaron en otras actividades.</i></p>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+        <h4 class="modal-title" id="myModalLabel">Descarga ZIP de Cédulas de Inscripción</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+		  <div id="progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 1%;">
+		    0%
+		  </div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelar" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button id="iniciar" onclick="descargarCedulaInscripcion()" type="button" class="btn btn-primary">Iniciar descarga</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModalRes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+        <h4 class="modal-title" id="myModalLabel">Descarga ZIP de Cédulas de Resultados</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+		  <div id="progressRes" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 1%;">
+		    0%
+		  </div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelarRes" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button id="iniciarRes" onclick="descargarCedulaResultados()" type="button" class="btn btn-primary">Iniciar descarga</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+	var cbs = [
+		<?php 
+		foreach ($clubesdescarga as $key) {
+			print '"'.$key["id_club"].'",' ;
+		}
+		?>
+		"0"];
+
+	var cbs_nombre = [
+		<?php 
+		foreach ($clubesdescarga as $key) {
+			print '"'.$key["nombre_club"].'",' ;
+		}
+		?>
+		"0"];
+
+	function descargarCedulaInscripcion(){
+
+		$("#iniciar").attr("disabled","disabled");
+		$("#cancelar").attr("disabled","disabled");
+		
+		reiniciar();
+		cont = 0;
+		recursivo(cont);
+	}
+
+	function descargarCedulaResultados(){
+
+		$("#iniciarRes").attr("disabled","disabled");
+		$("#cancelarRes").attr("disabled","disabled");
+		
+		reiniciar();
+		cont = 0;
+		recursivo_resultado(cont);
+	}
+
+	function reiniciar(){
+		$.ajax({
+			  url: "<?php print get('webURL').'/admin/pdf/formatos/re-temp//' ?>",
+		});	
+	}
+
+
+	function recursivo( i ){
+		var urlS = "<?php print get('webURL').'/admin/pdf/formatos/zip-ins/"+cbs[i]+"/'.$periodo ?>";
+		$.ajax({
+			  url: urlS,
+			  method: "POST",
+			  data: {nombre_club: cbs_nombre[i]},
+			  success: function(data){
+			  	    $("#progress").css("width",( parseInt((cont  + 1 ) * 100 / (cbs.length-1))) + "%");
+			    	$("#progress").html(  parseInt( (cont  + 1 ) * 100 / (cbs.length-1) )+ "%");
+			    	
+			    	cont++;
+			    	if(cont == cbs.length-1)
+			    	{
+			    		descargarZIP("zip-ins-desc","CedulasInscripcion");
+			    		$('#myModal').modal('hide');
+			    		return;
+			    	}
+			    	recursivo(cont);
+
+			  }
+		});
+	}
+
+	function recursivo_resultado( i ){
+		var urlS = "<?php print get('webURL').'/admin/pdf/formatos/zip-res/"+cbs[i]+"/'.$periodo ?>";
+		$.ajax({
+			  url: urlS,
+			  method: "POST",
+			  data: {nombre_club: cbs_nombre[i]},
+			  success: function(data){
+			  	    $("#progressRes").css("width",( parseInt((cont  + 1 ) * 100 / (cbs.length-1))) + "%");
+			    	$("#progressRes").html(  parseInt( (cont  + 1 ) * 100 / (cbs.length-1) )+ "%");
+			    	
+			    	cont++;
+			    	if(cont == cbs.length-1)
+			    	{
+			    		descargarZIP("zip-res-desc","CedulasResultados");
+			    		$('#myModalRes').modal('hide');
+			    		return;
+			    	}
+			    	recursivo_resultado(cont);
+
+			  }
+		});
+	}
+
+	function descargarZIP(uri, name){
+		$.ajax({
+			  url: "<?php print get('webURL').'/admin/pdf/formatos/"+uri+"/0/'.$periodo ?>",
+			  success: function( data ){
+			  	window.location.href="<?php print _rs.'/temp/"+name+"_'.$periodo.'.zip' ?>";
+			  }
+		});	
+	}
+</script>

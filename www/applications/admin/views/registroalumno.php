@@ -72,7 +72,7 @@ $().ready(function() {
           <div class="col-sm-4">
       <!-- -->  <select name="carrera" class="form-control" id="carrera">
                   <?php foreach ($carreras as $carrera) { 
-                    print '<option value="'.$carrera['id_carrera'].'">'.$carrera['abreviatura_carrera'].' ('.$carrera['id_carrera'].')</option>';
+                    print '<option value="'.$carrera['id_carrera'].'">'.$carrera['abreviatura_carrera'].' ('.$carrera['plan_estudio'].')</option>';
                   } ?>
   
                 </select>

@@ -87,6 +87,7 @@ function folio(folio)
     <tr>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -103,7 +104,7 @@ function folio(folio)
       </tr>
       <tr>
         <td><strong>Carrera</td>
-        <td colspan="3"><?php print $alumno['nombre_carrera'] ?></td>
+        <td colspan="3"><?php print $alumno['nombre_carrera']." (".$alumno['plan_estudio'].")" ?></td>
       </tr>
       <tr>
         <td><strong>Semestre</td>
@@ -190,8 +191,8 @@ function folio(folio)
                 ?>
               <tr>
                 <td><?php print $ins['folio'] ?></td>
-                <td><?php print $ins['fecha_inscripcion_club'] ?></td>
-                <td><?php print $ins['fecha_liberacion_club'] ?></td>
+                <td><?php print convertirFecha($ins['fecha_inscripcion_club']) ?></td>
+                <td><?php print convertirFecha($ins['fecha_liberacion_club']) ?></td>
                 <td>
                   <a data-toggle="modal" onclick="modActividad(<?php print "'".$periodo."','".$ins['folio']."'" ?>)" href="#cambiarActividad">
                     <?php print $ins['nombre_club'] ?>
@@ -220,7 +221,7 @@ function folio(folio)
             ?>
             <tr>
               <td colspan="7">
-                <a data-toggle="tooltip" title="Inscribir a una actividad" onclick="updateDataInsForm(<?php print $i.",'".$periodo."'" ?>)" class="pull-right btn btn-success" data-toggle="modal" href="#insActDialog" >
+                <a rel="tooltip" title="Inscribir a una actividad" onclick="updateDataInsForm(<?php print $i.",'".$periodo."'" ?>)" class="pull-right btn btn-success" data-toggle="modal" data-target="#insActDialog" href="#" >
                   <i class="glyphicon glyphicon-plus"></i> Inscribir actividad
                 </a>
               </td>
@@ -244,25 +245,27 @@ function folio(folio)
     <div class="modal-content">
       <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
-        <h3>Edición de acreditación </h3>
+        <h3>Edición de actividad </h3>
       </div>
       <div class="modal-body">
         <p>En el siguiente formulario se cambiará la actividad.</p>
        
         <form id="editAct" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editActividad' ?>">
         <div class="form-group">
-            <label class="control-label">Actividad</label> 
-          <div class="controls">
-                <select name="actividad">
+          <label class="control-label col-sm-2">Actividad</label> 
+          <div class="col-sm-9">
+                <select class="form-control" name="actividad">
                   <?php foreach ($clubes as $club) { ?>
                     <option value="<?php print $club['id_club'] ?>"><?php print $club['nombre_club'] ?></option>
                   <?php } ?>
                 </select> 
-          </div><br>
-          <label class="control-label">Periodo</label> 
-          <div class="controls">
-              <span id="periodoAct" type="text" class="uneditable-input"></span>
-          </div><br>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Periodo</label> 
+          <div class="col-sm-9">
+              <label id="periodoAct" ></label>
+          </div>
           <input type="hidden" value="" id="folioAct" name="folio">
           <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="nc">
         </div>
@@ -289,32 +292,38 @@ function folio(folio)
        
         <form id="editres" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/editResultado' ?>">
         <div class="form-group">
-            <label class="control-label">Actividad</label> 
-          <div class="controls">
+            <label class="control-label col-sm-2">Actividad</label> 
+          <div class="col-sm-9">
                 <span id="actividad" type="text" class="uneditable-input"></span>
-          </div><br>
-          <label class="control-label">Periodo</label> 
-          <div class="controls">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Periodo</label> 
+          <div class="col-sm-9">
               <span id="periodo" type="text" class="uneditable-input"></span>
-          </div><br>
-          <label class="control-label">Resultado</label> 
-          <div class="controls">
-              <select name="acreditado" id="selectRes">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Resultado</label> 
+          <div class="col-sm-9">
+              <select class="form-control" name="acreditado" id="selectRes">
                   <option value="1">ACREDITADO</option>
                   <option value="0">NO ACREDITADO</option>
               </select>
-          </div><br>
-          <label class="control-label">Observación</label> 
-          <div class="controls">
-              <textarea name="obs" id="obs"></textarea>
-          </div><br>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Observación</label> 
+          <div class="col-sm-9">
+              <textarea class="form-control" name="obs" id="obs"></textarea>
+          </div>
           <input type="hidden" value="" id ="folio" name="folio">
           <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="numero_control">
         </div>
     </form> 
       </div>
       <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <a href="#" class="btn btn-default" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
         <a href="#" class="btn btn-primary" onclick="$('#editres').submit()">Guardar cambios</a>
       </div>
     </div>
@@ -335,25 +344,29 @@ function folio(folio)
        
         <form id="insActForm" class="form-horizontal" method="post" action="<?php print get('webURL')._sh.'admin/inscipcionActividad' ?>">
         <div class="form-group">
-            <label class="control-label">Actividad</label> 
-          <div class="controls">
-                 <select name="actividad">
+          <label class="control-label col-sm-2">Actividad</label> 
+          <div class="col-sm-9">
+                 <select class="form-control" name="actividad">
                     <?php foreach ($clubes as $club) { if($club['tipo_club'] != 1 && $club['tipo_club'] != 2) { ?>
                     <option value="<?php print $club['id_club'] ?>"><?php print $club['nombre_club'] ?></option>
                   <?php } } ?>
               </select>
-          </div><br>
-          <label class="control-label">Resultado</label> 
-          <div class="controls">
-              <select name="acreditado" id="selectRes">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Resultado</label> 
+          <div class="col-sm-9">
+              <select class="form-control" name="acreditado" id="selectRes">
                   <option value="1">ACREDITADO</option>
                   <option value="0">NO ACREDITADO</option>
               </select>
-          </div><br>
-          <label class="control-label">Observación</label> 
-          <div class="controls">
-              <textarea name="obsIns" id="obsIns"></textarea>
-          </div><br>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Observación</label> 
+          <div class="col-sm-9">
+              <textarea class="form-control"  name="obsIns" id="obsIns"></textarea>
+          </div>
           <input type="hidden" value="" id ="periodoIns" name="periodo">
           <input type="hidden" value="" id ="semestre" name="semestre">
           <input type="hidden" value="<?php print $alumno['numero_control'] ?>" name="numero_control">
@@ -361,7 +374,7 @@ function folio(folio)
     </form> 
       </div>
       <div class="modal-footer">
-       <a href="#" class="btn" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+       <a href="#" class="btn btn-default" data-dismiss="modal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cerrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
         <a href="#" class="btn btn-primary" onclick="$('#insActForm').submit()">Guardar cambios</a>
       </div>
     </div>
@@ -414,7 +427,7 @@ function folio(folio)
           <!--   <input type="text" name="ap" class="form-control" id="ap" value="<?php print $alumno['apellido_paterno_alumno'] ?>"> -->
                    <select name="carrera" class="form-control">
                     <?php foreach ($carreras as $car) { ?>
-                      <option <?php if($alumno['id_carrera'] == $car['id_carrera']) print "selected='selected'" ?> value="<?php print $car['id_carrera']  ?>"><?php print $car['nombre_carrera'] ?></option>
+                      <option <?php if($alumno['id_carrera'] == $car['id_carrera']) print "selected='selected'" ?> value="<?php print $car['id_carrera']  ?>"><?php print $car['abreviatura_carrera']." (".$car['plan_estudio'].")" ?></option>
                     <?php } ?>  
                     </select>
               </div>

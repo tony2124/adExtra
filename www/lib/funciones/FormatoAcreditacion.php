@@ -8,6 +8,7 @@ $admin = $this->Admin_Model->getAdminData($row[0]['id_administrador']);
 
 /***** obtener datos de revision ****/
 $periodo = $row[0]['periodo'];
+$club = $row[0]['nombre_club'];
 if(strcmp(substr($periodo, 0,3), "AGO") == 0) 
   $fecha = substr($periodo, 11,4)."-01-31"; 
 else  

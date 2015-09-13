@@ -61,24 +61,6 @@
 				});
 		});
 
-			/*$(function(){
-		 	  $("a[rel=popover]").popover();
-			  $("a[rel=tooltip]").tooltip();
-			  $( ".selectorFecha" ).datepicker({  
-    			defaultDate: "-15y", 
-                yearRange: "1900:-15",
-				dateFormat: 'yy-mm-dd',  
-				showAnim: 'explode',
-				duration: 'normal',
-				changeMonth: true,
-                changeYear: true });
-			   $( ".selectorFechaInicio" ).datepicker({ 
-				dateFormat: 'yy-mm-dd',  
-				showAnim: 'explode',
-				duration: 'normal',
-				changeMonth: true,
-                changeYear: true });
-			});*/
 		 </script>
 	</head>
 
@@ -108,7 +90,8 @@
         <li <?php if($menu == 2) print "class='active'" ?> class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnos <span class="caret"></span></a>
           <ul class="dropdown-menu">
-		      <li><a href="<?php print get('webURL'). _sh .'admin/listaclub/'  ?>">Listas de alumnos</a></li>
+		      <li><a href="<?php print get('webURL'). _sh .'admin/listaclub/'  ?>">Listas de alumnos por club</a></li>
+		      <li><a href="<?php print get('webURL'). _sh .'admin/listacarrera/'  ?>">Listas de alumnos por carrera</a></li>
 		      <li><a href="<?php print get('webURL'). _sh .'admin/formRegistroalumno/'  ?>">Registrar nuevo alumno</a></li>
 		      <li class="divider"></li>
 		      <li><a href="<?php print get('webURL'). _sh .'admin/carreras/' ?>">Carreras / Licenciaturas</a></li>
@@ -128,10 +111,10 @@
         	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Configuración <span class="caret"></span></a>
         	<ul class="dropdown-menu">
         		<li><a href="<?php print get('webURL'). _sh .'admin/configLiberacion/'  ?>">Fechas (inscr. / lib.)</a></li>
-        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Imágenes y logos <label class="label label-primary">Pro</label></a></li>
         		<li><a href="<?php print get('webURL'). _sh .'admin/revisiones'  ?>">Códigos y revisiones</a></li>
-        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Datos del instituto <label class="label label-primary">Pro</label></a></li>
-        		<li><a href="<?php print get('webURL'). _sh .'admin/'  ?>">Conexión a BD de alumnos <label class="label label-primary">Pro</label></a></li>
+        		<li><a href="#">Imágenes y logos <label class="label label-primary">Pro</label></a></li>
+        		<li><a href="#">Datos del instituto <label class="label label-primary">Pro</label></a></li>
+        		<li><a href="#">Conexión a BD de alumnos <label class="label label-primary">Pro</label></a></li>
         	</ul>
         </li>
 
@@ -139,8 +122,11 @@
         	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mantenimiento <span class="caret"></span></a>
         	<ul class="dropdown-menu">
 			    <li><a href="<?php print get('webURL'). _sh .'admin/respaldoBD/'  ?>">Respaldo de BD</a></li>
-			    <li><a href="<?php print get('webURL'). _sh .'admin/subirBD/'  ?>">Subir base de datos</a></li>
-			    <li><a href="<?php print get('webURL'). _sh .'admin/eliminarhistorial/'  ?>">Eliminar historial</a></li>
+			    <li><a href="<?php print get('webURL'). _sh .'admin/subirBD/'  ?>">Subir datos de alumnos</a></li>
+			    <li><a href="#">Subir fotos de alumnos <label class="label label-primary">Pro</label></a></li>
+			    <li><a href="#">Restaurar BD <label class="label label-primary">Pro</label></a></li>
+			    <li><a href="#">Eliminar historial <label class="label label-primary">Pro</label></a></li>
+			    <li><a href="#">Ver bitácora de operaciones <label class="label label-primary">Pro</label></a></li>
 			    <!--<li><a href="<?php print get('webURL'). _sh .'admin/excel/'  ?>">Archivo Excel</a></li>-->
 			</ul>
         </li>
@@ -172,17 +158,6 @@
               <li><a href="<?php print get('webURL') .  _sh .'admin/logout' ?>"><b class="icon-off"></b> Salir de la sesión</a></li>
            </ul>
 		</div>
-      <!--
-      <form class="navbar-form navbar-right" role="search">
-	        <div class="form-group">
-	          <input type="text" class="form-control" placeholder="Núm. control">
-	        </div>
-	        <button type="submit" class="btn btn-default">Buscar</button>
-	        <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-filter"></span> </a>
-	   </form>
-		-->
-
-		
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
