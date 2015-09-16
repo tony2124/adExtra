@@ -30,7 +30,7 @@ function hace_tiempo($init,$finish)
 function createThumbs( $pathToImages, $image, $pathToThumbs, $thumbWidth ) 
 {
     $info = pathinfo($pathToImages . $image);
-   
+   	mkdir($pathToThumbs, 0777);
     if ( strtolower($info['extension']) == 'jpg' ) 
     {
       $img = imagecreatefromjpeg( "{$pathToImages}{$image}" );

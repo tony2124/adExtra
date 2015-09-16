@@ -1,10 +1,10 @@
 <?php if($carrera){ ?>
-<legend><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;  <strong>Modificación de carrera</strong></legend>
+<legend><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;  <strong>Modificación de carrera</strong><a class="btn btn-primary btn-sm pull-right" onclick="goBack()" href="#"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a></legend>
 <?php }else{ ?>
-<legend><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;  <strong>Registro de nueva carrera</strong></legend>
+<legend><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;  <strong>Registro de nueva carrera</strong><a class="btn btn-primary btn-sm pull-right" onclick="goBack()" href="#"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a></legend>
 <?php } ?>
 <p></p>
-<a class="btn btn-default pull-right" href="<?php print get('webURL').'/admin/carreras/' ?>"><span class="glyphicon glyphicon-chevron-left"></span> Regresar</a>
+
 <form id="textoForm" action="<?php print isset($carrera) ? get('webURL')._sh.'admin/modcarrera/'.$carrera[0]['id_carrera'] : get('webURL')._sh.'admin/guardarcarrera' ?>" method="post">
 	<div class="col-sm-8 form-horizontal">
 		<?php if(!$carrera){ ?>

@@ -27,7 +27,7 @@ $(function () {
 <form id="textoForm" action="<?php print ($club != NULL) ? get('webURL')._sh.'admin/modclub/'.$club[0]['id_club'] : get('webURL')._sh.'admin/guardarclub' ?>" method="post" enctype="multipart/form-data">
 	<div class="col-sm-12 form-horizontal">
 		<div class="form-group">
-			<label class="label-control col-sm-2"for="foto">Tipo de club</label>
+			<label class="label-control col-sm-2">Tipo de club</label>
 			<div class="col-sm-3">
 				<select class="form-control" name="tipo">
 					<option value="3">Selecciona un tipo</option>
@@ -36,7 +36,7 @@ $(function () {
 				</select>
 			</div>
 		
-			<label class="label-control col-sm-2" for="titulo">Nombre del club</label>
+			<label class="label-control col-sm-2" >Nombre del club</label>
 			<div class="col-sm-5">
 				<input class="form-control" name="name" id="titulo" type="text" size="40" maxlength="40" value="<?php print ($club) ? $club[0]['nombre_club'] : NULL ?>" />
 			</div>
@@ -60,19 +60,10 @@ $(function () {
 
 			<?php } 	?>
 		<div class="form-group">
-			<label class="label-control col-sm-3"for="foto">Subir una foto</label>
+			<label class="label-control col-sm-3">Subir una foto</label>
 			<div class="col-sm-6">
 				<input name="foto" id="foto" type="file" /><br>
 			</div>
-			<!--<label class="label-control col-sm-1">Grupo</label>
-			<div class="col-sm-2">
-				<select class="form-control">
-					<option>A</option>
-					<option>B <span class="label labe-primary">Pro</span></option>
-					<option>C <span class="label labe-primary">Pro</span></option>
-					<option>D <span class="label labe-primary">Pro</span></option>
-				</select>
-			</div>-->
 		</div>
 		
 		
@@ -107,7 +98,8 @@ $(function () {
 		<th>ID CLUB</th>
 		<th>Tipo club</th>
 		<th>Nombre del club</th>
-<!--	<th>Foto</th>-->
+		<th>Foto</th>
+		<th>Reseña</th>
 		<th>Fecha creación</th>
 		<th>Fecha modif.</th>
 		<th>Estado</th>
@@ -119,11 +111,16 @@ $(function () {
 			<td><?php echo $not['id_club'] ?></td>
 			<td><?php if($not['tipo_club']==1)  print "DEPORTIVO"; else if($not['tipo_club']==2) print "CULTURAL"; else print "OTROS"; ?></td>
 			<td><a href="<?php print get("webURL")._sh.'admin/adminclubes/'.$not['id_club'] ?>"><?php echo $not['nombre_club'] ?></a></td>
-			<!--<td>
+			<td>
 				<?php if($not['foto_club']!=NULL) { ?>
-				<a href="#" rel="popover" data-content="<?php print "<img src='"._rs."/img/clubes/".$not['foto_club']."' width='250' >" ?>" data-original-title="Imagen">ver</a>
+					<span class="glyphicon glyphicon-ok"></span>
 				<?php } ?>
-			</td>-->
+			</td>
+			<td>
+				<?php if($not['texto_club']!=NULL) { ?>
+					<span class="glyphicon glyphicon-ok"></span>
+				<?php } ?>
+			</td>
 			
 			<td><?php echo convertirFecha($not['fecha_creacion']) ?></td>
 			<td><?php echo hace_tiempo($not['fecha_modificacion'],date("Y-m-d")) ?></td>

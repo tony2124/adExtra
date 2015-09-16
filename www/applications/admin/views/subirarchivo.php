@@ -30,15 +30,20 @@ function eliminar(name)
 <legend><span class="glyphicon glyphicon-tasks"></span>&nbsp;&nbsp;  <strong>Archivos en el servidor</strong></legend>
 <table class="table table-striped table-condensed">
 	<thead>
+		<th width="20">No.</th>
 		<th width="500">Nombre del archivo</th>
 		<th></th>
 	</thead>
 	<tbody>
 		<?php $i = 0; while($i < sizeof($files)) { ?>
 		<tr class="roll">
+			<td><?php print ($i+1) ?></td>
 			<td><a href="<?php print _rs . '/descarga/' . $files[$i] ?>" target="_blank"><?php echo $files[$i] ?></a></td>
-			<td width="30">
-				<a rel="tooltip" title="Eliminar" data-toggle="modal" class="btn btn-danger btn-xs" onclick="eliminar('<?php print $files[$i++] ?>')" href="#confirmModal">
+			<td width="60">
+				<a rel="tooltip" title="Descargar" class="btn btn-success btn-xs" href="<?php print _rs . '/descarga/' . $files[$i] ?>">
+					<span class="glyphicon glyphicon-download-alt"></span>
+				</a>
+				<a rel="tooltip" title="Eliminar" data-toggle="modal" class="btn btn-danger btn-xs" onclick="eliminar('<?php print $files[$i++] ?>')" data-target="#confirmModal" href="#">
 					<span class="glyphicon glyphicon-remove"></span>
 				</a>
 			</td>

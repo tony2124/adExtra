@@ -44,8 +44,9 @@ function eliminar(id)
 					    <img class="img-thumbnail" src="<?php print _rs ?>/img/noticias/<?php print $modnot['imagen_noticia'] ?>" width="330">				
 					</div>
 					<p>
-							<input type="checkbox" name="mostrarfoto" id="mostrarfoto" checked="checked" />&nbsp;Mantener foto actual.
-						</p>
+						<input type="checkbox" name="mostrarfoto" id="mostrarfoto" checked="checked" />&nbsp;Mantener foto actual.
+						<input type="hidden" name="fotoanterior" value="<?php print $modnot['imagen_noticia'] ?>">
+					</p>
 				</div>
 			</div>
 				

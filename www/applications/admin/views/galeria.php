@@ -297,7 +297,7 @@ if(isset($URL['tipo']))
 	</div>
 </div>
 
-<div class="modal hide fade" id="editarAlbum">
+<div class="modal fade" id="editarAlbum">
 	<div class="modal-dialog modal-md" role="document">
     	<div class="modal-content">
 		  <div class="modal-header">

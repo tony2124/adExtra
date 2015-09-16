@@ -69,7 +69,7 @@ function guardar(posicion)
       </a>
       <ul class="dropdown-menu">
         <li><a href="<?php print get("webURL")."/admin/formHorarios/1"  ?>">Usar horarios periodo ant.</a></li>
-        <li><a href="#">Descargar horario <label class="label label-primary">Pro</label></a></li>
+        <li><a href="#">Descargar PDF horario <label class="label label-primary">Pro</label></a></li>
       </ul>
     </div>
   </div>

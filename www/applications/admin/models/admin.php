@@ -26,6 +26,33 @@ public function getResultadoProm()
 return $this->Db->query("select * from ");
 }
 
+//*** AVISOS ****/
+public function clubesNoAsignados($periodo){
+	return $this->Db->query("SELECT clubes.id_club, nombre_club, horarios.id_club, periodo from clubes LEFT JOIN horarios on clubes.id_club = horarios.id_club AND horarios.periodo='$periodo' WHERE horarios.id_club is NULL and (clubes.tipo_club = 1 or clubes.tipo_club= 2) and clubes.eliminado_club = false");
+}
+
+public function clubesSinResena(){
+	return $this->Db->query("SELECT nombre_club from clubes where (texto_club = '' or foto_club = '' ) and eliminado_club = false and (tipo_club = 1 or tipo_club = 2) order by nombre_club");
+}
+
+public function fecha_inscripcion_abierta(){
+	return $this->Db->query("SELECT * from conf_fechas where '".date("Y-m-d")."' >= fecha_inicio_inscripcion AND '".date("Y-m-d")."' <= fecha_fin_inscripcion AND periodo = '".periodo_actual()."'");
+}
+
+public function fecha_liberacion_abierta(){
+	return $this->Db->query("SELECT * from conf_fechas where '".date("Y-m-d")."' >= fecha_inicio_liberacion AND '".date("Y-m-d")."' <= fecha_fin_liberacion AND periodo = '".periodo_actual()."'");
+}
+
+public function adminActuales(){
+	return $this->Db->query("SELECT count(id_administrador) as count from administradores where actual = 1");
+}
+
+public function visitas(){
+	return $this->Db->query("SELECT numero_visitas from configuracion");
+}
+
+/*****************************/
+
 
 public function getPromotorAsignado($id_club, $periodo){
 		return $this->Db->query("SELECT * from horarios, clubes, promotores where horarios.id_club = clubes.id_club AND 

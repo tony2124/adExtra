@@ -18,7 +18,7 @@
 				    <span class="caret"></span>
 				  </a>
 				  <ul class="dropdown-menu">
-				    <li><a href="<?php print get('webURL')._sh ?>" target="_blank">Lista de promotores</a></li>		  </ul>
+				    <li><a href="#">Lista de promotores <span class="label label-primary">Pro</span></a> </li>		  </ul>
 				</div>
 	    	</div>
 	  	</div>

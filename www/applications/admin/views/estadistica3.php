@@ -412,7 +412,7 @@
 			     		<th rowspan="2">ID</th>
 					    <th rowspan="2">Tipo</th>
 					    <th rowspan="2">Nombre del club</th>
-					    <th colspan="3">Alumnos inscritos</th>
+					    <th colspan="3">Alumnos liberados</th>
 			    	</tr>
 			    	<tr>
 			    		<th>M</th>
@@ -544,9 +544,10 @@
 		      google.setOnLoadCallback(drawChart5);
 		      google.setOnLoadCallback(drawChart6);
 		      google.setOnLoadCallback(drawChart7);
+		      
 		      function drawChart() {
 		        var data = google.visualization.arrayToDataTable([
-		        	['Task', 'Hours per Day'],
+		        	['Clubes', 'Alumnos'],
 		        	<?php 
 		        		$i =  0;
 		        		while( $i < sizeof($mostrar)) {
@@ -558,7 +559,7 @@
 		          
 		        ]);
 
-		        var options = {
+		       var options = {
 		          title: 'Alumnos inscritos en clubes',
 		          height: 500,
 		          width: 800,
@@ -566,13 +567,14 @@
 		          is3D: true
 		        };
 
+
 		        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
 		        chart.draw(data, options);
 		      }
 
 		      function drawChart2() {
 		        var data = google.visualization.arrayToDataTable([
-		        	['Task', 'Hours per Day'],
+		        	['Clubes', 'Alumnos'],
 		        	<?php 
 		        		$i =  0;
 		        		while( $i < sizeof($mostrar)) {
@@ -598,7 +600,7 @@
 
 		      function drawChart3() {
 		        var data = google.visualization.arrayToDataTable([
-		        	['Task', 'Hours per Day'],
+		        	['Clubes', 'Alumnos'],
 		        	<?php 
 		        		$i =  0;
 		        		while( $i < sizeof($mostrar)) {
@@ -623,7 +625,7 @@
 
 		      function drawChart4() {
 		        var data = google.visualization.arrayToDataTable([
-		        	['Task', 'Hours per Day'],
+		        	['Clubes', 'Alumnos'],
 		        	<?php 
 		        		$i =  0;
 		        		while( $i < sizeof($mostrar)) {
@@ -648,7 +650,7 @@
 
 		       function drawChart5() {
 		        var data = google.visualization.arrayToDataTable([
-		        	['Task', 'Hours per Day'],
+		        	['Clubes', 'Alumnos'],
 		        	<?php 
 		        		$i =  0;
 		        		while( $i < sizeof($dg)) {
@@ -673,7 +675,7 @@
 
 		       function drawChart6() {
 		        var data = google.visualization.arrayToDataTable([
-		        	['Task', 'Hours per Day'],
+		        	['Clubes', 'Alumnos'],
 		        	<?php 
 
 		        				print "['PARTICIPACIÓN EN CLUBES',".$totales[5]."],";
@@ -698,7 +700,7 @@
 
 		       function drawChart7() {
 		        var data = google.visualization.arrayToDataTable([
-		        	['Task', 'Hours per Day'],
+		        	['Clubes', 'Alumnos'],
 		        	<?php 
 
 		        				print "['ACREDITADOS',".$totales[5]."],";
@@ -743,8 +745,11 @@
         <h4 class="modal-title" id="myModalLabel">Descarga ZIP de Cédulas de Inscripción</h4>
       </div>
       <div class="modal-body">
+      	<label id="preparando1"></label>
+        <div class="clear: both"></div>
+        <p>&nbsp;</p>
         <div class="progress">
-		  <div id="progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 1%;">
+		  <div id="progress" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
 		    0%
 		  </div>
 		</div>
@@ -767,8 +772,12 @@
         <h4 class="modal-title" id="myModalLabel">Descarga ZIP de Cédulas de Resultados</h4>
       </div>
       <div class="modal-body">
+      	<label id="preparando"></label>
+        <div class="clear: both"></div>
+        <p>&nbsp;</p>
         <div class="progress">
-		  <div id="progressRes" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 1%;">
+
+		  <div id="progressRes" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
 		    0%
 		  </div>
 		</div>
@@ -830,10 +839,14 @@
 			  url: urlS,
 			  method: "POST",
 			  data: {nombre_club: cbs_nombre[i]},
+			  beforeSend: function(  ){
+			  	$("#preparando1").html("Preparando cédula de inscripción de " + cbs_nombre[i]);
+			  },
 			  success: function(data){
 			  	    $("#progress").css("width",( parseInt((cont  + 1 ) * 100 / (cbs.length-1))) + "%");
 			    	$("#progress").html(  parseInt( (cont  + 1 ) * 100 / (cbs.length-1) )+ "%");
 			    	
+
 			    	cont++;
 			    	if(cont == cbs.length-1)
 			    	{
@@ -853,6 +866,9 @@
 			  url: urlS,
 			  method: "POST",
 			  data: {nombre_club: cbs_nombre[i]},
+			  beforeSend: function(  ){
+			  	$("#preparando").html("Preparando cédula de resultados de " + cbs_nombre[i]);
+			  },
 			  success: function(data){
 			  	    $("#progressRes").css("width",( parseInt((cont  + 1 ) * 100 / (cbs.length-1))) + "%");
 			    	$("#progressRes").html(  parseInt( (cont  + 1 ) * 100 / (cbs.length-1) )+ "%");

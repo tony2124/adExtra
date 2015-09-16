@@ -107,7 +107,8 @@ $(document).ready(function()
 
   <thead>
     <tr style="background: #eeeeee">
-	  <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;N0.</th>
+	  <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;No.</th>
+	  <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;Folio</th>
       <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;N. control</th>
       <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;Nombre</th>
       <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;Club</th>
@@ -122,7 +123,8 @@ $(document).ready(function()
 $i=1;
 foreach ($alumnos as $alum) {	?>
   <tr>
-    <td><?php print $i++ ?></td>
+    <td align="center"><?php print $i++ ?></td>
+    <td align="center"><?php print $alum['folio'] ?></td>
     <td><?php print $alum['numero_control'] ?></td>
     <td><a href="<?php print get("webURL")._sh."admin/alumno/".$alum['numero_control'] ?>"><?php echo $alum['apellido_paterno_alumno']." ".$alum['apellido_materno_alumno']." ".$alum['nombre_alumno'] ?></a></td>
     <td><?php echo $alum['nombre_club'] ?></td>

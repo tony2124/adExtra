@@ -126,7 +126,7 @@
 			    <li><a href="#">Subir fotos de alumnos <label class="label label-primary">Pro</label></a></li>
 			    <li><a href="#">Restaurar BD <label class="label label-primary">Pro</label></a></li>
 			    <li><a href="#">Eliminar historial <label class="label label-primary">Pro</label></a></li>
-			    <li><a href="#">Ver bitácora de operaciones <label class="label label-primary">Pro</label></a></li>
+			    <li><a href="#">Bitácora de operaciones <label class="label label-primary">Pro</label></a></li>
 			    <!--<li><a href="<?php print get('webURL'). _sh .'admin/excel/'  ?>">Archivo Excel</a></li>-->
 			</ul>
         </li>

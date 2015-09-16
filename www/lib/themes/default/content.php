@@ -31,6 +31,34 @@
 
 
 		</form>
+		<hr>
+		<h4><b class="glyphicon glyphicon-globe"></b> <strong>Número de visitas: <?php print $visitas[0]["numero_visitas"] ?></strong></h4>
+		<hr>
+		<?php if($adminactuales){ ?>
+		<?php if($adminactuales[0]["count"] > 1){ ?>
+		<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> <strong>¡MÁS DE UN ADMINISTRADOR!</strong> <br>Tiene activo más de un administrador. Por favor, active sólo un administrador actual para no causar inestabilidad.</div>
+		
+		<?php } } if($fecha_liberacion_abierta){ ?>
+		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> <strong>¡PERIODO DE LIBERACIÓN ABIERTO!</strong> <br>Inicia: <kbd><?php print convertirFecha($fecha_liberacion_abierta[sizeof($fecha_liberacion_abierta) - 1]["fecha_inicio_liberacion"]) ?></kbd> <br>Finaliza: <kbd><?php print convertirFecha($fecha_liberacion_abierta[sizeof($fecha_liberacion_abierta) -1]["fecha_fin_liberacion"]) ?></kbd></div>
+		<?php } if($fecha_inscripcion_abierta){ ?>
+		<div class="alert alert-success"><span class="glyphicon glyphicon-info-sign"></span> <strong>¡INSCRIPCIONES ABIERTAS!</strong> <br>Inicia: <kbd><?php print convertirFecha($fecha_inscripcion_abierta[0]["fecha_inicio_inscripcion"]) ?></kbd> <br>Finaliza: <kbd><?php print convertirFecha($fecha_inscripcion_abierta[0]["fecha_fin_inscripcion"]) ?></kbd></div>
+		<?php } if($clubesnoasignados){ ?>
+		<div class="alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span> No se ha asignado promotor a los siguientes clubes: 
+			<?php
+				foreach ($clubesnoasignados as $key) {
+					print "<kbd>".$key['nombre_club']."</kbd>,";
+				}
+			?>	vaya al apartado de <a href="<?php print get("webURL")."/admin/formHorarios" ?>">horarios</a> para asignarlos.
+		</div>
+		<?php } if($clubessinresena) { ?>
+		<div class="alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span> Los siguientes clubes NO tienen foto o reseña:  
+			<?php
+				foreach ($clubessinresena as $key) {
+					print "<kbd>".$key['nombre_club']."</kbd>, ";
+				}
+			?>, por favor vaya al apartado de <a href="<?php print get("webURL")."/admin/adminclubes" ?>">administración de clubes</a> para editarlos.
+		</div>
+		<?php } ?>
 		<p><a target="_blank" href="<?php print _rs ?>/973164852/MANUAL_ADMINISTRADOR.pdf">¡Descargar manual de administrador!</a></p>
 		<center>
 			<a href="http://www.itsa.edu.mx/"  title="Ir a la página del ITSA" rel="tooltip">

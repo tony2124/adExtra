@@ -29,6 +29,8 @@ class Admin_Controller extends ZP_Controller {
 		$club = $_POST['club'];
 		$album = $_POST['album'];
 
+		
+		mkdir($_SERVER['DOCUMENT_ROOT']."/extra/img/galeria/".$club."/",0700);
 		$targetFolder = '/extra/img/galeria/'.$club.'/'.$album.'/'; // Relative to the root 
 		mysql_connect("localhost","root","simpus2124");
 
@@ -126,6 +128,10 @@ class Admin_Controller extends ZP_Controller {
 		$carreras = $this->Admin_Model->getCarreras(NULL, false);
 		$clubesdescarga = $this->Admin_Model->getClubes();
 
+		
+		//obtenerClubesNoAsignados();
+
+
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
 		$i = 0;
@@ -145,8 +151,12 @@ class Admin_Controller extends ZP_Controller {
 		$vars["view"]	 = $this->view("estadistica3", TRUE);
 		$vars["periodo"] = $periodo;
 		$vars["clubes"] = $clubes;
+
+		include(_pathwww.'/lib/funciones/avisos.php');
+
 		$vars["clubesdescarga"] = $clubesdescarga;
 		$vars["alumnos"] = $alumnos;
+
 		
 		$vars["carreras"] = $carreras;
 		$vars["todos_alumnos"] = $alumnos;
@@ -187,23 +197,9 @@ class Admin_Controller extends ZP_Controller {
 		$vars['promotorasignado'] = $this->Admin_Model->getPromotorAsignado($club, $periodo);
 		$vars['view'] = $this->view("listaclub", true);
 		$vars["menu"] = 2;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content", $vars);
  	}
-
- 	/***** REGISTRO DE NUEVO ALUMNO ********/
- 	public function formRegistroAlumno()
-	{
-		if (!SESSION('user_admin'))
-			return redirect(get('webURL') .  _sh .'admin/login');
-
-		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL, false);
-		$vars['view'] = $this->view('registroalumno',true);
-		$vars['menu'] = 2;
-		$this->render("content",$vars);
-	}
-
-
-
 
  	public function listacarrera($carrera = NULL, $periodo = NULL)
 	{
@@ -232,10 +228,50 @@ class Admin_Controller extends ZP_Controller {
 		$vars['par2'] = $periodo;
 		$vars['alumnos'] = $alumnos;
 		$vars['carreras'] = $carreras;
-		//$vars['periodos'] = periodos('2083');
 		$vars["menu"] = 2;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view("listacarrera", true);
 		$this->render("content", $vars);
+ 	}
+
+ 	/***** REGISTRO DE NUEVO ALUMNO ********/
+ 	public function formRegistroAlumno()
+	{
+		if (!SESSION('user_admin'))
+			return redirect(get('webURL') .  _sh .'admin/login');
+
+		$vars['carreras'] = $this->Admin_Model->getCarreras(NULL, false);
+		$vars['view'] = $this->view('registroalumno',true);
+		$vars['menu'] = 2;
+		include(_pathwww.'/lib/funciones/avisos.php');
+		$this->render("content",$vars);
+	}
+
+ 	
+//REGISTRO DE CARRERAS
+ 	public function carreras($tipo = NULL, $id = NULL)
+ 	{
+ 		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		$vars['menu'] = 2;
+
+		if(strcmp($tipo,"nueva-edit") == 0){
+			if($id != NULL) 
+				$vars['carrera'] = $this->Admin_Model->getCarreras($id,true);
+			else 
+				$vars['carrera'] = NULL;
+			$vars['view'] = $this->view('regcarrera',true);
+		}
+		else
+		{
+			$vars['carreras'] = $this->Admin_Model->getCarreras(NULL, true);
+	 		$vars['view'] = $this->view('carreras',true);
+	 		
+	 		
+ 		}
+ 		include(_pathwww.'/lib/funciones/avisos.php');
+ 		$this->render('content', $vars);
  	}
 
 
@@ -250,6 +286,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['promotores']  = $this->Admin_Model->obtenerListaPromotores($buscar);
 		$vars['buscar'] = $buscar;
 		$vars['menu'] = 3;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view('promotores',true);
 		$this->render('content', $vars);
 	}
@@ -267,6 +304,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['historial'] = $result;
 		//____($vars['promotor']);
 		$vars['menu'] = 3;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view('verpromotor',true);
 		$this->render('content', $vars);
 	}
@@ -297,7 +335,6 @@ class Admin_Controller extends ZP_Controller {
 			return redirect(get('webURL') . _sh . 'admin/login');
 
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
-		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
 		$i = 0;
 		if(strcmp($periodossss[0]['periodo'], periodo_actual()) != 0)
@@ -310,8 +347,6 @@ class Admin_Controller extends ZP_Controller {
 			$periodos[$i] = $per['periodo']; 
 			$i++;
 		}
-
-
 
 		$periodossss = $this->Admin_Model->getPeriodos();
 
@@ -350,29 +385,10 @@ class Admin_Controller extends ZP_Controller {
 		$vars['clubes'] = $this->Admin_Model->getClubes();
 
 		$vars['menu'] = 3;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view('horarios',true);
-		$this->render('noRightContent', $vars);
+		$this->render('content', $vars);
 	}
-
-/*
-	function buscar_promotor()
-	{
-		if( !SESSION('user_admin') )
-			return redirect(get('webURL') . _sh . 'admin/login');
-
-		$palabra = POST("nombre");
-		redirect(get("webURL")._sh."admin/promotores/".$palabra);
-	}
-/*
-	public function elimPromotor()
-	{
-		if( !SESSION('user_admin') )
-			return redirect(get('webURL') . _sh . 'admin/login');
-
-		$usuario_promotor = POST('usuario_promotor');
-		$this->Admin_Model->elimPromotor($usuario_promotor);
-		redirect(get('webURL'). _sh . 'admin/promotores');
-	}*/
 
 	public function formRegistroPromotor()
 	{
@@ -381,6 +397,7 @@ class Admin_Controller extends ZP_Controller {
 
 		$vars['clubes'] = $this->Admin_Model->getClubesProm();
 		$vars['menu'] = 3;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view('registroPromotor', true);
 		$this->render('content', $vars);
 	}
@@ -394,6 +411,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['promotor'] = $data[0];
 		$vars['clubes'] = $this->Admin_Model->getClubes();
 		$vars['menu'] = 3;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view('editPromotor', true);
 		$this->render('content', $vars);
 	}
@@ -583,7 +601,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars["view"] = $this->view("busquedaAlumnos",true);
 		/*****************************************************/
 		$vars['menu'] = 0;
-
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content",$vars);
 	}
 
@@ -604,7 +622,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars["alumno"] = $datos[0];
 		$vars["inscripciones"] = $inscripciones;
 		$vars['menu'] = 0;
-
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars["view"] = $this->view("alumno",true);
 
 		$this->render("content",$vars);
@@ -625,7 +643,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['formatos'] = $formatos;
 		$vars['revisiones'] = $revisiones;
 		$vars['menu'] = 4;
-
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars["view"] = $this->view("revisiones",true);
 
 		$this->render("content",$vars);
@@ -643,7 +661,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['fecha'] = POST("fecha");
 
 		$this->Admin_Model->guardarRevision($vars);
-		//____($vars);
+		
 		redirect(get('webURL')._sh.'admin/revisiones/success');
 	}
 
@@ -659,7 +677,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['fecha'] = POST("fecha");
 
 		$this->Admin_Model->actualizarRevision($vars, $id);
-		//____($vars);
+		
 		redirect(get('webURL')._sh.'admin/revisiones');
 	}
 
@@ -723,7 +741,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['fecha_modificacion'] = date('Y-m-d');
 		$vars['observaciones'] = str_replace( "'", "\"", $_POST['obsIns']);
 		$vars['acreditado'] = POST('acreditado');
-		print $this->Admin_Model->inscribirActividad($vars);
+		$this->Admin_Model->inscribirActividad($vars);
 		redirect(get('webURL').'/admin/alumno/'.POST('numero_control'));
 	}
 	
@@ -799,6 +817,7 @@ class Admin_Controller extends ZP_Controller {
  		$vars['mensaje'] = $mensaje[0]; 
  		$vars['view'] = $this->view('avisos',true);
  		$vars['menu'] = 6;
+ 		include(_pathwww.'/lib/funciones/avisos.php');
  		$this->render('content', $vars);
  	}
 
@@ -823,6 +842,7 @@ class Admin_Controller extends ZP_Controller {
 
 		$vars['view'] = $this->view('subiralumnos',true);
 		$vars['menu'] = 0;
+		include(_pathwww.'/lib/funciones/avisos.php');
  		$this->render('content', $vars);
 
 	}
@@ -868,6 +888,7 @@ class Admin_Controller extends ZP_Controller {
    		$vars['files'] = $files;
 		$vars['view'] = $this->view('subirarchivo',true);
 		$vars['menu'] = 6;
+		include(_pathwww.'/lib/funciones/avisos.php');
  		$this->render('content', $vars);
 	}
 
@@ -926,6 +947,7 @@ class Admin_Controller extends ZP_Controller {
 
    		$vars['files'] = $files;
    		$vars['menu'] = 0;
+   		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view("respaldobd",true);
 		$this->render("content", $vars);
 	}
@@ -950,7 +972,7 @@ class Admin_Controller extends ZP_Controller {
 		$usuario = "root";
 
 
-		$passwd = "";
+		$passwd = "simpus2124";
 		$host = "localhost";
 		$bd = "itsaextr_extra";
 
@@ -981,7 +1003,7 @@ class Admin_Controller extends ZP_Controller {
 			$vars['modnot'] = $n[0];
 		} 
 		$vars['menu'] = 6;
-
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content", $vars);
 	}
 
@@ -996,7 +1018,7 @@ class Admin_Controller extends ZP_Controller {
 		
 		$vars['view'] = $this->view("vernoticia",true);
 		$vars['menu'] = 6;
-
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content", $vars);
 	}
 
@@ -1024,7 +1046,6 @@ class Admin_Controller extends ZP_Controller {
 		$nombre = str_replace( "'", "\"", $nombre);
 
 		$name = "";
-
 		if (FILES("foto", "tmp_name")) 
 		{
 		    $path = _spath.'/IMAGENES/fotosNoticias/';  
@@ -1095,64 +1116,65 @@ class Admin_Controller extends ZP_Controller {
 
 		$nombre = $_POST['name'];
 		$cadena = $_POST['texto']; //porque necesito el código en formato HTML NO FORMATEADO
-		//____($nombre." ".$texto);
+		
 		$cadena = str_replace( "'", "\"", $cadena);
 		$nombre = str_replace( "'", "\"", $nombre);
 
-		$name = POST('mostrarfoto');
+		$name = $fotoanterior = POST('fotoanterior');
+		if(POST("mostrarfoto") == NULL)
+			if (FILES("foto", "tmp_name")) 
+			{
+				$path = _spath.'/img/noticias/'; 
 
-		if (FILES("foto", "tmp_name")) 
-		{
-			$path = _spath.'/img/noticias/'; 
+			    $tmp_name = $_FILES["foto"]["tmp_name"];
+				$name = $_FILES["foto"]["name"];
+		
+				$ext = explode(".",$name);		
+				if($ext[1]=='JPG' || $ext[1]=='jpg')
+				{		 		
+					$id = date("YmdHis").rand(0,100).rand(0,100);
+					$name = $id.".".$ext[1];
 
-		    $tmp_name = $_FILES["foto"]["tmp_name"];
-			$name = $_FILES["foto"]["name"];
-	
-			$ext = explode(".",$name);		
-			if($ext[1]=='JPG' || $ext[1]=='jpg')
-			{		 		
-				$id = date("YmdHis").rand(0,100).rand(0,100);
-				$name = $id.".".$ext[1];
+					move_uploaded_file($tmp_name, $path.$name); # Guardar el archivo en una ubicaci�n, debe tener los permisos necesarios
+					chmod($path.$name,0777);
 
-				move_uploaded_file($tmp_name, $path.$name); # Guardar el archivo en una ubicaci�n, debe tener los permisos necesarios
-				chmod($path.$name,0777);
+					$rutaImagenOriginal = $path.$name;
+					$img_original = imagecreatefromjpeg($rutaImagenOriginal);
+					$max_ancho = 800;
+					$max_alto = 800;
+					list($ancho,$alto) = getimagesize($rutaImagenOriginal);
+					$x_ratio = $max_ancho /$ancho;
+					$y_ratio = $max_alto / $alto;
+					if(($ancho <= $max_ancho) && ($alto <= $max_alto))
+					{
+						$ancho_final = $ancho;
+						$alto_final = $alto;
+					}
+					elseif(($x_ratio * $alto) <$max_alto)
+					{
+						$alto_final = ceil($x_ratio * $alto);
+						$ancho_final = $max_ancho;
+					}
+					else 
+					{
+						$ancho_final = ceil($y_ratio*$ancho);
+						$alto_final = $max_alto;
+					}
 
-				$rutaImagenOriginal = $path.$name;
-				$img_original = imagecreatefromjpeg($rutaImagenOriginal);
-				$max_ancho = 800;
-				$max_alto = 800;
-				list($ancho,$alto) = getimagesize($rutaImagenOriginal);
-				$x_ratio = $max_ancho /$ancho;
-				$y_ratio = $max_alto / $alto;
-				if(($ancho <= $max_ancho) && ($alto <= $max_alto))
-				{
-					$ancho_final = $ancho;
-					$alto_final = $alto;
-				}
-				elseif(($x_ratio * $alto) <$max_alto)
-				{
-					$alto_final = ceil($x_ratio * $alto);
-					$ancho_final = $max_ancho;
-				}
-				else 
-				{
-					$ancho_final = ceil($y_ratio*$ancho);
-					$alto_final = $max_alto;
-				}
-
-				$tmp = imagecreatetruecolor($ancho_final,$alto_final);
-				imagecopyresampled($tmp, $img_original, 0, 0, 0, 0, $ancho_final, $alto_final, $ancho, $alto);
-				imagedestroy($img_original);
-				$calidad = 95;
-				imagejpeg($tmp,$path."tm".$name,$calidad);
+					$tmp = imagecreatetruecolor($ancho_final,$alto_final);
+					imagecopyresampled($tmp, $img_original, 0, 0, 0, 0, $ancho_final, $alto_final, $ancho, $alto);
+					imagedestroy($img_original);
+					$calidad = 95;
+					imagejpeg($tmp,$path."tm".$name,$calidad);
+						
 					
-				
-				chmod($path."tm".$name,0777);
-				unlink($path.$name);
-				$name = "tm".$name;
-			}else $name=""; 
+					chmod($path."tm".$name,0777);
+					unlink($path.$name);
+					unlink($path.$fotoanterior);
+					$name = "tm".$name;
+				}else $name=""; 
 
-		} 
+			} 
 
 		$vars["id_noticias"] = $id_not;
 		$vars["nombre_noticia"] = $nombre;
@@ -1162,34 +1184,12 @@ class Admin_Controller extends ZP_Controller {
 		$vars["hora"] = date("H:i:s");
 		$vars["id_administrador"] = SESSION('id_admin');
 
-		print $this->Admin_Model->updateNew($vars);
+		$this->Admin_Model->updateNew($vars);
 
 		redirect(get('webURL')._sh.'admin/noticias');
 	}
 
-	public function carreras($tipo = NULL, $id = NULL)
- 	{
- 		if( !SESSION('user_admin') )
-			return redirect(get('webURL') . _sh . 'admin/login');
-
-		$vars['menu'] = 2;
-
-		if(strcmp($tipo,"nueva-edit") == 0){
-			if($id != NULL) 
-				$vars['carrera'] = $this->Admin_Model->getCarreras($id,true);
-			else 
-				$vars['carrera'] = NULL;
-			$vars['view'] = $this->view('regcarrera',true);
-		}
-		else
-		{
-			$vars['carreras'] = $this->Admin_Model->getCarreras(NULL, true);
-	 		$vars['view'] = $this->view('carreras',true);
-	 		
-	 		
- 		}
- 		$this->render('content', $vars);
- 	}
+	
 
  	public function reglamento()
  	{
@@ -1199,6 +1199,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['reglamento'] = $reg[0]; 
  		$vars['view'] = $this->view('reglamento',true);
  		$vars['menu'] = 6;
+ 		include(_pathwww.'/lib/funciones/avisos.php');
  		$this->render('content', $vars);
  	}
 
@@ -1226,6 +1227,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['clubes'] = $this->Admin_Model->getClubes("elim");
  		$vars['view'] = $this->view('adminclubes',true);
  		$vars['menu'] = 3;
+ 		include(_pathwww.'/lib/funciones/avisos.php');
  		$this->render('content', $vars);
  	}
 
@@ -1298,8 +1300,6 @@ class Admin_Controller extends ZP_Controller {
 		$vars["fecha_creacion"] = date("Y-m-d");
 		$vars["tipo_club"] = $tipo;
 
-	
-
 		if(strcmp($vars["nombre_club"], "") != 0)
 			$this->Admin_Model->guardarClub($vars);
 
@@ -1327,8 +1327,6 @@ class Admin_Controller extends ZP_Controller {
 		$vars["semestres_carrera"] = $sem;
 		$vars["plan"] = $plan;
 		
-		
-
 		if(strcmp($vars["nombre_carrera"], "") != 0 || strcmp($vars["abreviatura_carrera"], "") != 0)
 			$this->Admin_Model->guardarcarrera($vars);
 
@@ -1355,7 +1353,6 @@ class Admin_Controller extends ZP_Controller {
 		$vars["plan"] = $plan;
 		$vars["id_carrera"] = $id;
 		
-
 		if(strcmp($vars["nombre_carrera"], "") != 0 || strcmp($vars["abreviatura_carrera"], "") != 0)
 			$this->Admin_Model->modcarrera($vars);
 
@@ -1440,9 +1437,6 @@ class Admin_Controller extends ZP_Controller {
 		redirect(get('webURL')._sh.'admin/adminclubes');
 	}
 
-	
-
-
 	public function habilitarClub($id, $estado)
 	{
 		if( !SESSION('user_admin') )
@@ -1502,6 +1496,7 @@ class Admin_Controller extends ZP_Controller {
 
  		$vars['view'] = $this->view('galeria',true);
  		$vars['menu'] = 6;
+ 		include(_pathwww.'/lib/funciones/avisos.php');
  		$this->render('content', $vars);
  	}
 	
@@ -1533,7 +1528,6 @@ class Admin_Controller extends ZP_Controller {
 
 	function elimAlbum($tipo, $club, $album)
 	{
-
 		/* ELIMINO TODOS LOS ARCHIVOS DENTRO DEL ÁLBUM */
 		$filename = _spath."/img/galeria/".$club."/".$album."/";
 		$handle = opendir($filename."thumbs/");
@@ -1589,8 +1583,6 @@ class Admin_Controller extends ZP_Controller {
 		$this->Admin_Model->elimFoto($id);
 		redirect($url);
 	}
-
-
 	
  	public function configLiberacion($periodo = NULL, $succ =null)
  	{
@@ -1614,6 +1606,8 @@ class Admin_Controller extends ZP_Controller {
 
  		$vars['periodo'] = $periodo;
 		$vars['periodos'] = periodos_combo('1142');
+		
+		include(_pathwww.'/lib/funciones/avisos.php');
 
  		$vars['view'] = $this->view('configLiberacion', true);
  		
@@ -1715,6 +1709,7 @@ class Admin_Controller extends ZP_Controller {
  		$vars = $this->getDatosAdmin(SESSION('id_admin'),$vars);
 		$vars["view"] = $this->view("adminconfig",true);
 		$vars['menu'] = 0;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content",$vars);
  	}
 
@@ -1784,6 +1779,7 @@ class Admin_Controller extends ZP_Controller {
 	 		if(!$vars['regAdminError'])
 	 			$vars['success'] = $this->Admin_Model->setRow("administradores",$array);
 	 	}
+	 	include(_pathwww.'/lib/funciones/avisos.php');
  		$vars['view'] = $this->view("registroAdmin",true);
  		$this->render("content",$vars);
  	}
@@ -1819,6 +1815,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars["view"] = $this->view("adminconfig",true);
 		//$vars["view"]['registroAdmin'] = $this->view("registroAdmin",true);
 		$vars['menu'] = 0;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content",$vars);
 	}
 
@@ -1833,6 +1830,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars["view"] = $this->view("editadmin",true);
 		//$vars["view"]['registroAdmin'] = $this->view("registroAdmin",true);
 		$vars['menu'] = 0;
+		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content",$vars);
 	}
 
