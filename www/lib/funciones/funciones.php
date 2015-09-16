@@ -1,5 +1,11 @@
 <?php
 
+function redondear_dos_decimal($valor) { 
+   $float_redondeado=round($valor * 1000) / 1000; 
+   return $float_redondeado; 
+}
+
+
 function hace_tiempo($init,$finish)
 {
     //formateamos las fechas a segundos tipo 1374998435
@@ -95,20 +101,7 @@ function fechaactual()
 {
 	return date("Y-m-d");	
 }
-/*
-function edad($edad){
-		list($anio,$mes,$dia) = explode("-",$edad);
-		$anio_dif = date("Y") - $anio;
-		$mes_dif = date("m") - $mes;
-		$dia_dif = date("d") - $dia;
-		if ($mes_dif < 0)
-			$anio_dif--;
-		if($mes_dif == 0 && $dia_dif < 0)
-			$anio_dif--;
-			
-		return $anio_dif;
-	}
-*/
+
 function edad( $fecha ) {
     list($Y,$m,$d) = explode("-",$fecha);
     return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );

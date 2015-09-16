@@ -50,14 +50,7 @@ if(isset($URL['tipo']))
 		    });
 		<?php } ?>
 
-		$("a[rel=galeria]").fancybox({
-			'transitionIn'		: 'elastic',
-			'transitionOut'		: 'elastic',
-			'titlePosition' 	: 'over',
-			'titleFormat'		: function(title, currentArray, currentIndex, currentOpts) {
-					return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
-						}
-		});
+		$("a[rel=galeria]").fancybox();
 
 	});
 </script>
@@ -186,30 +179,32 @@ if(isset($URL['tipo']))
 			<?php if($fotos == NULL) print '<div class="alert alert-danger">No hay fotos en este álbum</div>'; else foreach ($fotos as $foto) { ?>					
 					<li class="horizontalListItem">
 					    <div class="borderContainer">
-					       <!--<div class="btn-group">
-					       	<a href="#" class="btn dropdown-toggle" data-toggle="dropdown" style="z-index: 1; position: absolute">
-					       		<span class="caret"></span>
-					       	</a>
-				       		<ul class="dropdown-menu">
-				              <li>
-				              	<a href="#">
-				              		<span class="glyphicon glyphicon-pencil"></span> Editar descripción
-				              	</a>
-				              </li>
-				              <li class="divider"></li>
-						      <li>
-				              	<a href="#">
-				              		<span class="glyphicon glyphicon-refresh"></span> Cambiar a otro álbum
-				              	</a>
-				              </li>
-				                <li class="divider"></li>
-				              <li>
-				              	<a data-toggle="modal" href="#confirmModal" onclick="eliminarFoto('<?php print $foto['id_imagen']."','".$foto['nombre_imagen'] ?>')">
-				              		<span class="glyphicon glyphicon-remove"></span> Eliminar foto
-				              	</a>
-				              </li>
-				            </ul>
-					       </div>-->
+					    	<div class="btn-group" role="group" aria-label="..." style="z-index: 1; position: absolute; right: 5px">
+							  <div class="btn-group" role="group" >
+							    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							      <span class="glyphicon glyphicon-chevron-down"></span>
+							    </button>
+							    <ul class="dropdown-menu">
+					              <li>
+					              	<a href="#">
+					              		<span class="glyphicon glyphicon-pencil"></span> Editar descripción <span class="label label-primary">Pro</span>
+					              	</a>
+					              </li>
+					              <li class="divider"></li>
+							      <li>
+					              	<a href="#">
+					              		<span class="glyphicon glyphicon-refresh"></span> Cambiar a otro álbum <span class="label label-primary">Pro</span>
+					              	</a>
+					              </li>
+					                <li class="divider"></li>
+					              <li>
+					              	<a data-toggle="modal" href="#confirmModal" onclick="eliminarFoto('<?php print $foto['id_imagen']."','".$foto['nombre_imagen'] ?>')">
+					              		<span class="glyphicon glyphicon-remove"></span> Eliminar foto
+					              	</a>
+					              </li>
+					            </ul>
+							  </div>
+							</div>
 					       <a rel="galeria" title="<?php print 'Descripción: '.$foto['pie'] ?>" href="<?php print _rs."/img/galeria/".$URL['club']. _sh . $URL['album']. _sh .$foto['nombre_imagen'] ?>">
 						       <div class="imageContainer" style="background-image: url('<?php echo _rs."/img/galeria/".$URL['club']. _sh . $URL['album'] . "/thumbs/".$foto['nombre_imagen'] ?>');"></div>
 						   </a>

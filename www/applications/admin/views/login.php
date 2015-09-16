@@ -3,6 +3,7 @@
 
 body{
 	background: url(<?php print ruta_imagen . '/backgrounds/back4.jpg' ?>);
+  background-size: cover;
 }
 
 </style>
@@ -11,7 +12,7 @@ body{
 	
 <form class="form-horizontal center-block" style="max-width:300px" method="post" action="<?php print get('webURL') . _sh . 'admin/iniciarsesion' ?>">
 <center>
-	<img src="<?php print ruta_imagen . '/ITSA.png' ?>" width="150">
+	<img src="<?php print ruta_imagen . '/ITSA.png' ?>" width="120">
 	<p>&nbsp;</p>
 	<p style="font-family: 'Lobster', cursive; font-size: 2em; color: #fff">Departamento de actividades culturales, deportivas y recreativas</p>
 	<hr>

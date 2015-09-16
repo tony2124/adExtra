@@ -25,42 +25,45 @@ class Admin_Controller extends ZP_Controller {
 
 	public function subirfoto(){
 		// Define a destination
-		$tipo = $_POST['tipo'];
-		$club = $_POST['club'];
-		$album = $_POST['album'];
+		$tipo = POST('tipo');
+		$club = POST('club');
+		$album = POST('album');
 
-		
-		mkdir($_SERVER['DOCUMENT_ROOT']."/extra/img/galeria/".$club."/",0700);
-		$targetFolder = '/extra/img/galeria/'.$club.'/'.$album.'/'; // Relative to the root 
-		mysql_connect("localhost","root","simpus2124");
+		$targetFolder = $_SERVER['DOCUMENT_ROOT'].'/extra/img/galeria/'.$club.'/'; 
+		mkdir($targetFolder,0700);
 
-		mysql_select_db("itsaextr_extra");
+		$targetPath = $targetFolder.$album; 
 
 		if (!empty($_FILES)) {
 			$tempFile = $_FILES['Filedata']['tmp_name'];
 
 			$name = $_FILES['Filedata']['name'];
 			$ext = explode(".",$name);				 		
-			$id = uniqid(); //date("YmdHis").rand(0,100).rand(0,100);
+			$id = uniqid(); 
 			$name = $id.".".$ext[1];
 
-			$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
-			mkdir($targetPath,0700);
+			mkdir($targetFolder,0700);
 			$targetFile = rtrim($targetPath,'/') . '/' . $name;
 			
-				// Validate the file type
-			$fileTypes = array('jpg','jpeg','JPG','JPEG', 'PNG','png'); // File extensions
+			// Validate the file type
+			$fileTypes = array('jpg','jpeg','JPG','JPEG'); // File extensions
 			$fileParts = pathinfo($_FILES['Filedata']['name']);
 			  
 			if (in_array($fileParts['extension'],$fileTypes)) {
 			    move_uploaded_file($tempFile,$targetFile);
-			    createThumbs($targetPath, $name, $targetPath,800);
-			    createThumbs($targetPath, $name, $targetPath."/thumbs/",200);
-			    $query = "INSERT into galeria values('$id','$name','$album','".date("Y-m-d")."','1','')";
-			    mysql_query($query) or die(mysql_error());
-			    echo '1';
+			    
+			    createThumbs($targetPath."/", $name, $targetPath."/thumbs/",200);
+			    $administradoractual = $this->Admin_Model->getActualAdmin();
+
+			    $vars["id"] = $id;
+			    $vars["name"] = $name;
+			    $vars["album"] = $album;
+			    $vars["admin"] = $administradoractual[0]["id_administrador"];
+
+			    $this->Admin_Model->insertarFoto($vars);
+			    
 			  } else {
-			    echo 'Invalid file type.';
+			    
 			  }
 		}
 	}
@@ -739,7 +742,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars['semestre'] = POST('semestre');
 		$vars['fecha_inscripcion'] = date('Y-m-d');
 		$vars['fecha_modificacion'] = date('Y-m-d');
-		$vars['observaciones'] = str_replace( "'", "\"", $_POST['obsIns']);
+		$vars['observaciones'] = str_replace( "'", "", POST('obsIns') );
 		$vars['acreditado'] = POST('acreditado');
 		$this->Admin_Model->inscribirActividad($vars);
 		redirect(get('webURL').'/admin/alumno/'.POST('numero_control'));
@@ -779,7 +782,7 @@ class Admin_Controller extends ZP_Controller {
 		$resultado = POST('acreditado');
 		$folio = POST('folio');
 		$numero_control = POST('numero_control');
-		$obs = str_replace( "'", "\"", $_POST['obs']);
+		$obs = str_replace( "'", " ", POST('obs') );
 		$fecha_lib = date("Y-m-d");
 		print $this->Admin_Model->updateRes($resultado, $folio, $obs, $fecha_lib);
 		redirect(get('webURL').'/admin/alumno/'.$numero_control);
@@ -947,6 +950,9 @@ class Admin_Controller extends ZP_Controller {
 
    		$vars['files'] = $files;
    		$vars['menu'] = 0;
+
+   		//$this->Admin_Model->hacerespaldo();
+
    		include(_pathwww.'/lib/funciones/avisos.php');
 		$vars['view'] = $this->view("respaldobd",true);
 		$this->render("content", $vars);
@@ -957,33 +963,49 @@ class Admin_Controller extends ZP_Controller {
 		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 		unlink( _spath . '/respaldos/' . $archivo);
-		redirect(  get('webURL') . _sh . 'admin/respaldobd'  );
+		redirect(  get('webURL') . _sh . 'admin/respaldoBD'  );
 	}
 
-	public function respaldando()
+
+	public function limpiarrespaldo()
 	{
-		
-		/*$resultado = null;*/
-		$name = date("y-m-d_H-i-s");
-		
-		//$this->Admin_Model->hacerespaldo( _spath.'/respaldos/'.$name );
-		
 
-		$usuario = "root";
-
-
-		$passwd = "simpus2124";
-		$host = "localhost";
-		$bd = "itsaextr_extra";
-
-		$executa = "mysqldump -h ". $host ." -u ".$usuario." -p ".$passwd." ".$bd." > "._spath.'/respaldos/'.$name.".sql";
-		$resultado = system($executa); 
-		if($resultado) 
-		print "Error al ejecutar comando:   "  . $executa;
-		else redirect( get('webURL') . _sh . 'admin/respaldoBD' );
-		//redirect( get('webURL') . _sh . 'admin/respaldoBD' );
+		$files = glob(_spath.'/temp/*'); 
+		foreach($files as $file){ 
+		  if(is_file($file))
+		    unlink($file); 
+		}
 	}
 
+	public function respaldando($fec, $table)
+	{
+
+		$name = $fec."_".$table.".txt";
+		$this->Admin_Model->hacerespaldo( _spath.'/temp/'.$name , $table);
+
+	}
+
+	public function descargarBD( $filename )
+	{
+		$ruta 		= _spath."/respaldos/";
+		$ruta_temp 	= _spath.'/temp/';
+
+		$zip = new ZipArchive();
+		
+		$filename = $filename.".zip"; 
+		$zip->open($ruta.$filename, ZipArchive::CREATE);
+
+			$directorio = opendir($ruta_temp); 
+		while ($archivo = readdir($directorio)) 
+		{
+		    if (!is_dir($archivo))
+		    {
+		    	$archivo_ruta = $ruta_temp.$archivo;
+		    	$zip->addFile($archivo_ruta, $archivo);
+		    }
+		}
+		$zip->close();
+	}
 
 	/********* NOTICIAS   ****///
 

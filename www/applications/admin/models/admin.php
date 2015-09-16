@@ -292,6 +292,10 @@ public function getFotos($album)
 	return $this->Db->query("select * from galeria where id_album='$album'");
 }
 
+public function insertarFoto($vars){
+	return $this->Db->query("INSERT into galeria values('$vars[id]','$vars[name]','$vars[album]','".date("Y-m-d")."','$vars[admin]','')");
+}
+
 public function getCarreras($id,$bool)
 {
 	if($id == NULL)
@@ -333,6 +337,10 @@ return $this->Db->query("select * from administradores where $Campo = $Valor");
 public function getAllAdminData()
 {
 return $this->Db->query("select * from administradores");
+}
+
+public function getActualAdmin(){
+	return $this->Db->query("SELECT * from administradores where actual = 1");		
 }
 
 public function getRespuesta($datos, $sit)
@@ -535,7 +543,7 @@ $this->Db->query($query);
 return $query;
 }
 
-
+/*
 public function insertarFoto($id, $name, $album)
 {
 $fecha = date("Y-m-d");
@@ -544,7 +552,7 @@ $query = "insert into galeria (id_imagen, nombre_imagen, id_album, fecha_modific
 $this->Db->query($query);
 return $query;
 }
-
+*/
 public function getAlumnoInscrito($folio)
 {
 	return $this->Db->query("select * from inscripciones natural join alumnos natural join carreras natural join clubes where folio = '$folio'");
@@ -620,15 +628,9 @@ return $this->Db->insert($tabla,$datos);
 		$this->Db->query("update configuracion set reglamento = '$reg'");
 	}
 
-	public function hacerespaldo($backupFile)
+	public function hacerespaldo($backupFile, $table)
 	{
-		return $this->Db->query("SELECT * INTO OUTFILE '$backupFile' FROM inscripciones");
+		return $this->Db->query( "SELECT * INTO OUTFILE '$backupFile' FIELDS TERMINATED BY ',' ENCLOSED BY '|' LINES TERMINATED BY '\n' FROM $table" );
 	}
-
-	public function getExcel()
-	{
-		return $this->Db->query("select * from alumnos natural join inscripciones natural join carreras natural join clubes where periodo = '"+periodo_actual()+"'");
-	}
-
 
 }
