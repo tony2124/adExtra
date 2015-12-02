@@ -23,6 +23,66 @@ class Admin_Controller extends ZP_Controller {
 		redirect(get('webURL') . _sh . 'admin/login');
 	}
 
+	function notifications($pushMessage){
+		$usuariosOnline = $this->Admin_Model->getUsuariosOnline();
+
+		if($usuariosOnline){
+			foreach ($usuariosOnline as $row ) {
+				$registatoin_ids = array($row['gcm_regid']);
+				$message = array("mensaje" => utf8_encode($pushMessage));
+
+				$this->send_push_notification($registatoin_ids, $message);
+			}
+		}
+	
+	}
+
+	//Sending Push Notification
+	function send_push_notification($registatoin_ids, $message) {
+
+		define("GOOGLE_API_KEY", "AIzaSyA7O8lk_M1cg50vs6uL6TKFbg97g2_gM7w"); // Place your Google API Key
+		//echo $message;
+        // Set POST variables
+        $url = 'https://android.googleapis.com/gcm/send';
+
+        $fields = array(
+            'registration_ids' => $registatoin_ids,
+            'data' => $message,
+        );
+
+        $headers = array(
+            'Authorization: key=' . GOOGLE_API_KEY,
+            'Content-Type: application/json'
+        );
+		//print_r($headers);
+        // Open connection
+        $ch = curl_init();
+
+        // Set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Disabling SSL Certificate support temporarly
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+        // Execute post
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+
+        // Close connection
+        curl_close($ch);
+        echo json_encode($fields);
+    
+
+	}
+
 	public function subirfoto(){
 		// Define a destination
 		$tipo = POST('tipo');
@@ -90,7 +150,7 @@ class Admin_Controller extends ZP_Controller {
 		$clave = POST('clave');
 		$data = $this->Admin_Model->getData($usuario);
 
-		if (crypt($clave, $data[0]['contrasena_administrador']) == $data[0]['contrasena_administrador'])
+		if (strcmp(crypt($clave, $data[0]['contrasena_administrador']) , $data[0]['contrasena_administrador']) == 0)
 		{
 			SESSION('user_admin',$data[0]['usuario_administrador']);
 			SESSION('id_admin',$data[0]['id_administrador']);
@@ -115,9 +175,6 @@ class Admin_Controller extends ZP_Controller {
 		if (!SESSION('user_admin'))
 			return redirect(get('webURL') .  _sh .'admin/login');
 
-		//$configuracion = $this->Admin_Model->getConfiguracion();
-		//si no existe periodo calcular periodo actual
-
 		if(!isset($periodo)) 
 		{
 			$periodo = periodo_actual();
@@ -131,9 +188,7 @@ class Admin_Controller extends ZP_Controller {
 		$carreras = $this->Admin_Model->getCarreras(NULL, false);
 		$clubesdescarga = $this->Admin_Model->getClubes();
 
-		
-		//obtenerClubesNoAsignados();
-
+		$ultimosinscritos = $this->Admin_Model->getUltimosInscritos();
 
 		/***** SELECCION DE PERIODOS AGREGADOS EN LA BD *****/
 		$periodossss = $this->Admin_Model->getPeriodos();
@@ -154,6 +209,7 @@ class Admin_Controller extends ZP_Controller {
 		$vars["view"]	 = $this->view("estadistica3", TRUE);
 		$vars["periodo"] = $periodo;
 		$vars["clubes"] = $clubes;
+		$vars["ultimosinscritos"] = $ultimosinscritos;
 
 		include(_pathwww.'/lib/funciones/avisos.php');
 
@@ -324,6 +380,9 @@ class Admin_Controller extends ZP_Controller {
 
 	function guardarHorario($periodo)
 	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
 		$vars['club'] = POST('club');
 		$vars['promotor'] = POST('promotor');
 		$vars['lugar'] = POST('lugar');
@@ -438,7 +497,7 @@ class Admin_Controller extends ZP_Controller {
 			{		 		
 				$id = date("YmdHis").rand(0,100).rand(0,100);
 				$name = $id.".".$ext[1];
-
+				unlink($path.POST('fotoactual'));
 				move_uploaded_file($tmp_name, $path.$name); # Guardar el archivo en una ubicaci�n, debe tener los permisos necesarios
 				chmod($path.$name,0777);
 
@@ -486,13 +545,11 @@ class Admin_Controller extends ZP_Controller {
 		$vars['fecha_nac'] = POST('fecha_nac');
 		$vars['fecha_reg'] = date("Y-m-d");
 		$vars['sexo'] = POST('sexo');
-		//$vars['club'] = POST('club');
 		$vars['sexo'] = POST('sexo');
 		$vars['email'] = POST('email');
 		$vars['tel'] = POST('tel');
 		$vars['direccion'] = POST('direccion');
 		$vars['ocupacion'] = strtoupper(POST('ocupacion'));
-		//____($vars);
 		if( strcmp(POST('mantener'), "S") != 0 )
 			$this->Admin_Model->updatePromotor($vars);
 		if( strcmp(POST('mantener'), "S") == 0 )
@@ -567,7 +624,6 @@ class Admin_Controller extends ZP_Controller {
 		$vars['fecha_nac'] = POST('fecha_nac');
 		$vars['fecha_reg'] = date("Y-m-d");
 		$vars['sexo'] = POST('sexo');
-		//$vars['club'] = POST('club');
 		$vars['sexo'] = POST('sexo');
 		$vars['email'] = POST('email');
 		$vars['tel'] = POST('tel');
@@ -630,6 +686,31 @@ class Admin_Controller extends ZP_Controller {
 
 		$this->render("content",$vars);
 	}
+
+	public function fotosalumnos(){
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		$vars["view"] = $this->view("subirfotos",true);
+		$vars['menu'] = 5;
+		include(_pathwww.'/lib/funciones/avisos.php');
+		$this->render("content",$vars);	
+	}
+
+	public function subirfotosalumnos(){
+		if (!SESSION('user_admin'))
+			return redirect(get('webURL') .  _sh .'admin/login');
+		$targetFolder = $_SERVER['DOCUMENT_ROOT'].'/extra/img/alumnos/'; 
+		mkdir($targetFolder,0700);
+
+	//	if (!empty($_FILES)) {
+			$tempFile = $_FILES['Filedata']['tmp_name'];
+			$name = $_FILES['Filedata']['name'];	
+			$targetFile = $targetFolder . $name;
+			move_uploaded_file($tempFile,$targetFile);
+	//	}
+	}
+	
 
 	public function revisiones($id = NULL)
 	{
@@ -833,7 +914,30 @@ class Admin_Controller extends ZP_Controller {
 		$mostrar = POST('mostrarAviso');
 		if($mostrar) $mostrar = 1; else $mostrar = 0;
 		$this->Admin_Model->guardarAviso($cuerpo, $mostrar);
+
+		$this->notifications( $cuerpo );
+
 		redirect(get('webURL')._sh.'admin/avisos');
+	}
+
+	public function notificacion($var){
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+
+		switch ($var) {
+			case '1':
+					$cuerpo = $this->Admin_Model->getAviso();
+					$this->notifications( $cuerpo[0]["texto_noticia"] );	
+			break;
+			case '2':
+					$fec_ins = $this->Admin_Model->fecha_inscripcion_abierta();
+					$this->notifications( '<h3>Las inscripciones para el periodo '.periodo_actual().' est&aacute;n abiertas. Inscr&iacute;bete a los clubes culturales y deportivos.</h3><br><h3>La fecha de inicio de inscripci&oacute;n es '. convertirFecha($fec_ins[0]["fecha_inicio_inscripcion"]) .' y termina el '.convertirFecha($fec_ins[0]["fecha_fin_inscripcion"]) .'.</h3>' );				
+			break;
+
+		}
+		redirect(get('webURL')._sh.'admin/estadistica');
+		
 	}
 
 	public function subirBD($data = NULL)
@@ -977,11 +1081,56 @@ class Admin_Controller extends ZP_Controller {
 		}
 	}
 
-	public function respaldando($fec, $table)
+	public function numrows(){
+		print sizeof($this->Admin_Model->num_reg());
+	}
+
+	public function respaldando($fec, $table, $indice = null)
 	{
 
 		$name = $fec."_".$table.".txt";
-		$this->Admin_Model->hacerespaldo( _spath.'/temp/'.$name , $table);
+
+		if(strcmp("inscripciones", $table) == 0){
+		 	$reg = $this->Admin_Model->num_reg();
+		 	$num_reg = sizeof($reg) - ($indice * 7000);
+	 		if($num_reg < 7000)
+	 			$f = $indice * 7000 + $num_reg;
+	 		else
+	 			$f = ($indice + 1) * 7000;
+	 		
+	 		$r = $this->Admin_Model->hacerespaldo( $table, $indice * 7000, $f );
+
+	 		$name = $fec."_".$table."_".($indice+1).".txt";
+
+	 		$filename = _spath.'/temp/'.$name;
+
+			$fp = fopen($filename, 'w');
+
+			foreach ($r as $row ) {
+			    fputcsv($fp, $row);
+			}
+
+			fclose($fp);
+
+		 	print $num_reg = $num_reg - 7000;
+			
+		}else{
+
+			$r = $this->Admin_Model->hacerespaldo( $table);
+
+			$filename = _spath.'/temp/'.$name;
+
+			$fp = fopen($filename, 'w');
+
+			foreach ($r as $row ) {
+			    fputcsv($fp, $row);
+			}
+
+			fclose($fp);	
+		}
+
+
+		
 
 	}
 
@@ -1070,7 +1219,7 @@ class Admin_Controller extends ZP_Controller {
 		$name = "";
 		if (FILES("foto", "tmp_name")) 
 		{
-		    $path = _spath.'/IMAGENES/fotosNoticias/';  
+		    $path = _spath.'/img/noticias/';  
 		    $tmp_name = $_FILES["foto"]["tmp_name"];
 			$name = $_FILES["foto"]["name"];
 	
@@ -1118,7 +1267,7 @@ class Admin_Controller extends ZP_Controller {
 
 		}
 
-		$vars["id_noticias"] = uniqid();
+		//$vars["id_noticias"] = uniqid();
 		$vars["nombre_noticia"] = $nombre;
 		$vars["texto_noticia"] = $cadena;
 		$vars["imagen_noticia"] = $name;
@@ -1280,7 +1429,7 @@ class Admin_Controller extends ZP_Controller {
 
 				move_uploaded_file($tmp_name, $path.$name); # Guardar el archivo en una ubicaci�n, debe tener los permisos necesarios
 				chmod($path.$name,0777);
-
+/*
 				$rutaImagenOriginal = $path.$name;
 				$img_original = imagecreatefromjpeg($rutaImagenOriginal);
 				$max_ancho = 800;
@@ -1311,7 +1460,7 @@ class Admin_Controller extends ZP_Controller {
 				imagejpeg($tmp,$path."tm".$name,$calidad);
 				chmod($path."tm".$name,0777);
 				unlink($path.$name);
-				$name = "tm".$name;
+				$name = "tm".$name;*/
 			}else $name=""; 
 
 		}
@@ -1395,6 +1544,8 @@ class Admin_Controller extends ZP_Controller {
 
 		$name = POST('mostrarfoto');
 
+		$fotoanterior = POST('fotoanterior');
+
 		if (FILES("foto", "tmp_name")) 
 		{
 			$path = _spath.'/img/clubes/'; 
@@ -1410,39 +1561,8 @@ class Admin_Controller extends ZP_Controller {
 
 				move_uploaded_file($tmp_name, $path.$name); # Guardar el archivo en una ubicaci�n, debe tener los permisos necesarios
 				chmod($path.$name,0777);
+				unlink($path.$fotoanterior);
 
-				$rutaImagenOriginal = $path.$name;
-				$img_original = imagecreatefromjpeg($rutaImagenOriginal);
-				$max_ancho = 500;
-				$max_alto = 500;
-				list($ancho,$alto) = getimagesize($rutaImagenOriginal);
-				$x_ratio = $max_ancho /$ancho;
-				$y_ratio = $max_alto / $alto;
-				if(($ancho <= $max_ancho) && ($alto <= $max_alto))
-				{
-					$ancho_final = $ancho;
-					$alto_final = $alto;
-				}
-				elseif(($x_ratio * $alto) <$max_alto)
-				{
-					$alto_final = ceil($x_ratio * $alto);
-					$ancho_final = $max_ancho;
-				}
-				else 
-				{
-					$ancho_final = ceil($y_ratio*$ancho);
-					$alto_final = $max_alto;
-				}
-
-				$tmp = imagecreatetruecolor($ancho_final,$alto_final);
-				imagecopyresampled($tmp, $img_original, 0, 0, 0, 0, $ancho_final, $alto_final, $ancho, $alto);
-				imagedestroy($img_original);
-				$calidad = 95;
-				imagejpeg($tmp,$path."tm".$name,$calidad);
-
-				chmod($path."tm".$name,0777);
-				unlink($path.$name);
-				$name = "tm".$name;
 			}else $name=""; 
 
 		} 
@@ -1479,7 +1599,7 @@ class Admin_Controller extends ZP_Controller {
 	}
 
 
-	
+
 	/* GALERIA  */
 	public function galeria($tipo=NULL, $club = NULL, $album = NULL, $subalbum = NULL)
  	{
@@ -1541,6 +1661,9 @@ class Admin_Controller extends ZP_Controller {
 
 	function editAlbum($tipo, $club, $album)
 	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
 		$nombre = strtoupper(POST('nombre_album'));
 
 		$this->Admin_Model->editAlbum($album, $nombre);
@@ -1550,6 +1673,9 @@ class Admin_Controller extends ZP_Controller {
 
 	function elimAlbum($tipo, $club, $album)
 	{
+		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
 		/* ELIMINO TODOS LOS ARCHIVOS DENTRO DEL ÁLBUM */
 		$filename = _spath."/img/galeria/".$club."/".$album."/";
 		$handle = opendir($filename."thumbs/");
@@ -1605,7 +1731,9 @@ class Admin_Controller extends ZP_Controller {
 		$this->Admin_Model->elimFoto($id);
 		redirect($url);
 	}
-	
+				
+
+		
  	public function configLiberacion($periodo = NULL, $succ =null)
  	{
  		if( !SESSION('user_admin') )
@@ -1638,30 +1766,23 @@ class Admin_Controller extends ZP_Controller {
 
  	/***** ADMINISTRADOR  *******/ 	
 
- 	public function cambiarEstado ($estado = NULL,$userAdmin = NULL)
+ 	public function cambiarEstado ($estado, $id )
  	{
  		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 		
- 		$this->sessionOn();
-		if($estado == 'Vigente')
-			$array = array("actual" => "1");
- 		else if($estado == 'noVigente' && $this->Admin_Model->comprobarEstados() >= 2)
- 			$array = array("actual" => "0");
- 		else
+ 		$array = array("actual" => $estado);
+
+ 		if( $estado == 0  && $this->Admin_Model->comprobarEstados() < 2)
  		{
-
- 			$vars = $this->getDatosAdmin(SESSION('id_admin'));
- 			$vars['menu'] = 0;
- 			$vars['errorEstado'] = true;
- 			$vars["view"] = $this->view("adminconfig",true);
- 			$this->render("content",$vars);
- 			return;
+ 			return redirect(get('webURL') .  _sh .'admin/adminconfig/'.$id.'/1');
  		}
- 		$idAdministrador = $this->Admin_Model->getCampos("administradores","id_administrador","usuario_administrador='$userAdmin'");
- 		$this->Admin_Model->setCampos("administradores",$array,isset($userAdmin)?$idAdministrador[0]['id_administrador']:SESSION('id_admin'));
+ 		
+ 			
 
- 		return redirect(get('webURL') .  _sh .'admin/adminconfig/');
+ 		$this->Admin_Model->setCampos("administradores",$array, $id );
+ 
+ 		return redirect(get('webURL') .  _sh .'admin/adminconfig/'.$id);
  	}
 
  	public function editaAdmin ()
@@ -1669,70 +1790,105 @@ class Admin_Controller extends ZP_Controller {
  		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
- 		//$this->sessionOn();
- 		$datosAdmin = $this->Admin_Model->getCampos("administradores","contrasena_administrador","id_administrador = ".SESSION('id_admin'));
- 		if(POST('guardarCambios'))
- 		{
- 			$datos = array(
- 				0 => array(utf8_encode(POST('newpass1')),utf8_encode(POST('newpass2')),6,25,NULL,NULL,NULL),
- 				1 => array(utf8_encode(POST('nombre')),NULL,NULL,25,"/^([A-Z][a-záéíóúñ]+([[:space:]][A-Z][a-záéíóúñ]+)*|[A-ZÁÉÍÓÚÑ]+([[:space:]][A-ZÁÉÍÓÚÑ]+)*)$/",NULL,NULL),
- 				2 => array(utf8_encode(POST('adminAP')),NULL,NULL,25,"/^([A-Z][a-záéíóúñ]+([[:space:]][A-Z][a-záéíóúñ]+)*|[A-ZÁÉÍÓÚÑ]+([[:space:]][A-ZÁÉÍÓÚÑ]+)*)$/",NULL,NULL),
- 				3 => array(utf8_encode(POST('adminAM')),NULL,NULL,25,"/^([A-Z][a-záéíóúñ]+([[:space:]][A-Z][a-záéíóúñ]+)*|[A-ZÁÉÍÓÚÑ]+([[:space:]][A-ZÁÉÍÓÚÑ]+)*)$/",NULL,NULL),
- 				4 => array(utf8_encode(POST('email')),NULL,NULL,45,"/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/","administradores","correo_electronico"),
- 				5 => array(utf8_encode(POST('direc')),NULL,NULL,100,"/^[[:ascii:]]*$/i",NULL,NULL),
- 				6 => array(utf8_encode(POST('profe')),NULL,NULL,45,"/^[[:ascii:]]*$/i",NULL,NULL),
- 				7 => array(utf8_encode(POST('abrevi')),NULL,NULL,40,"/^[[:ascii:]]*$/i",NULL,NULL),
- 				8 => array(utf8_encode(POST('fecha')),NULL,NULL,40,NULL,NULL,NULL)
- 				);
+			$vars['id'] 	= 	SESSION("id_admin");
+ 			$vars['sexo'] 	= 	POST('sexo');
+ 			$vars['user'] 	= 	POST('usuario');
+ 			$vars['pass'] 	= 	crypt(POST('pass'));
+ 			$vars['nombre'] = 	strtoupper(POST('nombre'));
+ 			$vars['ap'] 	= 	strtoupper(POST('adminAP')); 
+ 			$vars['am'] 	=	strtoupper(POST('adminAM'));
+ 			$vars['tel'] 	=	POST('tel'); 
+ 			$vars['email'] 	=	POST('email');
+ 			$vars['dir'] 	=	POST('direc'); 
+			$vars['prof'] 	=	strtoupper(POST('profe')); 
+ 			$vars['abrev'] 	=	POST('abrevi');
+ 			$vars['fecha'] 	=	POST('fecha');
 
- 			$campos = array(
- 				0 => array("contrasena_administrador","Contraseña"),
- 				1 => array("nombre_administrador","Nombre"),
- 				2 => array("apellido_paterno_administrador","Apellido paterno"),
- 				3 => array("apellido_materno_administrador","Apellido materno"),
- 				4 => array("correo_electronico","E-mail"),
- 				5 => array("direccion_administrador","Dirección"),
- 				6 => array("profesion_administrador","Profesión"),
- 				7 => array("abreviatura_profesion","Abreviatura"),
- 				8 => array("fecha_nacimiento_admin","Fecha de nacimiento")
- 				);
- 			$array = array();
- 			$i = 1;
- 			while ($i < count($datos))
- 			{
- 				if(!$vars['adminUpdate'] = ($this->Admin_Model->isValid($datos[$i])))
-	 			{
-	 				$array += array($campos[$i][0] => utf8_decode($datos[$i][0]) );
-	 			}
-	 			else
-	 			{
-	 				$vars['adminUpdate'] = $campos[$i][1].": Al modificar - ".$vars['adminUpdate'];
-	 				break;
-				}
-	 			$i++;
- 			}
+ 			$this->Admin_Model->editAdmin($vars);
  			
- 			if(!$vars['adminUpdate'] && POST('lastpass') && (crypt(POST('lastpass'), $datosAdmin[0]['contrasena_administrador']) == $datosAdmin[0]['contrasena_administrador']))
- 			{
- 				//if(POST('lastpass') != $datosAdmin[0]['contrasena_administrador'])
-					//$vars['adminUpdate'] = "Contraseña actual: La contraseña introducida no es correcta, favor de verificar.";
- 				if(!$vars['adminUpdate'] = $this->Admin_Model->isValid($datos[0]))
- 				{
- 					$array += array($campos[0][0] => utf8_decode(crypt($datos[0][0])));
- 				}
- 				else
- 				{
- 					$vars['adminUpdate'] = $campos[0][1].": Al modificar - ".$vars['adminUpdate'];
- 				}
- 			}
- 			if(!$vars['adminUpdate'])
-	 			$this->Admin_Model->setCampos("administradores",$array,SESSION('id_admin'));
- 		}
- 		$vars = $this->getDatosAdmin(SESSION('id_admin'),$vars);
-		$vars["view"] = $this->view("adminconfig",true);
-		$vars['menu'] = 0;
-		include(_pathwww.'/lib/funciones/avisos.php');
-		$this->render("content",$vars);
+ 			return redirect(get('webURL') .  _sh .'admin/editadmin');	
+ 	}
+
+ 	public function registrandoAdmin(){
+
+ 		if( !SESSION('user_admin') )
+			return redirect(get('webURL') . _sh . 'admin/login');
+
+		$name = "";
+
+		if (FILES("foto", "tmp_name")) 
+		{
+		    $path = _spath.'/img/administradores/';  
+		    $tmp_name = $_FILES["foto"]["tmp_name"];
+			$name = $_FILES["foto"]["name"];
+	
+			$ext = explode(".",$name);		
+			if($ext[1]=='JPG' || $ext[1]=='jpg')
+			{		 		
+				$id = date("YmdHis").rand(0,100).rand(0,100);
+				$name = $id.".".$ext[1];
+
+				move_uploaded_file($tmp_name, $path.$name); # Guardar el archivo en una ubicaci�n, debe tener los permisos necesarios
+				chmod($path.$name,0777);
+
+				$rutaImagenOriginal = $path.$name;
+				$img_original = imagecreatefromjpeg($rutaImagenOriginal);
+				$max_ancho = 200;
+				$max_alto = 200;
+				list($ancho,$alto) = getimagesize($rutaImagenOriginal);
+				$x_ratio = $max_ancho /$ancho;
+				$y_ratio = $max_alto / $alto;
+				if(($ancho <= $max_ancho) && ($alto <= $max_alto))
+				{
+					$ancho_final = $ancho;
+					$alto_final = $alto;
+				}
+				elseif(($x_ratio * $alto) <$max_alto)
+				{
+					$alto_final = ceil($x_ratio * $alto);
+					$ancho_final = $max_ancho;
+				}
+				else 
+				{
+					$ancho_final = ceil($y_ratio*$ancho);
+					$alto_final = $max_alto;
+				}
+
+				$tmp = imagecreatetruecolor($ancho_final,$alto_final);
+				imagecopyresampled($tmp, $img_original, 0, 0, 0, 0, $ancho_final, $alto_final, $ancho, $alto);
+				imagedestroy($img_original);
+				$calidad = 95;
+				imagejpeg($tmp,$path."tm".$name,$calidad);
+				chmod($path."tm".$name,0777);
+				unlink($path.$name);
+				$name = "tm".$name;
+			}else $name="nofoto.jpg"; 
+
+		}
+
+		$vars['user'] = POST('user');
+		$vars['pass'] = crypt(POST('pass'));
+		$vars['foto'] = $name;
+		$vars['nombre'] = strtoupper(POST('nombre'));
+		$vars['ap'] = strtoupper(POST('ap'));
+		$vars['am'] = strtoupper(POST('am'));
+		$vars['sexo'] = POST('sexo');
+		$vars['fecha_nac'] = POST('fecha_nac');
+		$vars['fecha_reg'] = date("Y-m-d");
+		
+		$vars['profesion'] = POST('profesion');
+		$vars['abrev'] = POST('abrev');
+
+		$vars['email'] = POST('email');
+		$vars['tel'] = POST('tel');
+		$vars['direccion'] = POST('direccion');
+
+		$vars['tipo'] = POST('tipo');
+	
+		$this->Admin_Model->regAdmin($vars);
+
+		redirect(get('webURL') . _sh .'admin/adminconfig');
+
  	}
 
  	public function regisAdmin()
@@ -1740,67 +1896,8 @@ class Admin_Controller extends ZP_Controller {
  		if( !SESSION('user_admin') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
- 		$this->sessionOn();
- 		$vars['date'] = date("Y-m-d");
  		$vars['menu'] = 0;
- 		if(POST('btnSubmit'))
- 		{
- 			//Explainer
- 			/*	Array( 0 , 1 , 2 , n)
- 			(value,	=> x , x , x , x
-			compare,=> x , x , x , x
-			min,	=> x , x , x , x
-			max,	=> x , x , x , x
-			expreg,	=> x , x , x , x
-			tabla,	=> x , x , x , x
-			columna)=> x , x , x , x
- 			*/
- 			$getPost = array(
- 				0 => array(utf8_encode(POST('usuario')),NULL,6,25,"/^[A-Za-z][A-Za-z0-9]*$/","administradores","usuario_administrador"),	//4 letras iniciales seguidas de numeros o letras
- 				1 => array(utf8_encode(POST('passone')),utf8_encode(POST('passtwo')),6,25,NULL,NULL,NULL), //Cualquier caracter exepto espacio
- 				2 => array(utf8_encode(POST('nombre')),NULL,NULL,25,"/^([A-Z][a-záéíóúñ]+([[:space:]][A-Z][a-záéíóúñ]+)*|[A-ZÁÉÍÓÚÑ]+([[:space:]][A-ZÁÉÍÓÚÑ]+)*)$/",NULL,NULL),
- 				3 => array(utf8_encode(POST('apepat')),NULL,NULL,25,"/^([A-Z][a-záéíóúñ]+([[:space:]][A-Z][a-záéíóúñ]+)*|[A-ZÁÉÍÓÚÑ]+([[:space:]][A-ZÁÉÍÓÚÑ]+)*)$/",NULL,NULL),
- 				4 => array(utf8_encode(POST('apemat')),NULL,NULL,25,"/^([A-Z][a-záéíóúñ]+([[:space:]][A-Z][a-záéíóúñ]+)*|[A-ZÁÉÍÓÚÑ]+([[:space:]][A-ZÁÉÍÓÚÑ]+)*)$/",NULL,NULL),
- 				5 => array(utf8_encode(POST('email')),NULL,NULL,45,"/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/","administradores","correo_electronico"),
- 				6 => array(utf8_encode(POST('direccion')),NULL,NULL,100,"/^[[:ascii:]]*$/i",NULL,NULL),
- 				7 => array(utf8_encode(POST('prof')),NULL,NULL,45,"/^[[:ascii:]]*$/i",NULL,NULL),
- 				8 => array(utf8_encode(POST('abprof')),NULL,NULL,40,"/^[[:ascii:]]*$/i",NULL,NULL)
- 				);
- 			$campos = array(
- 				0 => array("usuario_administrador","Usuario"),
- 				1 => array("contrasena_administrador","Contraseña"),
- 				2 => array("nombre_administrador","Nombre"),
- 				3 => array("apellido_paterno_administrador","Apellido paterno"),
- 				4 => array("apellido_materno_administrador","Apellido materno"),
- 				5 => array("correo_electronico","E-mail"),
- 				6 => array("direccion_administrador","Dirección"),
- 				7 => array("profesion_administrador","Profesión"),
- 				8 => array("abreviatura_profesion","Abreviatura")
- 				);
- 			$array = array();
- 			$i = 0;
- 			while ($i < count($getPost))
- 			{
- 				if(!$vars['regAdminError'] = ($this->Admin_Model->isValid($getPost[$i])))
-	 			{
-	 				$array += array($campos[$i][0] => utf8_decode($getPost[$i][0]) );
-	 			}
-	 			else
-	 			{
-	 				$vars['regAdminError'] = $campos[$i][1].": ".$vars['regAdminError'];
-	 				break;
-	 			}
-	 			$i++;
- 			}
-	 		$array += array(
-	 			"fecha_registro" => $vars['date'],
-	 			"actual" => 1,
-	 			"eliminado" => 0,
-	 			"tipo_administrador" => 1
-	 			);
-	 		if(!$vars['regAdminError'])
-	 			$vars['success'] = $this->Admin_Model->setRow("administradores",$array);
-	 	}
+
 	 	include(_pathwww.'/lib/funciones/avisos.php');
  		$vars['view'] = $this->view("registroAdmin",true);
  		$this->render("content",$vars);
@@ -1820,13 +1917,8 @@ class Admin_Controller extends ZP_Controller {
 		return $vars;
  	}
 
- 	private function sessionOn()
- 	{
- 		if (!SESSION('user_admin'))
-			return redirect(get('webURL') . _sh .'admin/login');
- 	}
 
- 	public function adminconfig($id = NULL)
+ 	public function adminconfig($id = NULL, $error = NULL)
 	{
 		if (!SESSION('user_admin'))
 			return redirect(get('webURL') . _sh .'admin/login');	
@@ -1834,9 +1926,13 @@ class Admin_Controller extends ZP_Controller {
 		if(!$id) $id = SESSION('id_admin');
 		
 		$vars = $this->getDatosAdmin($id);
-		$vars["view"] = $this->view("adminconfig",true);
-		//$vars["view"]['registroAdmin'] = $this->view("registroAdmin",true);
+		
+		$vars['error'] = $error;
 		$vars['menu'] = 0;
+		$vars['id'] = $id;
+
+		$vars['view'] = $this->view("adminconfig",true);
+		
 		include(_pathwww.'/lib/funciones/avisos.php');
 		$this->render("content",$vars);
 	}

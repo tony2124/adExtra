@@ -21,11 +21,9 @@ $().ready(function() {
       am:  "required",
       email: { required: true, email: true},
       fecha_nac: {required: true, date: true},
-      tel: {digits: true, minlength: 7, maxlength: 10},
+      tel: {digits: true, minlength: 7, maxlength: 10, required: true},
       ocupacion: "required",
-      direccion: "required",
-      horario: "required",
-      lugar: "required"
+      direccion: "required"
     },
     messages: {
       user: { required: "* Este campo es obligatorio", minlength: "Debe tener mínimo 6 caracteres", maxlength: "Debe tener máximo 16 caracteres" },
@@ -37,8 +35,6 @@ $().ready(function() {
       fecha_nac: { required: "* Este campo es obligatorio", date: "Ingrese una fecha válida en el formato aaaa-mm-dd"},
       ocupacion: "* Este campo es obligatorio",
       direccion: "* Este campo es obligatorio",
-      horario: "* Este campo es obligatorio",
-      lugar: "* Este campo es obligatorio",
       tel: {digits: "Este campo solo admite números", minlength: "El teléfono debe contener de 7 a 10 números", maxlength: "El teléfono debe contener de 7 a 10 números"}
 
     }

@@ -123,7 +123,7 @@
         	<ul class="dropdown-menu">
 			    <li><a href="<?php print get('webURL'). _sh .'admin/respaldoBD/'  ?>">Respaldo de BD</a></li>
 			    <li><a href="<?php print get('webURL'). _sh .'admin/subirBD/'  ?>">Subir datos de alumnos</a></li>
-			    <li><a href="#">Subir fotos de alumnos <label class="label label-primary">Pro</label></a></li>
+			    <li><a href="<?php print get('webURL'). _sh .'admin/fotosalumnos/'  ?>">Subir fotos de alumnos </li>
 			    <li><a href="#">Restaurar BD <label class="label label-primary">Pro</label></a></li>
 			    <li><a href="#">Eliminar historial <label class="label label-primary">Pro</label></a></li>
 			    <li><a href="#">Bitácora de operaciones <label class="label label-primary">Pro</label></a></li>

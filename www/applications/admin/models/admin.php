@@ -19,6 +19,18 @@ public function acentos()
 	$this->Db->query("SET NAMES 'utf8'");
 }
 
+public function getUsuariosOnline(){
+	$query = "SELECT * FROM gcm_users WHERE estatus=1";
+	return $this->Db->query($query);
+}
+
+public function getUltimosInscritos()
+{
+	return $this->Db->query("SELECT * from inscripciones join alumnos join clubes join carreras on alumnos.id_carrera = carreras.id_carrera AND inscripciones.numero_control = alumnos.numero_control AND clubes.id_club = inscripciones.id_club where periodo = '".periodo_actual()."' order by fecha_inscripcion_club DESC, folio DESC LIMIT 10");
+}
+
+
+
 /****** PROMOTORES *******/
 public function getResultadoProm()
 {
@@ -48,7 +60,7 @@ public function adminActuales(){
 }
 
 public function visitas(){
-	return $this->Db->query("SELECT numero_visitas from configuracion");
+	return $this->Db->query("SELECT count(id) as numero_visitas from ip");
 }
 
 /*****************************/
@@ -129,6 +141,27 @@ values('$vars[user]', '$vars[pass]','$vars[foto]', '$vars[nombre]' ,'$vars[ap]',
 //$this->acentos();
 $this->Db->query($query);
 return $query;
+}
+
+public function regAdmin($vars)
+{
+	$query = "insert into administradores (usuario_administrador, contrasena_administrador, foto_admin, nombre_administrador, apellido_paterno_administrador, apellido_materno_administrador, sexo_admin, fecha_nacimiento_admin, fecha_registro, correo_electronico, telefono_administrador, profesion_administrador, abreviatura_profesion, direccion_administrador,  tipo_administrador)
+	values('$vars[user]', '$vars[pass]','$vars[foto]', '$vars[nombre]' ,'$vars[ap]','$vars[am]', $vars[sexo], '$vars[fecha_nac]', '$vars[fecha_reg]', '$vars[email]','$vars[tel]' ,'$vars[profesion]','$vars[abrev]', '$vars[direccion]', '$vars[tipo]')";
+	//$this->acentos();
+	$this->Db->query($query);
+	return $query;
+}
+
+public function editAdmin($vars)
+{
+	$query = "UPDATE administradores set usuario_administrador = '$vars[user]', contrasena_administrador = '$vars[pass]', 
+				nombre_administrador = '$vars[nombre]', apellido_paterno_administrador = '$vars[ap]', 
+				apellido_materno_administrador = '$vars[am]', sexo_admin = $vars[sexo], fecha_nacimiento_admin = '$vars[fecha]', 
+				correo_electronico = '$vars[email]', telefono_administrador = '$vars[tel]', profesion_administrador = '$vars[prof]', 
+				abreviatura_profesion = '$vars[abrev]', direccion_administrador = '$vars[direccion]',  tipo_administrador = '$vars[tipo]' 
+				WHERE id_administrador = '$vars[id]'";
+	$this->Db->query($query);
+	return $query;
 }
 
 public function updatePromotor($vars)
@@ -404,8 +437,8 @@ return $this->Db->query("select * from noticias where id_noticias = '$id'");
 
 public function saveNew($vars)
 {
-$query = "insert into noticias(id_noticias, nombre_noticia, texto_noticia, imagen_noticia, fecha_modificacion, hora, id_administrador)
-values ('$vars[id_noticias]','$vars[nombre_noticia]','$vars[texto_noticia]','$vars[imagen_noticia]','$vars[fecha_modificacion]','$vars[hora]',$vars[id_administrador])";
+$query = "insert into noticias(nombre_noticia, texto_noticia, imagen_noticia, fecha_modificacion, hora, id_administrador)
+values ('$vars[nombre_noticia]','$vars[texto_noticia]','$vars[imagen_noticia]','$vars[fecha_modificacion]','$vars[hora]',$vars[id_administrador])";
 $this->acentos();
 $this->Db->query($query);
 return $query;
@@ -522,37 +555,27 @@ return $query;
 
 public function eliminargeneracion($gen)
 {
-$query = "delete from inscripciones where numero_control like '$gen%'";
-$this->Db->query($query);
-$query = "delete from alumnos where numero_control like '$gen%'";
-$this->Db->query($query);
-return $query;
+	$query = "delete from inscripciones where numero_control like '$gen%'";
+	$this->Db->query($query);
+	$query = "delete from alumnos where numero_control like '$gen%'";
+	$this->Db->query($query);
+	return $query;
 }
 
 public function eliminarFotosAlbum($album)
 {
-$query = "delete from galeria where id_album = '$album'";
-$this->Db->query($query);
-return $query;
+	$query = "delete from galeria where id_album = '$album'";
+	$this->Db->query($query);
+	return $query;
 }
 
 public function editAlbum($album, $name)
 {
-$query = "update albumes set nombre_album = '$name' where id_album = '$album'";
-$this->Db->query($query);
-return $query;
+	$query = "update albumes set nombre_album = '$name' where id_album = '$album'";
+	$this->Db->query($query);
+	return $query;
 }
 
-/*
-public function insertarFoto($id, $name, $album)
-{
-$fecha = date("Y-m-d");
-$admin = SESSION('id_admin');
-$query = "insert into galeria (id_imagen, nombre_imagen, id_album, fecha_modificacion, id_administrador, pie) values('$id', '$name', '$album', '$fecha', $admin, '')";
-$this->Db->query($query);
-return $query;
-}
-*/
 public function getAlumnoInscrito($folio)
 {
 	return $this->Db->query("select * from inscripciones natural join alumnos natural join carreras natural join clubes where folio = '$folio'");
@@ -560,12 +583,12 @@ public function getAlumnoInscrito($folio)
 
 public function setCampos($tabla, $campos, $ID)
 {
-$this->Db->update($tabla, $campos, $ID);
+	$this->Db->update($tabla, $campos, $ID);
 }
 
 public function setRow($tabla,$datos)
 {
-return $this->Db->insert($tabla,$datos);
+	return $this->Db->insert($tabla,$datos);
 }
 
 	public function getCampos($tabla,$campos,$where = NULL)
@@ -628,9 +651,16 @@ return $this->Db->insert($tabla,$datos);
 		$this->Db->query("update configuracion set reglamento = '$reg'");
 	}
 
-	public function hacerespaldo($backupFile, $table)
+	public function hacerespaldo( $table, $i = NULL, $f = NULL)
 	{
-		return $this->Db->query( "SELECT * INTO OUTFILE '$backupFile' FIELDS TERMINATED BY ',' ENCLOSED BY '|' LINES TERMINATED BY '\n' FROM $table" );
+		if(strcmp($table, "inscripciones") == 0)		
+			return $this->Db->query( "SELECT * FROM $table LIMIT $i, $f" );
+
+		return $this->Db->query( "SELECT * FROM $table" );
+	}
+
+	public function num_reg(){
+		return $this->Db->query("SELECT folio from inscripciones");
 	}
 
 }

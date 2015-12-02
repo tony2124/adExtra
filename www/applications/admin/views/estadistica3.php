@@ -18,9 +18,9 @@
 			?>
 		</select>
 	</div>
-	<div class="col-sm-7"></div>
+	<div class="col-sm-5"></div>
 	<div class="col-sm-2">
-		<div class="btn-group" style="width:100%">
+		<div style="width:100%" class="btn-group">
 	      <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
 	        <span  class="glyphicon glyphicon-save"></span>
 	        Descarga
@@ -32,6 +32,9 @@
 	        <li><a data-toggle="modal" data-target="#myModalRes" href="#" >ZIP Cédulas de resultados</a></li>
 	      </ul>
 	    </div>
+	</div>
+	<div class="col-sm-2">
+	    <a style="width:100%" href="<?php print get("webURL")."/admin/notificacion/1" ?>" data-toggle="tooltip" title="Envía el aviso a los celulares." class="btn btn-primary"><span class="glyphicon glyphicon-phone"></span> Notificar</a>
 	</div>
 </div>
 <div style="clear: both"></div>
@@ -167,6 +170,7 @@
 <!-- PESTAÑAS PARA MOSTRAR LA INFORMACIÓN POR SEPARADO. -->
     <ul class="nav nav-tabs">
 	    <li class="active"><a href="#clubes" data-toggle="tab"><span class="glyphicon glyphicon-knight"></span> CLUBES</a></li>
+	    <li><a href="#otros" data-toggle="tab"><span class="glyphicon glyphicon-record"></span>  OTRAS ACT.</a></li>
 	    <li><a href="#carreras" data-toggle="tab"><span class="glyphicon glyphicon-education"></span>  CARRERAS</a></li>
 	    <li><a href="#grafico" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span> GRÁFICO PARTICIPACIÓN</a></li>
     </ul>
@@ -237,6 +241,10 @@
 			</table>
 			</div>
 			<hr>
+			
+
+		</div>
+		<div class="tab-pane" id="otros">
 			<!-- ****** TABLA OTROS ****** -->
 			<div class="table-responsive">
 			<table id="estadistica" width="600" class="table table-striped table-bordered table-condensed">
@@ -291,7 +299,6 @@
 			</div>
 			<hr>
 			
-
 		</div>
 		<div class="tab-pane" id="carreras">
 			<div class="table-responsive">
@@ -404,7 +411,7 @@
 			 </table>
 			</div>
 			 <hr>
-			 <!-- ****** TABLA OTROS ****** -->
+			 <!-- ****** TABLA OTROS ****** --
 			 <div class="table-responsive">
 			<table id="estadistica" width="600" class="table table-striped table-bordered table-condensed">
 				<thead>
@@ -457,7 +464,7 @@
 			</table>
 			</div>
 			<hr>
-			<!--<p>TOTAL DE ALUMNOS LIBERADOS: <span style="font-size: 30px"><?php print  $totalesX[2] + ($tmL+$thL) ?></span></p>-->
+			-<p>TOTAL DE ALUMNOS LIBERADOS: <span style="font-size: 30px"><?php print  $totalesX[2] + ($tmL+$thL) ?></span></p>-->
 
 		</div>
 		<div class="tab-pane" id="grafico">
@@ -526,7 +533,7 @@
 			    </div>
 			  </div>
 			</div>
-
+			<hr>
 
 
 			
@@ -732,7 +739,42 @@
 		<div style="clear: both"></div>
 	<p>&nbsp;</p>	
 
-<p><h3><strong>IMPORTANTE</strong></h3><i>Los datos que aquí se presentan hacen referencia únicamente a los alumnos que se inscribieron a los diferentes clubes deportivos y culturales. Los gráficos no incluyen los datos de los alumnos que liberaron en otras actividades.</i></p>
+	<legend><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;  <strong>Últimos alumnos inscritos en el periodo <?php print periodo_actual() ?></strong></legend>
+	<table class="table table-hover" style="font-size: 12px">
+		<tr>
+			<td><strong>Folio</strong></td>
+			<td><strong>Fecha insc.</strong></td>
+			<td><strong>Disp.</strong> </td>
+			<td><strong>Nombre</strong></td>
+			<td><strong>Club</strong></td>
+			<td><strong>Carrera</strong></td>
+			<td align="center"><strong>Sem</strong></td>
+		</tr>
+		<?php
+			foreach ($ultimosinscritos as $ui) {  ?>
+				<tr>
+					<td><?php print $ui['folio'] ?></td>
+					<td><?php print convertirFecha($ui['fecha_inscripcion_club']) ?></td>
+					<td>
+						<?php if(strcmp($ui['dispositivo'], '2')==0 ) { ?>
+						<span class="glyphicon glyphicon-phone"></span>
+						<?php }else{ ?>
+						<span class="glyphicon glyphicon-globe"></span>
+						<?php } ?>
+					</td>
+					<td><a href="<?php print get("webURL"). "/admin/alumno/".$ui['numero_control'] ?>"> <?php print $ui['apellido_paterno_alumno']." ".$ui['apellido_materno_alumno']." ".$ui['nombre_alumno'] ?></a></td>
+					<td><?php print $ui['nombre_club'] ?></td>
+					<td><?php print $ui['abreviatura_carrera'] ?></td>
+					<td align="center"><?php print $ui['semestre'] ?></td>
+				</tr>
+<?php
+			}
+		?>
+		
+	</table>
+<p>&nbsp;</p>	
+
+<p><h3><strong>IMPORTANTE</strong></h3><i>Los datos que aquí se presentan hacen referencia únicamente a los alumnos que se inscribieron a los diferentes clubes deportivos y culturales. También se anexa de manera general los alumnos que acreditan con actividades externas al departamento.</i></p>
 
 
 

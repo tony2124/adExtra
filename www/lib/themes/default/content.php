@@ -41,7 +41,9 @@
 		<?php } } if($fecha_liberacion_abierta){ ?>
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> <strong>¡PERIODO DE LIBERACIÓN ABIERTO!</strong> <br>Inicia: <kbd><?php print convertirFecha($fecha_liberacion_abierta[sizeof($fecha_liberacion_abierta) - 1]["fecha_inicio_liberacion"]) ?></kbd> <br>Finaliza: <kbd><?php print convertirFecha($fecha_liberacion_abierta[sizeof($fecha_liberacion_abierta) -1]["fecha_fin_liberacion"]) ?></kbd></div>
 		<?php } if($fecha_inscripcion_abierta){ ?>
-		<div class="alert alert-success"><span class="glyphicon glyphicon-info-sign"></span> <strong>¡INSCRIPCIONES ABIERTAS!</strong> <br>Inicia: <kbd><?php print convertirFecha($fecha_inscripcion_abierta[0]["fecha_inicio_inscripcion"]) ?></kbd> <br>Finaliza: <kbd><?php print convertirFecha($fecha_inscripcion_abierta[0]["fecha_fin_inscripcion"]) ?></kbd></div>
+		<div class="alert alert-success"><span class="glyphicon glyphicon-info-sign"></span> <strong>¡INSCRIPCIONES ABIERTAS!</strong> <br>Inicia: <kbd><?php print convertirFecha($fecha_inscripcion_abierta[0]["fecha_inicio_inscripcion"]) ?></kbd> <br>Finaliza: <kbd><?php print convertirFecha($fecha_inscripcion_abierta[0]["fecha_fin_inscripcion"]) ?></kbd>
+			<a  href="<?php print get("webURL")."/admin/notificacion/2" ?>" data-toggle="tooltip" title="Envía notificación de inscripciones abiertas a celulares." class="btn btn-primary"><span class="glyphicon glyphicon-phone"></span> Notificar</a>
+		</div>
 		<?php } if($clubesnoasignados){ ?>
 		<div class="alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span> No se ha asignado promotor a los siguientes clubes: 
 			<?php
@@ -59,12 +61,18 @@
 			?>, por favor vaya al apartado de <a href="<?php print get("webURL")."/admin/adminclubes" ?>">administración de clubes</a> para editarlos.
 		</div>
 		<?php } ?>
-		<p><a target="_blank" href="<?php print _rs ?>/973164852/MANUAL_ADMINISTRADOR.pdf">¡Descargar manual de administrador!</a></p>
-		<center>
-			<a href="http://www.itsa.edu.mx/"  title="Ir a la página del ITSA" rel="tooltip">
-				<img align="center" width="100" class="pull-right" src="<?php print ruta_imagen.'/itsa.png' ?>">
-			</a>
-		</center>
+		<!--<p><a target="_blank" href="<?php print _rs ?>/973164852/MANUAL_ADMINISTRADOR.pdf">¡Descargar manual de administrador!</a></p>-->
+		
+		<a target="_blank" href="http://www.itsaextraescolares.com" >
+			<img style=" margin-right: 20px" align="center" width="150" title="Ir a la página de Extraescolares" data-toggle="tooltip" class="pull-left" src="<?php print ruta_imagen.'/cuinique.png' ?>">
+		</a>
+		<a target="_blank" href="https://play.google.com/store/apps/details?id=simpus.mobile.itsaextraescolares" >
+			<img style="margin-top: 20px; margin-right: 20px" align="center" width="150"  title="Descargar la App" data-toggle="tooltip" class="pull-left" src="<?php print ruta_imagen.'/googleplay.jpg' ?>">
+		</a>
+		<a target="_blank" href="http://www.itsa.edu.mx/"  >
+			<img align="center" width="90" title="Ir a la página del ITSA" data-toggle="tooltip" src="<?php print ruta_imagen.'/itsa.png' ?>">
+		</a>
+		
 		
 	
 	</div>

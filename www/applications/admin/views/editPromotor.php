@@ -65,11 +65,12 @@ $().ready(function() {
         <div class="control-group">
           <label class="control-label" for="user">Foto</label>
           <div class="form-group">
-              <img class="thumbnail col-sm-2" src="<?php print _rs._sh.'img/promotores/'.$promotor['foto_promotor'] ?>" width="100">
+              <img class="thumbnail col-sm-2" src="<?php print _rs._sh.'img/promotores/'.$promotor['foto_promotor'] ?>" onerror="this.src='<?php print ($promotor['sexo_promotor']==1) ? _rs."/img/default/nofotoh.png" : _rs."/img/default/nofotom.png" ?>'" width="100">
               <div class="col-sm-8">
                 <label class="col-sm-12">
                   <input type="checkbox" value="S" name="mantener" checked="checked"> &nbsp;Mantener la foto actual   </label>
                 <input type="file" name="foto">
+                <input type="hidden" name="fotoactual" value="<?php print $promotor['foto_promotor'] ?>">
                 <p>&nbsp;</p>
                 <p style="font-style: italic">* Para subir una nueva foto quite la selección de la casilla "mantener foto actual" y seleccione la foto. Nota: Si adjunta una foto nueva la anterior será destruida.</p>
               </div>

@@ -1,10 +1,3 @@
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
-
 
 <legend><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;  <strong>Reglamento del departamento</strong></legend>
 <p>Escriba el reglamento del departamento cultural, deportiva y recreativa, tome en cuenta que este reglamento es el que se muestra en el sitio informativo y nada esta enlazado con el archivo de descarga del reglamento.</p>
@@ -27,17 +20,11 @@
 
 </form>
 
-<script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+<script src="<?php print get("webURL")."/www/lib/tinymce/tinymce.min.js" ?>"></script>
 
 <script type="text/javascript">
-      $(function() {
-          $('#reglamento').editable({
-          	inlineMode: false,
-          	allowStyle: true,
-          	colors: [
-		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
-		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
-		      ]
-          })
-      });
+       tinymce.init({
+            selector: "#reglamento",
+            height: 300
+        });
 </script>

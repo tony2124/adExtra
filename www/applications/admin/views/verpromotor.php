@@ -17,7 +17,7 @@
   <tbody>
       <tr>
         <td width="210" rowspan="12">
-          <img onerror="this.src='<?php print ($promotor['sexo_promotor']==1) ? _rs."/img/alumnos/nofotoh.png" : _rs."/img/alumnos/nofotom.png" ?>'" class="img-thumbnail" width="200" src="<?php print _rs."/img/promotores/".$promotor['foto_promotor'] ?>">
+          <img onerror="this.src='<?php print ($promotor['sexo_promotor']==1) ? _rs."/img/default/nofotoh.png" : _rs."/img/default/nofotom.png" ?>'" class="img-thumbnail" width="200" src="<?php print _rs."/img/promotores/".$promotor['foto_promotor'] ?>">
         </td>
         <td width="200"><strong>Usuario</strong></td>
         <td colspan="3"><?php print $promotor['usuario_promotor'] ?></td>

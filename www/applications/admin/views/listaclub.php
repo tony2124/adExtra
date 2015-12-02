@@ -130,6 +130,7 @@ if($alumnos != NULL) { ?>
 	      <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;No.</th>
 	      <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;Folio</th>
 	      <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;N. control</th>
+	      <th>Disp.</th>
 	      <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;Nombre</th>
 	      <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;Carrera</th>
 	      <th><span class="glyphicon glyphicon-resize-vertical"></span>&nbsp;Sexo</th>
@@ -148,6 +149,14 @@ if($alumnos != NULL) { ?>
 	    <td align="center"><?php print $i++ ?></td>
 	    <td><?php print $alum['folio'] ?></td>
 	    <td><?php print $alum['numero_control'] ?></td>
+	    <td>
+	    	<?php if(strcmp($alum['dispositivo'], '2')==0 ) { ?>
+				<span class="glyphicon glyphicon-phone"></span>
+			<?php }else{ ?>
+				<span class="glyphicon glyphicon-globe"></span>
+			<?php } ?>
+					
+	    </td>
 	    <td><a href="<?php print get("webURL")._sh."admin/alumno/".$alum['numero_control'] ?>"><?php echo $alum['apellido_paterno_alumno']." ".$alum['apellido_materno_alumno']." ".$alum['nombre_alumno'] ?></a></td>
 	    <td><?php echo $alum['abreviatura_carrera'] ?></td>
 	    <td align="center"><?php echo ($alum['sexo']==1) ? 'H' : 'M' ?></td>

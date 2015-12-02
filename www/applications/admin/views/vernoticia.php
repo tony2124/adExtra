@@ -5,7 +5,7 @@
 <?php if(file_exists(_spath."/img/noticias/".$noticia['imagen_noticia']) && strcmp($noticia['imagen_noticia'],"") != 0) { ?>
 <div class="img-thumbnail" style="background: url(<?php print _rs."/img/noticias/".$noticia['imagen_noticia'] ?>); background-size: cover; width:300px; height: 300px; float: left; margin-right: 30px; margin-bottom: 30px"></div>
 <?php }else{ ?>
-<div class="img-thumbnail" style="background: url(<?php print _rs."/img/noticias/no-disponible.png" ?>); background-size: cover; width:300px; height: 300px; float: left; margin-right: 30px; margin-bottom: 30px"></div>
+<div class="img-thumbnail" style="background: url(<?php print _rs."/img/default/no-disponible.png" ?>); background-size: cover; width:300px; height: 300px; float: left; margin-right: 30px; margin-bottom: 30px"></div>
 <?php } ?>
 <h3><?php print $noticia['nombre_noticia'] ?></h3>
 <hr>

@@ -1,10 +1,3 @@
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
-
 
 <script type="text/javascript">
 
@@ -41,8 +34,15 @@ function eliminar(id)
 				<div class="col-sm-5">
 					<a href="#" data-toggle="collapse" data-target="#fotocollapse" aria-expanded="false" aria-controls="fotocollapse">Ver foto de la noticia.</a>
 					<div class="collapse" id="fotocollapse">
-					    <img class="img-thumbnail" src="<?php print _rs ?>/img/noticias/<?php print $modnot['imagen_noticia'] ?>" width="330">				
+					    <!--<img class="img-thumbnail" src="<?php print _rs ?>/img/noticias/<?php print $modnot['imagen_noticia'] ?>" onerror="this.src='<?php print ($promotor['sexo_promotor']==1) ? _rs."/img/default/nofotoh.png" : _rs."/img/default/nofotom.png" ?>'" width="330">				-->
+					    <?php if(file_exists(_spath."/img/noticias/".$modnot['imagen_noticia']) && strcmp($modnot['imagen_noticia'],"") != 0) { ?>
+						<div class="img-thumbnail" style="background: url(<?php print _rs."/img/noticias/".$modnot['imagen_noticia'] ?>); background-size: cover; width:300px; height: 300px; float: left; margin-right: 30px; margin-bottom: 30px"></div>
+						<?php }else{ ?>
+						<div class="img-thumbnail" style="background: url(<?php print _rs."/img/default/no-disponible.png" ?>); background-size: cover; width:300px; height: 300px; float: left; margin-right: 30px; margin-bottom: 30px"></div>
+						<?php } ?>
+
 					</div>
+					<div style="clear: both"></div>
 					<p>
 						<input type="checkbox" name="mostrarfoto" id="mostrarfoto" checked="checked" />&nbsp;Mantener foto actual.
 						<input type="hidden" name="fotoanterior" value="<?php print $modnot['imagen_noticia'] ?>">
@@ -129,17 +129,11 @@ function eliminar(id)
 	</tbody>
 </table>
 
-<script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+<script src="<?php print get("webURL")."/www/lib/tinymce/tinymce.min.js" ?>"></script>
 
 <script type="text/javascript">
-      $(function() {
-          $('#edit').editable({
-          	inlineMode: false,
-          	allowStyle: true,
-          	colors: [
-		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
-		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
-		      ]
-          })
-      });
+       tinymce.init({
+            selector: "#edit",
+            height: 300
+        });
 </script>

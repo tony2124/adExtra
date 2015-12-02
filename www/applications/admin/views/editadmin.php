@@ -19,73 +19,80 @@
 
 <legend><span class="glyphicon glyphicon-fire"></span>&nbsp;&nbsp;  <strong>Editar datos del administrador</strong> <a onclick="goBack()" href="#" class="btn btn-primary btn-sm pull-right"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp;&nbsp;Regresar</a></legend>
 <p>En el siguiente formulario se muestran los datos del administrador, por favor edite los campos correspondientes y haga clic en guardar cambios.</p>
-<p>&nbsp;</p>
+<hr>
 <form id="editarAdmin" class="form-horizontal" method="POST" action="<?php print get('webURL')._sh.'admin/editaAdmin' ?>">
     <div class="form-group">
-        <label class="control-label col-sm-2" for="input01">Usuario</label>
+        <label class="control-label col-sm-2" >Usuario</label>
         <div class="col-sm-4">
-            <input type="text" name="usuario" class="form-control" id="input01" value="<?php print $datosAdmin[0]['usuario_administrador'] ?>">
+            <input type="text" name="usuario" class="form-control" value="<?php print $datosAdmin[0]['usuario_administrador'] ?>">
         </div>
-        <label class="control-label col-sm-2" for="input02">Contraseña 
-            <a rel="popover" data-content="Actual: Ingresa la vieja contraseña <br> Nueva: Ingresa una nueva contraseña <br> Re-nueva: Vuelve a ingresar la nueva contraseña" data-original-title="AYUDA"><i class="glyphicon glyphicon-info-sign"></i></a>
+        <label class="control-label col-sm-2" >Contraseña 
+            <!--<a rel="popover" data-content="Actual: Ingresa la vieja contraseña <br> Nueva: Ingresa una nueva contraseña <br> Re-nueva: Vuelve a ingresar la nueva contraseña" data-original-title="AYUDA"><i class="glyphicon glyphicon-info-sign"></i></a>-->
         </label>
         <div class="col-sm-4">
-            <input type="password" name="lastpass" class="form-control" id="input02" placeholder="Actual">
+            <input type="password" name="pass" class="form-control" placeholder="Contraseña">
         </div>
     </div>
 
     
     <div class="form-group">
-        <label class="control-label col-sm-2" for="input01">Fec. de nac.</label>
+        <label class="control-label col-sm-2">Fec. de nac.</label>
         <div class="col-sm-4">
-            <input type="text" name="fecha" class="form-control selectorFecha"  value="<?php print $datosAdmin[0]['fecha_nacimiento_admin'] ?>">
+            <input type="text" name="fecha" class="form-control selectorFecha" value="<?php print $datosAdmin[0]['fecha_nacimiento_admin'] ?>">
         </div>
-        <div class="col-sm-2"></div>
+        <label class="control-label col-sm-2" >Sexo</label>
         <div class="col-sm-4">
-            <input type="password" name="newpass1" class="form-control" id="input02" placeholder="Nueva">
+            <select name="sexo" class="form-control">
+              <option value="1" <?php if(strcmp($datosAdmin[0]['sexo_admin'], "1") == 0) print "selected" ?>>HOMBRE</option>
+              <option value="2" <?php if(strcmp($datosAdmin[0]['sexo_admin'], "2") == 0) print "selected" ?>>MUJER</option>
+            </select>
         </div>
     </div>
     
     <div class="form-group">
-        <div class="col-sm-8">
-
-        </div>
+        <label class="control-label col-sm-2" >Tipo admin.</label>
         <div class="col-sm-4">
-            <input type="password" name="newpass2" class="form-control" id="input02" placeholder="Re-nueva">
+            <select name="tipo" class="form-control">
+              <option value="1">ADMINISTRADOR</option>
+            </select>
+        </div>
+        <label class="control-label col-sm-2" >Teléfono</label>
+        <div class="col-sm-4">
+            <input type="number" name="tel" class="form-control" value="<?php print $datosAdmin[0]['telefono_administrador'] ?>" placeholder="Teléfono">
         </div>
     </div>
  <div class="form-group">
-        <label class="control-label col-sm-2" for="input03">Nombre(s)</label>
+        <label class="control-label col-sm-2" >Nombre(s)</label>
     <div class="col-sm-4">
-        <input type="text" name="nombre" class="form-control" id="input03"  value="<?php print $datosAdmin[0]['nombre_administrador'] ?>">
+        <input type="text" name="nombre" class="form-control"   value="<?php print $datosAdmin[0]['nombre_administrador'] ?>">
     </div>
-    <label class="control-label col-sm-2" for="input04">Apellido paterno</label>
+    <label class="control-label col-sm-2" >Apellido paterno</label>
     <div class="col-sm-4">
-        <input type="text" required name="adminAP" class="form-control" id="input04"  value="<?php print $datosAdmin[0]['apellido_paterno_administrador'] ?>">
+        <input type="text" required name="adminAP" class="form-control"   value="<?php print $datosAdmin[0]['apellido_paterno_administrador'] ?>">
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label col-sm-2" for="input04">Apellido materno</label>
+    <label class="control-label col-sm-2" >Apellido materno</label>
     <div class="col-sm-4">
-<!-- -->  <input type="text" name="adminAM" class="form-control" id="input04"  value="<?php print $datosAdmin[0]['apellido_materno_administrador'] ?>">
+<!-- -->  <input type="text" name="adminAM" class="form-control"   value="<?php print $datosAdmin[0]['apellido_materno_administrador'] ?>">
     </div>
     <label class="control-label col-sm-2" for="input06">Correo electrónico</label>
     <div class="col-sm-4">
-<!-- -->  <input type="email" name="email" class="form-control" id="input06"  value="<?php print $datosAdmin[0]['correo_electronico'] ?>" required>
+<!-- -->  <input type="email" name="email" class="form-control"  value="<?php print $datosAdmin[0]['correo_electronico'] ?>" required>
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label col-sm-2" for="input07">Profesión</label>
+    <label class="control-label col-sm-2" >Profesión</label>
     <div class="col-sm-4">
-<!-- -->  <input type="text" name="profe" class="form-control" id="input07"  value="<?php print $datosAdmin[0]['profesion_administrador'] ?>">
+<!-- -->  <input type="text" name="profe" class="form-control"  value="<?php print $datosAdmin[0]['profesion_administrador'] ?>">
     </div>
-    <label class="control-label col-sm-2" for="input08">Abreviatura de la profesión</label>
+    <label class="control-label col-sm-2" >Abreviatura de la profesión</label>
     <div class="col-sm-4">
-<!-- -->  <input type="text" name="abrevi" class="form-control" id="input08"  value="<?php print $datosAdmin[0]['abreviatura_profesion'] ?>">
+<!-- -->  <input type="text" name="abrevi" class="form-control"  value="<?php print $datosAdmin[0]['abreviatura_profesion'] ?>">
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label col-sm-2" for="input08">Dirección</label>
+    <label class="control-label col-sm-2">Dirección</label>
     <div class="col-sm-10">
 <!-- -->  <textarea type="text" name="direc" class="form-control" id="input09"><?php print $datosAdmin[0]['direccion_administrador'] ?></textarea>
     </div>

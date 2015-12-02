@@ -93,7 +93,7 @@ function folio(folio)
   <tbody>
       <tr>
         <td width="210" rowspan="9">
-          <img onerror="this.src='<?php print ($alumno['sexo']==1) ? _rs."/img/alumnos/nofotoh.png" : _rs."/img/alumnos/nofotom.png" ?>'" class="img-thumbnail" width="200" src="<?php print _rs."/img/alumnos/".$alumno['numero_control'].".jpg" ?>">
+          <img onerror="this.src='<?php print ($alumno['sexo']==1) ? _rs."/img/default/nofotoh.png" : _rs."/img/default/nofotom.png" ?>'" class="img-thumbnail" width="200" src="<?php print _rs."/img/alumnos/".$alumno['numero_control'].".jpg" ?>">
         </td>
         <td width="200"><strong>Número de control</strong></td>
         <td colspan="3"><?php print $alumno['numero_control'] ?></td>
@@ -175,6 +175,7 @@ function folio(folio)
         <th>Folio</th>
         <th>fecha insc.</th>
         <th>fecha lib.</th>
+        <th>Disp.</th>
         <th>Actividad</th>
         <th>Resultado</th>
         <th>Obser.</th>
@@ -193,6 +194,13 @@ function folio(folio)
                 <td><?php print $ins['folio'] ?></td>
                 <td><?php print convertirFecha($ins['fecha_inscripcion_club']) ?></td>
                 <td><?php print convertirFecha($ins['fecha_liberacion_club']) ?></td>
+                <td>
+                    <?php if(strcmp($ins['dispositivo'], '2')==0 ) { ?>
+                    <span class="glyphicon glyphicon-phone"></span>
+                  <?php }else{ ?>
+                    <span class="glyphicon glyphicon-globe"></span>
+                  <?php } ?>  
+                </td>
                 <td>
                   <a data-toggle="modal" onclick="modActividad(<?php print "'".$periodo."','".$ins['folio']."'" ?>)" href="#cambiarActividad">
                     <?php print $ins['nombre_club'] ?>
@@ -221,7 +229,7 @@ function folio(folio)
             ?>
             <tr>
               <td colspan="7">
-                <a rel="tooltip" title="Inscribir a una actividad" onclick="updateDataInsForm(<?php print $i.",'".$periodo."'" ?>)" class="pull-right btn btn-success" data-toggle="modal" data-target="#insActDialog" href="#" >
+                <a title="Inscribir a una actividad" onclick="updateDataInsForm(<?php print $i.",'".$periodo."'" ?>)" class="pull-right btn btn-success" data-toggle="modal" data-target="#insActDialog" href="#" >
                   <i class="glyphicon glyphicon-plus"></i> Inscribir actividad
                 </a>
               </td>

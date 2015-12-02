@@ -1,9 +1,3 @@
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 function eliminar(nombre, id)
@@ -52,8 +46,9 @@ $(function () {
 					    <img class="img-thumbnail" src="<?php print _rs ?>/img/clubes/<?php print $club[0]['foto_club'] ?>" width="330">				
 					</div>
 					<p>
-							<input type="checkbox" name="mostrarfoto" id="mostrarfoto" value="<?php echo $club[0]['foto_club'] ?>" checked="checked" />&nbsp;Mantener foto actual.
-						</p>
+						<input type="checkbox" name="mostrarfoto" id="mostrarfoto" value="<?php echo $club[0]['foto_club'] ?>" checked="checked" />&nbsp;Mantener foto actual.
+						<input type="hidden" value="<?php echo $club[0]['foto_club'] ?>" name="fotoanterior">
+					</p>
 				</div>
 			</div>
 				
@@ -146,44 +141,12 @@ $(function () {
 		<?php } ?>
 	</tbody>
 </table>
-<!--
-<div class="modal hide fade" id="confirmModal">
-  <div class="modal-header">
-    <button class="close" data-dismiss="modal">×</button>
-    <h3>Confirmación</h3>
-  </div>
-  <div class="modal-body">
-    <p>¿Está seguro que desea eliminar el club de <span class="label label-important" id="nombre_club"></span>?</p>
-   
-    <form id="elimClub" method="post" action="<?php print get('webURL')._sh.'admin/elimClub' ?>">
-      <input name="id_club" id="id_club" type="hidden" value="">
-    </form> 
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
-    <a href="#" class="btn btn-danger" onclick="$('#elimClub').submit()">Eliminar</a>
-  </div>
-</div>
--->
 
-<!-- Include JS files. -->
-  <script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+<script src="<?php print get("webURL")."/www/lib/tinymce/tinymce.min.js" ?>"></script>
 
-  <!-- Include IE8 JS. -->
-  <!--[if lt IE 9]>
-      <script src="../js/froala_editor_ie8.min.js"></script>
-  <![endif]-->
-
-  <!-- Initialize the editor. -->
-  <script>
-      $(function() {
-          $('#edit').editable({
-          	inlineMode: false,
-          	allowStyle: true,
-          	colors: [
-		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
-		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
-		      ]
-          })
-      });
-  </script>
+<script type="text/javascript">
+       tinymce.init({
+            selector: "#edit",
+            height: 300
+        });
+</script>

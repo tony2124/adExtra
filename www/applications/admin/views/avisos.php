@@ -1,9 +1,3 @@
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_editor.min.css" ?>" rel="stylesheet" type="text/css" />
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_content.min.css" ?>" rel="stylesheet" type="text/css" />
-
-<link href="<?php print get("webURL")."/www/lib/froala_editor/css/froala_style.min.css" ?>" rel="stylesheet" type="text/css" />
 
 
 <legend><span class="glyphicon glyphicon-bookmark"></span>&nbsp;&nbsp;  <strong>Publica un aviso</strong></legend>
@@ -13,7 +7,7 @@
 	<p>La configuración actual indica que el aviso NO se está mostrando en el sitio web.</p>
 </div>
 <?php } ?>
-<div class="well">En el siguiente apartado usted podrá escribir un aviso o varios avisos a las personas que visiten el sitio de Servicios Extraescolores.</div>
+<div class="well">En el siguiente apartado usted podrá escribir un aviso o varios avisos a las personas que visiten el sitio de Servicios Extraescolores. Al momento de guardar el aviso también se envía una notificación a todos los alumnos que tienen la aplicación de extraescolares.</div>
 <hr>
 <form id="textoForm" name="textoForm" action="<?php print get('webURL'). _sh . 'admin/guardarAviso' ?>" method="post">
 	<textarea style="width: 100%" name="aviso" id="aviso">
@@ -37,17 +31,11 @@
 </p>
 </form>
 
-<script src="<?php print get("webURL")."/www/lib/froala_editor/js/froala_editor.min.js" ?>"></script>
+<script src="<?php print get("webURL")."/www/lib/tinymce/tinymce.min.js" ?>"></script>
 
 <script type="text/javascript">
-      $(function() {
-          $('#aviso').editable({
-          	inlineMode: false,
-          	allowStyle: true,
-          	colors: [
-		        '#15E67F', '#E3DE8C', '#D8A076', '#D83762', '#76B6D8', 'REMOVE',
-		        '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
-		      ]
-          })
-      });
+       tinymce.init({
+            selector: "#aviso",
+            height: 300
+        });
 </script>

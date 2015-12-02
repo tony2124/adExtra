@@ -83,8 +83,25 @@ function eliminar(name)
 		});	
 	}
 
+	function inscripcion(indice){
+		var urlS = <?php print '"'.get('webURL').'/admin/respaldando/" + name + "/inscripciones/" + indice '  ?>;
+		$.ajax({
+			  url: urlS,
+			  success: function(data){
+			  	if(data > 0)
+			  		inscripcion(indice + 1);
+			  }
+		});	
+	}
 
 	function recursivo( i ){
+
+		if(tablas[i] == "inscripciones")
+    	{
+    		inscripcion(0);	
+			i++;
+    	}
+
 		var urlS = <?php print '"'.get('webURL').'/admin/respaldando/" + name + "/" + tablas[i]'  ?>;
 		$.ajax({
 			  url: urlS,
@@ -101,6 +118,7 @@ function eliminar(name)
 			    	}
 			    	else
 			    		recursivo(i);
+				    
 
 			  }
 		});
