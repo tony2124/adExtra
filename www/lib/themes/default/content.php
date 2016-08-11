@@ -48,7 +48,7 @@
 		<div class="alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span> No se ha asignado promotor a los siguientes clubes: 
 			<?php
 				foreach ($clubesnoasignados as $key) {
-					print "<kbd>".$key['nombre_club']."</kbd>,";
+					print "<kbd>".$key['nombre_club']."</kbd> ,";
 				}
 			?>	vaya al apartado de <a href="<?php print get("webURL")."/admin/formHorarios" ?>">horarios</a> para asignarlos.
 		</div>

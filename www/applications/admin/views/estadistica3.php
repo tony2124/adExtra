@@ -18,7 +18,11 @@
 			?>
 		</select>
 	</div>
-	<div class="col-sm-5"></div>
+
+	<div class="col-sm-3"></div>
+	<div class="col-sm-2">
+		<a style="width:100%" href="<?php print get("webURL")."/admin/aplicacion" ?>" data-toggle="tooltip" title="Lista de registros de descarga de la APP." class="btn btn-success">Descargas APP</a>
+	</div>
 	<div class="col-sm-2">
 		<div style="width:100%" class="btn-group">
 	      <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#" style="width:100%">
@@ -751,6 +755,7 @@
 			<td align="center"><strong>Sem</strong></td>
 		</tr>
 		<?php
+		if($ultimosinscritos)
 			foreach ($ultimosinscritos as $ui) {  ?>
 				<tr>
 					<td><?php print $ui['folio'] ?></td>

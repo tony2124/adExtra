@@ -77,13 +77,13 @@
 	   <tr>
 	   	<td><?php print $i+1; ?></td>
 		<td><?php print strtoupper($alumno['numero_control']) ?></td>
-		<td><a href="<?php print get("webURL")."/promotor/alumno/".$alumno['numero_control'] ?>"> <?php print strtoupper($alumno['apellido_paterno_alumno'].' '.$alumno['apellido_materno_alumno'].' '.$alumno['nombre_alumno']) ?></a></td>
+		<td><a target="_blank" href="<?php print get("webURL")."/promotor/alumno/".$alumno['numero_control'] ?>"> <?php print strtoupper($alumno['apellido_paterno_alumno'].' '.$alumno['apellido_materno_alumno'].' '.$alumno['nombre_alumno']) ?></a></td>
 		<td><?php print (strcmp($alumno['sexo'],"1") == 0) ? "HOMBRE" : "MUJER";  ?></td>
 		<td><?php print $alumno['semestre'] ?></td>
 		<td><?php print strtoupper($alumno['abreviatura_carrera']) ?></td>
 		<td> <?php print ($alumno['acreditado'] == 1) ? "<label class='label label-success'>ACREDITADO</label>" : "<label class='label label-danger'>NO ACREDITADO</label>"  ?></td>
 		<?php if($liberacion){ ?>
-		<td width="82">
+		<td width="100">
 			
 			<div class="btn-group" data-toggle="buttons">
 			  <label class="btn btn-default btn-sm <?php if($alumno['acreditado'] == 1) print 'active' ?>">

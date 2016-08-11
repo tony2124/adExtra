@@ -96,7 +96,7 @@ class Promotor_Controller extends ZP_Controller {
 
 	public function alumno($nctrl = NULL)
 	{
-		if (!SESSION('user_admin'))
+		if (!SESSION('usuario_promotor'))
 			return redirect(get('webURL') .  _sh .'admin/login');
 
 		$datos = $this->Promotor_Model->getAlumno($nctrl);
@@ -109,7 +109,7 @@ class Promotor_Controller extends ZP_Controller {
 
 	function datos()
 	{
-		if( !SESSION('user_admin') )
+		if( !SESSION('usuario_promotor') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 
 		$id = SESSION("usuario_promotor");
@@ -125,7 +125,7 @@ class Promotor_Controller extends ZP_Controller {
 	}
 
 	function horarios(){
-		if( !SESSION('user_admin') )
+		if( !SESSION('usuario_promotor') )
 			return redirect(get('webURL') . _sh . 'admin/login');
 		
 		$vars['promotores']  = $this->Promotor_Model->getPromotores(periodo_actual());

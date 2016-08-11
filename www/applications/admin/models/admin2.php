@@ -30,10 +30,6 @@ public function getUltimosInscritos()
 }
 
 
-public function obtenerListaDescargas()
-{
-	return $this->Db->query("SELECT * from gcm_users order by created_at DESC");
-}
 
 /****** PROMOTORES *******/
 public function getResultadoProm()
@@ -300,15 +296,12 @@ public function getClubes($hm = NULL)
 
 public function guardarHorario($vars,$upd)
 {
-	$bool = true;
+
 	//$data = $this->Db->query("select * from horarios where periodo = '$vars[periodo]' and id_club = '$vars[club]'");
-	if($upd == 0){
-		$bool = $this->Db->query("INSERT into horarios(id_club, usuario_promotor,periodo,grupo,lugar, horario) values($vars[club],'$vars[promotor]','$vars[periodo]','A','$vars[lugar]','$vars[horario]')");
-		if(!$bool)
-			$bool = $this->Db->query("update horarios set usuario_promotor = '$vars[promotor]', lugar = '$vars[lugar]', horario =  '$vars[horario]' where id_club = '$vars[club]' and periodo = '$vars[periodo]' ");
-	}else
-		$bool = $this->Db->query("update horarios set usuario_promotor = '$vars[promotor]', lugar = '$vars[lugar]', horario =  '$vars[horario]' where id_club = '$vars[club]' and periodo = '$vars[periodo]' ");
-	return $bool;
+	if($upd == 0)
+		$this->Db->query("INSERT into horarios(id_club, usuario_promotor,periodo,grupo,lugar, horario) values($vars[club],'$vars[promotor]','$vars[periodo]','A','$vars[lugar]','$vars[horario]')");
+	else
+		$this->Db->query("update horarios set usuario_promotor = '$vars[promotor]', lugar = '$vars[lugar]', horario =  '$vars[horario]' where id_club = '$vars[club]' and periodo = '$vars[periodo]' ");
 }
 
 public function getClubesProm()

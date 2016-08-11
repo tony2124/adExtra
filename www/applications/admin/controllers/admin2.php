@@ -334,23 +334,6 @@ class Admin_Controller extends ZP_Controller {
  	}
 
 
- 	//HISTORIAL DE DESCARGAS DE LA APP
- 	public function aplicacion()
- 	{
- 		if( !SESSION('user_admin') )
-			return redirect(get('webURL') . _sh . 'admin/login');
-
-		$vars['menu'] = 1;
-
-		$vars['datos'] = $this->Admin_Model->obtenerListaDescargas();
-
-	 	$vars['view'] = $this->view('aplicacion',true);
- 		include(_pathwww.'/lib/funciones/avisos.php');
- 		$this->render('content', $vars);
- 	}
-
-
-
 /* PROMOTORES */
 	function promotores($buscar = "")
 	{

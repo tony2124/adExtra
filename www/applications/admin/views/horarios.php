@@ -5,16 +5,16 @@ function promotor(usuario, name)
    $('#usuario_promotor').val(usuario);
 }
 
-function guardar(posicion)
+function guardar(posicion, upd)
 {
     var request = $.ajax({
       type: "POST",
       url: "<?php print get('webURL')._sh.'admin/guardarHorario/'.$periodo ?>",
-      data: { club: $('#club'+posicion).val(), promotor: $('#promotor'+posicion).val(), lugar : $('#lugar'+posicion).val(), horario: $('#horario'+posicion).val() }
+      data: { update:upd, club: $('#club'+posicion).val(), promotor: $('#promotor'+posicion).val(), lugar : $('#lugar'+posicion).val(), horario: $('#horario'+posicion).val() }
       });
 
     request.done(function( msg ) {
-      alert( "El registro ha sido actualizado: " );
+      alert( "Guardado con éxito" );
     });
 
     request.fail(function(jqXHR, textStatus) {
@@ -140,6 +140,31 @@ function guardar(posicion)
                       {
                         if(strcmp( $periodo , periodo_actual()) == 0)
                         {
+
+                           if(isset($mostrar_datos)) { ?>
+                          <td>
+                              <select class="form-control" id="promotor<?php print $cI ?>"> 
+                                <?php 
+                                  foreach ($promotores_actuales as $prom) 
+                                    { ?>
+                                      <option value="<?php print $prom['usuario_promotor'] ?>"  <?php if(strcmp($prom['usuario_promotor'], $promotor['usuario_promotor']) == 0) print "selected='selected'" ?>>
+                                        <?php print strtoupper($prom['nombre_promotor'].' '.$prom['apellido_paterno_promotor'].' '.$prom['apellido_materno_promotor']) ?>
+                                      </option>
+                                <?php } ?>
+                              </select>
+                            </td>
+                            <td>
+                              <textarea class="form-control" id="lugar<?php print $cI ?>"><?php print $promotor['lugar'] ?></textarea>
+                            </td>
+                            <td>
+                              <textarea class="form-control" id="horario<?php print $cI ?>"><?php print $promotor['horario'] ?></textarea>
+                            </td>
+                            <td>
+                              <button id="guardar" class="btn btn-default" onclick="guardar(<?php print $cI ?>,0)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                              <button class="btn btn-default" data-toggle="collapse" href="#showAdmin_<?php print $cI;?>"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                            </td>
+
+                       <?php    }else{
                           ?>
                             <td>
                               <select class="form-control" id="promotor<?php print $cI ?>"> 
@@ -159,10 +184,11 @@ function guardar(posicion)
                               <textarea class="form-control" id="horario<?php print $cI ?>"><?php print $promotor['horario'] ?></textarea>
                             </td>
                             <td>
-                              <button id="guardar" class="btn btn-default" onclick="guardar(<?php print $cI ?>)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                              <button id="guardar" class="btn btn-default" onclick="guardar(<?php print $cI ?>,1)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                               <button class="btn btn-default" data-toggle="collapse" href="#showAdmin_<?php print $cI;?>"><span class="glyphicon glyphicon-chevron-down"></span></button>
                             </td>
                             <?php 
+                          }
                         }
                         else
                         { ?>
@@ -194,7 +220,7 @@ function guardar(posicion)
                           </td>
                           <td><textarea class="form-control" id="lugar<?php print $cI ?>"></textarea></td>
                           <td><textarea class="form-control" id="horario<?php print $cI ?>"></textarea></td>
-                          <td><button class="btn btn-default" onclick="guardar(<?php print $cI ?>)"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
+                          <td><button class="btn btn-default" onclick="guardar(<?php print $cI ?>,0)"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
   <?php               }  
 
 ?>
@@ -264,9 +290,9 @@ function guardar(posicion)
                   </td>
                 </tr>
                 <?php 
-                $cI++;
+                
                  } 
-
+                 $cI++;
                   }
                  ?>
               </tbody>
@@ -274,7 +300,7 @@ function guardar(posicion)
 
 
 <!--<a href="<?php print get('webURL'). _sh . 'admin/formRegistroPromotor' ?>">Agregar un nuevo promotor</a>-->
-
+<!--
 <div class="modal hide fade" id="confirmModal">
   <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
@@ -293,3 +319,4 @@ function guardar(posicion)
   </div>
 </div>
 
+-->
